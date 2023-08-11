@@ -14,8 +14,9 @@ public static class ServiceCollectionExtensions
         => services
         .AddGameCommandClient(gameCommandClientOptions)
         .AddGameCurrencyClient(gameCurrencyClientOptions)
-        .AddSingleton<IBrandGameProvider>(sp => ActivatorUtilities.CreateInstance<BrandGameProviderRepository>(sp, TimeSpan.FromMinutes(5)))
-        .AddSingleton<IGameProvider>(sp => ActivatorUtilities.CreateInstance<GameProviderRepository>(sp, TimeSpan.FromHours(1)))
-        .AddSingleton<IGame>(sp => ActivatorUtilities.CreateInstance<GameRepository>(sp, TimeSpan.FromHours(1)))
-        .AddSingleton<IPlayer>(sp => ActivatorUtilities.CreateInstance<PlayerRepository>(sp, TimeSpan.FromHours(1)));
+        .AddScoped<IBrandGameProvider>(sp => ActivatorUtilities.CreateInstance<BrandGameProviderRepository>(sp, TimeSpan.FromMinutes(5)))
+        .AddScoped<IGameCurrency, GameCurrencyRepository>()
+        .AddScoped<IGameProvider>(sp => ActivatorUtilities.CreateInstance<GameProviderRepository>(sp, TimeSpan.FromHours(1)))
+        .AddScoped<IGame>(sp => ActivatorUtilities.CreateInstance<GameRepository>(sp, TimeSpan.FromHours(1)))
+        .AddScoped<IPlayer>(sp => ActivatorUtilities.CreateInstance<PlayerRepository>(sp, TimeSpan.FromHours(1)));
 }
