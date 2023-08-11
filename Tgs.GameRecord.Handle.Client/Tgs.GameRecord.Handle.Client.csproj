@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>0.0.1</Version>
+		<Authors>Raypro</Authors>
+		<RootNamespace>Tgs.GameRecord.Handle.Client</RootNamespace>
+		<PackageId>Tgs.GameRecord.Handle.Client</PackageId>
+		<Title>Tgs.GameRecord.Handle.Client</Title>
+		<PackageProjectUrl>	https://gitlab.com/rayprosoft/tgs-gamerounds-work</PackageProjectUrl>
+		<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-gamerounds-work.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Tgs GameRecord Handle Client</PackageTags>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PhoenixToolkits.NuGet.BuildTools" Version="0.0.2" />
+    <PackageReference Include="Tgs.MessageQueue" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tgs.GameRecord.Handle.Common\Tgs.GameRecord.Handle.Common.csproj">
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

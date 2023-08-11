@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle", "Tgs.GameRecord.Handle\Tgs.GameRecord.Handle.csproj", "{4DC41F0B-90A2-4F2E-9C48-844D7AD74EEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Core", "Tgs.GameRecord.Handle.Core\Tgs.GameRecord.Handle.Core.csproj", "{A61F9516-D985-4909-88A7-51A7F543DAFA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Core.UnitTest", "Tgs.GameRecord.Handle.Core.UnitTest\Tgs.GameRecord.Handle.Core.UnitTest.csproj", "{AD88CE51-FA25-4DD7-BC1A-89741ADF101D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Repositories", "Tgs.GameRecord.Handle.Repositories\Tgs.GameRecord.Handle.Repositories.csproj", "{63EE2F0C-A049-4AC4-B415-C999136855F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Repositories.UnitTest", "Tgs.GameRecord.Handle.Repositories.UnitTest\Tgs.GameRecord.Handle.Repositories.UnitTest.csproj", "{A5484F94-02CE-4179-9E16-696DA1329807}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Common", "Tgs.GameRecord.Handle.Common\Tgs.GameRecord.Handle.Common.csproj", "{B1E3FF05-367C-4762-9E08-73A0F49C41C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameRecord.Handle.Client", "Tgs.GameRecord.Handle.Client\Tgs.GameRecord.Handle.Client.csproj", "{C5F93322-6CA7-4B6E-9DE2-E72E46A300D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DC41F0B-90A2-4F2E-9C48-844D7AD74EEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DC41F0B-90A2-4F2E-9C48-844D7AD74EEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DC41F0B-90A2-4F2E-9C48-844D7AD74EEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DC41F0B-90A2-4F2E-9C48-844D7AD74EEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A61F9516-D985-4909-88A7-51A7F543DAFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A61F9516-D985-4909-88A7-51A7F543DAFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A61F9516-D985-4909-88A7-51A7F543DAFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A61F9516-D985-4909-88A7-51A7F543DAFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD88CE51-FA25-4DD7-BC1A-89741ADF101D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD88CE51-FA25-4DD7-BC1A-89741ADF101D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD88CE51-FA25-4DD7-BC1A-89741ADF101D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD88CE51-FA25-4DD7-BC1A-89741ADF101D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63EE2F0C-A049-4AC4-B415-C999136855F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63EE2F0C-A049-4AC4-B415-C999136855F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63EE2F0C-A049-4AC4-B415-C999136855F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63EE2F0C-A049-4AC4-B415-C999136855F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5484F94-02CE-4179-9E16-696DA1329807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5484F94-02CE-4179-9E16-696DA1329807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5484F94-02CE-4179-9E16-696DA1329807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5484F94-02CE-4179-9E16-696DA1329807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1E3FF05-367C-4762-9E08-73A0F49C41C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1E3FF05-367C-4762-9E08-73A0F49C41C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1E3FF05-367C-4762-9E08-73A0F49C41C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1E3FF05-367C-4762-9E08-73A0F49C41C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5F93322-6CA7-4B6E-9DE2-E72E46A300D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5F93322-6CA7-4B6E-9DE2-E72E46A300D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5F93322-6CA7-4B6E-9DE2-E72E46A300D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5F93322-6CA7-4B6E-9DE2-E72E46A300D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {481EF44A-40C5-4CAC-9E74-6D6D27F0EAD3}
+	EndGlobalSection
+EndGlobal
