@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 using NSubstitute;
+using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
 using Tgs.MessageQueue;
@@ -59,7 +60,7 @@ public class GameRecordMessageCommandServiceUnitTest
         _ = fakeMessageSender
             .Received(1)
             .PublishAsync(
-            subject: Arg.Is("game.gamerecord.handle.publish"),
+            subject: Arg.Is(NatsConst.Publish),
             data: Arg.Any<ReadOnlyMemory<byte>>(),
             cancellationToken: Arg.Any<CancellationToken>());
     }
