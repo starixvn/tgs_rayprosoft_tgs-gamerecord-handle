@@ -30,7 +30,7 @@ internal class GameRecordHandleClient : IGameRecordHandleClient
         decimal commission,
         decimal turnover,
         decimal playerWinLoss,
-        string asditionalData,
+        string additionalData,
         CancellationToken cancellationToken)
 
     {
@@ -50,7 +50,7 @@ internal class GameRecordHandleClient : IGameRecordHandleClient
             Commission = commission,
             Turnover = turnover,
             PlayerWinLoss = playerWinLoss,
-            AdditionalData = asditionalData
+            AdditionalData = additionalData
         };
         return _messageSender
             .PublishAsync(

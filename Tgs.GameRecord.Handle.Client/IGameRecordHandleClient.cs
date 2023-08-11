@@ -19,6 +19,6 @@ public interface IGameRecordHandleClient
         decimal commission,
         decimal turnover,
         decimal playerWinLoss,
-        string asditionalData,
+        string additionalData,
         CancellationToken cancellationToken);
 }

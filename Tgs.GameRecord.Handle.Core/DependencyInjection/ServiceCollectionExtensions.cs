@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Tgs.GameRecord.Handle.Core;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

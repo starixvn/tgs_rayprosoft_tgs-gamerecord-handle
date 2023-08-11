@@ -10,7 +10,6 @@ public static class ServiceRegisterExtensions
     {
         using (var scope = app.Services.CreateScope())
         {
-
             var client = scope.ServiceProvider.GetRequiredService<IGameCommandClient>();
             var gameProvider = scope.ServiceProvider.GetRequiredService<IGameProvider>();
             var game = scope.ServiceProvider.GetRequiredService<IGame>();
@@ -45,17 +44,14 @@ public static class ServiceRegisterExtensions
                                 gameProviderId: gameProviderId,
                                 externaGamelId: gameInfo.GameExternalId)
                                 .ConfigureAwait(false);
-
                         }
                         catch
                         {
-
                         }
                     }
                 }
                 catch
                 {
-
                 }
             }
         }

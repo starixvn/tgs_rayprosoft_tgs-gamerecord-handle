@@ -4,13 +4,13 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.0.1</Version>
+		<Version>0.0.2</Version>
 		<Authors>Raypro</Authors>
 		<RootNamespace>Tgs.GameRecord.Handle.Client</RootNamespace>
 		<PackageId>Tgs.GameRecord.Handle.Client</PackageId>
 		<Title>Tgs.GameRecord.Handle.Client</Title>
-		<PackageProjectUrl>	https://gitlab.com/rayprosoft/tgs-gamerounds-work</PackageProjectUrl>
-		<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-gamerounds-work.git</RepositoryUrl>
+		<PackageProjectUrl>	https://gitlab.com/rayprosoft/tgs-gamerecord-handle</PackageProjectUrl>
+		<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-gamerecord-handle.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Tgs GameRecord Handle Client</PackageTags>
 	</PropertyGroup>
