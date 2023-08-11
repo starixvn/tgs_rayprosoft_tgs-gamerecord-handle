@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
         Action<GameCommandClientOptions, IServiceProvider> gameCommandClientOptions,
         Action<GameCurrencyClientOptions, IServiceProvider> gameCurrencyClientOptions)
         => services
+        .AddMemoryCache()
         .AddHandleCore()
         .AddHandleRepository(
             gameCommandClientOptions,
