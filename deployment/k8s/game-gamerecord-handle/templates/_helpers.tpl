@@ -49,8 +49,7 @@ Selector labels
 app.kubernetes.io/name: {{ include "game-gamerecord-handle.name" . }}
 app: {{ include "game-gamerecord-handle.name" . }}
 tgs.kind: game
-tgs.game.kind: gamerounds
-tgs.gamerounds.kind: work
+tgs.game.kind: gamerecord
 {{- end }}
 
 {{/*
