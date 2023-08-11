@@ -74,7 +74,7 @@ builder.Services
         .AddHandler<GameRecordMessageHandler>(subject: NatsConst.Working, group: NatsConst.WorkingGroup);
     })
     .ClearAllExchanges()
-    .AddNatsGlobPatternExchange("game.gamerecord.handle.publish");
+    .AddNatsGlobPatternExchange(NatsConst.Publish);
 
 builder.Services
     .AddOpenTelemetry()
