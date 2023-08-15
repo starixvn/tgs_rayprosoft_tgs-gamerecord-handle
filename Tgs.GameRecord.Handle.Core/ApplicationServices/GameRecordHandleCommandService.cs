@@ -4,12 +4,12 @@ namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 internal class GameRecordHandleCommandService : ICommandService<GameRecordHandleCommand>
 {
-    private readonly ICommandService<GameRecordMessageCommand> _gameMessageService;
+    private readonly ICommandService<GameRoundsWorkPublishCommand> _gameMessageService;
     private readonly IGetService<GameRecordInfoQuery, GameRecordInfoResult> _gameRecordService;
 
     public GameRecordHandleCommandService(
         IGetService<GameRecordInfoQuery, GameRecordInfoResult> gameRecordService,
-        ICommandService<GameRecordMessageCommand> gameMessageService)
+        ICommandService<GameRoundsWorkPublishCommand> gameMessageService)
     {
         _gameRecordService = gameRecordService ?? throw new ArgumentNullException(nameof(gameRecordService));
         _gameMessageService = gameMessageService ?? throw new ArgumentNullException(nameof(gameMessageService));
@@ -41,7 +41,7 @@ internal class GameRecordHandleCommandService : ICommandService<GameRecordHandle
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        var gameMessageCommand = new GameRecordMessageCommand(
+        var gameMessageCommand = new GameRoundsWorkPublishCommand(
             GameProviderId: gameRecordInfoResult.GameProviderId,
             GameProviderCode: gameRecordInfoResult.GameProviderCode,
             GameProviderConfigurationId: gameRecordInfoResult.GameProviderConfigurationId,

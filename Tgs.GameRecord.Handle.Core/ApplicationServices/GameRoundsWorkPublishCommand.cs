@@ -2,7 +2,7 @@
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
-public record GameRecordMessageCommand(
+public record GameRoundsWorkPublishCommand(
     Guid GameProviderId,
     string GameProviderCode,
     Guid GameProviderConfigurationId,

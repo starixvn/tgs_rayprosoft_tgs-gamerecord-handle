@@ -12,7 +12,7 @@ public class GameRecordHandleCommandServiceUnitTest
     public async Task Normal()
     {
         var fakeGameRecordInfo = Substitute.For<IGetService<GameRecordInfoQuery, GameRecordInfoResult>>();
-        var fakeGameRecordMessage = Substitute.For<ICommandService<GameRecordMessageCommand>>();
+        var fakeGameRecordMessage = Substitute.For<ICommandService<GameRoundsWorkPublishCommand>>();
 
         var command = new GameRecordHandleCommand(
             GameProviderCode: "KY",
@@ -94,7 +94,7 @@ public class GameRecordHandleCommandServiceUnitTest
             command: command)
             .ConfigureAwait(false);
 
-        var gameMessageCommand = new GameRecordMessageCommand(
+        var gameMessageCommand = new GameRoundsWorkPublishCommand(
             GameProviderId: gameRecordInfoResult.GameProviderId,
             GameProviderCode: gameRecordInfoResult.GameProviderCode,
             GameProviderConfigurationId: gameRecordInfoResult.GameProviderConfigurationId,

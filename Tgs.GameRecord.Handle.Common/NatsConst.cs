@@ -2,7 +2,7 @@
 
 public class NatsConst
 {
-    public const string Publish = "game.gamerecord.handle.publish.data";
-    public const string Working = "game.gamerecord.handle.working";
-    public const string WorkingGroup = "game.gamerecord.handle.working";
+    public const string GameRecordHandlePublish = "game.gamerecord.handle.publish";
+    public const string GameRecordHandlePublishGroup = "game.gamerecord.handle.publish";
+    public const string GameRoundWorkerPublish = "game.gameround.worker.publish";
 }

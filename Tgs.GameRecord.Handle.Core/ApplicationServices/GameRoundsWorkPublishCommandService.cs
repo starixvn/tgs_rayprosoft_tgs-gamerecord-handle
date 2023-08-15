@@ -1,22 +1,21 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
-using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.MessageQueue;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
-internal class GameRecordMessageCommandService : ICommandService<GameRecordMessageCommand>
+internal class GameRoundsWorkPublishCommandService : ICommandService<GameRoundsWorkPublishCommand>
 {
     private readonly IMessageSender _sender;
 
-    public GameRecordMessageCommandService(IMessageSender sender)
+    public GameRoundsWorkPublishCommandService(IMessageSender sender)
     {
         _sender = sender ?? throw new ArgumentNullException(nameof(sender));
     }
 
-    public ValueTask ExecuteAsync(GameRecordMessageCommand command, CancellationToken cancellationToken = default)
+    public ValueTask ExecuteAsync(GameRoundsWorkPublishCommand command, CancellationToken cancellationToken = default)
     {
         var data = new GameRecordPublish
         {
@@ -53,7 +52,7 @@ internal class GameRecordMessageCommandService : ICommandService<GameRecordMessa
         };
         return _sender
             .PublishAsync(
-            subject: NatsConst.Publish,
+            subject: "game.gameround.worker.publish",
             data: data.ToByteArray(),
             cancellationToken: cancellationToken);
     }

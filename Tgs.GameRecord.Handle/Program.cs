@@ -71,10 +71,10 @@ builder.Services
             var configuration = sp.GetRequiredService<IConfiguration>();
             options.Url = configuration.GetConnectionString("Nats")!;
         })
-        .AddHandler<GameRecordMessageHandler>(subject: NatsConst.Working, group: NatsConst.WorkingGroup);
+        .AddHandler<GameRecordMessageHandler>(subject: NatsConst.GameRecordHandlePublish, group: NatsConst.GameRecordHandlePublishGroup);
     })
     .ClearAllExchanges()
-    .AddNatsGlobPatternExchange(NatsConst.Publish);
+    .AddNatsGlobPatternExchange("*");
 
 builder.Services
     .AddOpenTelemetry()

@@ -14,7 +14,7 @@ public class GameRecordMessageCommandServiceUnitTest
     {
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
-        var command = new GameRecordMessageCommand(
+        var command = new GameRoundsWorkPublishCommand(
             GameProviderId: Guid.NewGuid(),
             GameProviderCode: "KY",
             GameProviderConfigurationId: Guid.NewGuid(),
@@ -49,7 +49,7 @@ public class GameRecordMessageCommandServiceUnitTest
                 ["externalRoundId"] = "50-1691469296-370404138-1"
             }.ToJsonString());
 
-        var service = new GameRecordMessageCommandService(
+        var service = new GameRoundsWorkPublishCommandService(
             fakeMessageSender);
 
         await service
@@ -60,7 +60,7 @@ public class GameRecordMessageCommandServiceUnitTest
         _ = fakeMessageSender
             .Received(1)
             .PublishAsync(
-            subject: Arg.Is(NatsConst.Publish),
+            subject: Arg.Is(NatsConst.GameRoundWorkerPublish),
             data: Arg.Any<ReadOnlyMemory<byte>>(),
             cancellationToken: Arg.Any<CancellationToken>());
     }
