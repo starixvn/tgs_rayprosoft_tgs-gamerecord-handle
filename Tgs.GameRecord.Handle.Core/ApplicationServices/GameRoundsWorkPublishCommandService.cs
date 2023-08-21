@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.MessageQueue;
 using Tgs.ServiceUtility;
@@ -52,7 +53,7 @@ internal class GameRoundsWorkPublishCommandService : ICommandService<GameRoundsW
         };
         return _sender
             .PublishAsync(
-            subject: "game.gameround.worker.publish",
+            subject: NatsConst.GameRoundWorkerPublish,
             data: data.ToByteArray(),
             cancellationToken: cancellationToken);
     }

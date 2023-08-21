@@ -18,13 +18,6 @@ public class GameCurrencyRepositoryUnitTest
         var turnover = 4m;
         var playerWinLoss = 4m;
 
-        var request = new ConvertPlatformRoundsRequest(
-            Bet: bet,
-            ValidBet: validBet,
-            Settle: settle,
-            Commission: commission,
-            Turnover: turnover,
-            WinLoss: playerWinLoss);
         var result = new ConvertPlatformRoundsResult(
             ExchangeRate: 1,
             Bet: 4,
@@ -37,7 +30,12 @@ public class GameCurrencyRepositoryUnitTest
             .ConvertPlatformRoundsAsync(
             gameProviderCode: Arg.Is(gameProviderCode),
             currencyCode: Arg.Is(currencyCode),
-            request: request,
+            bet: Arg.Is(bet),
+            validBet: Arg.Is(validBet),
+            settle: Arg.Is(settle),
+            commission: Arg.Is(commission),
+            turnover: Arg.Is(turnover),
+            winLoss: Arg.Is(playerWinLoss),
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(result);
 
@@ -80,13 +78,6 @@ public class GameCurrencyRepositoryUnitTest
         var turnover = 8m;
         var playerWinLoss = 12m;
 
-        var request = new ConvertPlatformRoundsRequest(
-            Bet: bet,
-            ValidBet: validBet,
-            Settle: settle,
-            Commission: commission,
-            Turnover: turnover,
-            WinLoss: playerWinLoss);
         var result = new ConvertPlatformRoundsResult(
             ExchangeRate: 1000m,
             Bet: 20000m,
@@ -99,7 +90,12 @@ public class GameCurrencyRepositoryUnitTest
             .ConvertPlatformRoundsAsync(
             gameProviderCode: Arg.Is(gameProviderCode),
             currencyCode: Arg.Is(currencyCode),
-            request: request,
+            bet: Arg.Is(bet),
+            validBet: Arg.Is(validBet),
+            settle: Arg.Is(settle),
+            commission: Arg.Is(commission),
+            turnover: Arg.Is(turnover),
+            winLoss: Arg.Is(playerWinLoss),
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(result);
 

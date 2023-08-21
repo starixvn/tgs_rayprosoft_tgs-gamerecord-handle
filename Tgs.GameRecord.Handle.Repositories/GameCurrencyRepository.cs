@@ -26,19 +26,16 @@ internal class GameCurrencyRepository : IGameCurrency
         decimal playerWinLoss,
         CancellationToken cancellationToken = default)
     {
-        var request = new ConvertPlatformRoundsRequest(
-            Bet: bet,
-            ValidBet: validBet,
-            Settle: settle,
-            Commission: commission,
-            Turnover: turnover,
-            WinLoss: playerWinLoss);
-
         var result = await _client
             .ConvertPlatformRoundsAsync(
             gameProviderCode: gameProviderCode,
             currencyCode: currencyCode,
-            request: request,
+            bet: bet,
+            validBet: validBet,
+            settle: settle,
+            commission: commission,
+            turnover: turnover,
+            winLoss: playerWinLoss,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 

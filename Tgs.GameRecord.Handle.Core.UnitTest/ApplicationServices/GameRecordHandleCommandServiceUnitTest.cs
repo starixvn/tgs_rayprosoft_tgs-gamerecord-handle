@@ -12,7 +12,8 @@ public class GameRecordHandleCommandServiceUnitTest
     public async Task Normal()
     {
         var fakeGameRecordInfo = Substitute.For<IGetService<GameRecordInfoQuery, GameRecordInfoResult>>();
-        var fakeGameRecordMessage = Substitute.For<ICommandService<GameRoundsWorkPublishCommand>>();
+        var fakeWorkPublishCommandService = Substitute.For<ICommandService<GameRoundsWorkPublishCommand>>();
+        var fakeDataPublishCommandService = Substitute.For<ICommandService<GameRecordDataPublishCommand>>();
 
         var command = new GameRecordHandleCommand(
             GameProviderCode: "KY",
@@ -87,14 +88,15 @@ public class GameRecordHandleCommandServiceUnitTest
 
         var service = new GameRecordHandleCommandService(
             fakeGameRecordInfo,
-            fakeGameRecordMessage);
+            fakeWorkPublishCommandService,
+            fakeDataPublishCommandService);
 
         await service
             .ExecuteAsync(
             command: command)
             .ConfigureAwait(false);
 
-        var gameMessageCommand = new GameRoundsWorkPublishCommand(
+        var workPublishCommand = new GameRoundsWorkPublishCommand(
             GameProviderId: gameRecordInfoResult.GameProviderId,
             GameProviderCode: gameRecordInfoResult.GameProviderCode,
             GameProviderConfigurationId: gameRecordInfoResult.GameProviderConfigurationId,
@@ -126,10 +128,48 @@ public class GameRecordHandleCommandServiceUnitTest
             PlayerWinLoss: gameRecordInfoResult.PlayerWinLoss,
             AdditionalData: command.AdditionalData);
 
-        _ = fakeGameRecordMessage
+        _ = fakeWorkPublishCommandService
             .Received(1)
             .ExecuteAsync(
-            command: Arg.Is(gameMessageCommand),
+            command: Arg.Is(workPublishCommand),
+            cancellationToken: Arg.Any<CancellationToken>());
+
+        var dataPublishCommand = new GameRecordDataPublishCommand(
+            GameProviderId: gameRecordInfoResult.GameProviderId,
+            GameProviderCode: gameRecordInfoResult.GameProviderCode,
+            GameProviderConfigurationId: gameRecordInfoResult.GameProviderConfigurationId,
+            SubGameProviderCode: gameRecordInfoResult.SubGameProviderCode,
+            GameId: gameRecordInfoResult.GameId,
+            GameType: gameRecordInfoResult.GameType,
+            ResellerId: gameRecordInfoResult.ResellerId,
+            ResellerCode: gameRecordInfoResult.ResellerCode,
+            LicenseeId: gameRecordInfoResult.LicenseeId,
+            LicenseeCode: gameRecordInfoResult.LicenseeCode,
+            BrandId: gameRecordInfoResult.BrandId,
+            BrandCode: gameRecordInfoResult.BrandCode,
+            PlayerCode: gameRecordInfoResult.PlayerCode,
+            Username: gameRecordInfoResult.Username,
+            CurrencyCode: gameRecordInfoResult.CurrencyCode,
+            WalletId: gameRecordInfoResult.WalletId,
+            Status: gameRecordInfoResult.Status,
+            ClientStatus: gameRecordInfoResult.ClientStatus,
+            ExternalRoundId: gameRecordInfoResult.ExternalRoundId,
+            ExternalGameId: gameRecordInfoResult.ExternalGameId,
+            ExternalCreatedOn: gameRecordInfoResult.ExternalCreatedOn,
+            ExternalClosedOn: gameRecordInfoResult.ExternalClosedOn,
+            ExchangeRate: gameRecordInfoResult.ExchangeRate,
+            Bet: gameRecordInfoResult.Bet,
+            ValidBet: gameRecordInfoResult.ValidBet,
+            Settle: gameRecordInfoResult.Settle,
+            Commission: gameRecordInfoResult.Commission,
+            Turnover: gameRecordInfoResult.Turnover,
+            PlayerWinLoss: gameRecordInfoResult.PlayerWinLoss,
+            AdditionalData: command.AdditionalData);
+
+        _ = fakeDataPublishCommandService
+            .Received(1)
+            .ExecuteAsync(
+            command: Arg.Is(dataPublishCommand),
             cancellationToken: Arg.Any<CancellationToken>());
     }
 }
