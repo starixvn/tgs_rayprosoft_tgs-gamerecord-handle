@@ -54,7 +54,7 @@ internal class GameRecordHandleClient : IGameRecordHandleClient
         };
         return _messageSender
             .PublishAsync(
-                subject: NatsConst.GameRecordHandlePublish,
+                subject: NatsConst.GameRecordPublish,
                 data: request.ToByteArray(),
                 cancellationToken: cancellationToken);
     }

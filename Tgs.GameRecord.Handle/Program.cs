@@ -71,7 +71,8 @@ builder.Services
             var configuration = sp.GetRequiredService<IConfiguration>();
             options.Url = configuration.GetConnectionString("Nats")!;
         })
-        .AddHandler<GameRecordMessageHandler>(subject: NatsConst.GameRecordHandlePublish, group: NatsConst.GameRecordHandlePublishGroup);
+        .AddHandler<GameRecordMessageHandler>(subject: "game.gamerecord.handle.publish", group: "game.gamerecord.publish.handle")
+        .AddHandler<GameRecordMessageHandler>(subject: NatsConst.GameRecordPublish, group: "game.gamerecord.publish.handle");
     })
     .ClearAllExchanges()
     .AddNatsGlobPatternExchange("*");
