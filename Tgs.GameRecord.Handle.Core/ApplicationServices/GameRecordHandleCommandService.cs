@@ -4,18 +4,18 @@ namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 internal class GameRecordHandleCommandService : ICommandService<GameRecordHandleCommand>
 {
-    private readonly ICommandService<GameRecordDataPublishCommand> _dataPublishCommandService;
+    private readonly ICommandService<GameRecordHandleDataPublishCommand> _handleDataPublishCommandService;
     private readonly IGetService<GameRecordInfoQuery, GameRecordInfoResult> _gameRecordService;
     private readonly ICommandService<GameRoundsWorkPublishCommand> _workPublishCommandService;
 
     public GameRecordHandleCommandService(
         IGetService<GameRecordInfoQuery, GameRecordInfoResult> gameRecordService,
         ICommandService<GameRoundsWorkPublishCommand> workPublishCommandService,
-        ICommandService<GameRecordDataPublishCommand> dataPublishCommandService)
+        ICommandService<GameRecordHandleDataPublishCommand> handleDataPublishCommandService)
     {
         _gameRecordService = gameRecordService ?? throw new ArgumentNullException(nameof(gameRecordService));
         _workPublishCommandService = workPublishCommandService ?? throw new ArgumentNullException(nameof(workPublishCommandService));
-        _dataPublishCommandService = dataPublishCommandService ?? throw new ArgumentNullException(nameof(dataPublishCommandService));
+        _handleDataPublishCommandService = handleDataPublishCommandService ?? throw new ArgumentNullException(nameof(handleDataPublishCommandService));
     }
 
     public async ValueTask ExecuteAsync(
@@ -82,7 +82,7 @@ internal class GameRecordHandleCommandService : ICommandService<GameRecordHandle
             cancellationToken)
             .ConfigureAwait(false);
 
-        var dataPublishCommand = new GameRecordDataPublishCommand(
+        var handleDataPublishCommand = new GameRecordHandleDataPublishCommand(
             GameProviderId: gameRecordInfoResult.GameProviderId,
             GameProviderCode: gameRecordInfoResult.GameProviderCode,
             GameProviderConfigurationId: gameRecordInfoResult.GameProviderConfigurationId,
@@ -114,9 +114,9 @@ internal class GameRecordHandleCommandService : ICommandService<GameRecordHandle
             PlayerWinLoss: gameRecordInfoResult.PlayerWinLoss,
             AdditionalData: command.AdditionalData);
 
-        await _dataPublishCommandService
+        await _handleDataPublishCommandService
             .ExecuteAsync(
-            dataPublishCommand,
+            handleDataPublishCommand,
             cancellationToken)
             .ConfigureAwait(false);
     }

@@ -7,16 +7,16 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
-internal class GameRecordDataPublishCommandService : ICommandService<GameRecordDataPublishCommand>
+internal class GameRecordHandleDataPublishCommandService : ICommandService<GameRecordHandleDataPublishCommand>
 {
     private readonly IMessageSender _sender;
 
-    public GameRecordDataPublishCommandService(IMessageSender sender)
+    public GameRecordHandleDataPublishCommandService(IMessageSender sender)
     {
         _sender = sender ?? throw new ArgumentNullException(nameof(sender));
     }
 
-    public async ValueTask ExecuteAsync(GameRecordDataPublishCommand command, CancellationToken cancellationToken = default)
+    public async ValueTask ExecuteAsync(GameRecordHandleDataPublishCommand command, CancellationToken cancellationToken = default)
     {
         var data = new GameRecordPublish
         {
@@ -51,12 +51,6 @@ internal class GameRecordDataPublishCommandService : ICommandService<GameRecordD
             PlayerWinLoss = command.PlayerWinLoss,
             AdditionalData = command.AdditionalData
         };
-        await _sender
-            .PublishAsync(
-            subject: "game.gamerecord.data.publish",
-            data: data.ToByteArray(),
-            cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
 
         await _sender
             .PublishAsync(

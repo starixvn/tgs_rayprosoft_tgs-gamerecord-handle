@@ -13,7 +13,7 @@ public class GameRecordHandleCommandServiceUnitTest
     {
         var fakeGameRecordInfo = Substitute.For<IGetService<GameRecordInfoQuery, GameRecordInfoResult>>();
         var fakeWorkPublishCommandService = Substitute.For<ICommandService<GameRoundsWorkPublishCommand>>();
-        var fakeDataPublishCommandService = Substitute.For<ICommandService<GameRecordDataPublishCommand>>();
+        var fakeHandleDataPublishCommandService = Substitute.For<ICommandService<GameRecordHandleDataPublishCommand>>();
 
         var command = new GameRecordHandleCommand(
             GameProviderCode: "KY",
@@ -89,7 +89,7 @@ public class GameRecordHandleCommandServiceUnitTest
         var service = new GameRecordHandleCommandService(
             fakeGameRecordInfo,
             fakeWorkPublishCommandService,
-            fakeDataPublishCommandService);
+            fakeHandleDataPublishCommandService);
 
         await service
             .ExecuteAsync(
@@ -134,7 +134,7 @@ public class GameRecordHandleCommandServiceUnitTest
             command: Arg.Is(workPublishCommand),
             cancellationToken: Arg.Any<CancellationToken>());
 
-        var dataPublishCommand = new GameRecordDataPublishCommand(
+        var handleDataPublishCommand = new GameRecordHandleDataPublishCommand(
             GameProviderId: gameRecordInfoResult.GameProviderId,
             GameProviderCode: gameRecordInfoResult.GameProviderCode,
             GameProviderConfigurationId: gameRecordInfoResult.GameProviderConfigurationId,
@@ -166,10 +166,10 @@ public class GameRecordHandleCommandServiceUnitTest
             PlayerWinLoss: gameRecordInfoResult.PlayerWinLoss,
             AdditionalData: command.AdditionalData);
 
-        _ = fakeDataPublishCommandService
+        _ = fakeHandleDataPublishCommandService
             .Received(1)
             .ExecuteAsync(
-            command: Arg.Is(dataPublishCommand),
+            command: Arg.Is(handleDataPublishCommand),
             cancellationToken: Arg.Any<CancellationToken>());
     }
 }
