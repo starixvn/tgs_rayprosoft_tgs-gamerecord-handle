@@ -16,7 +16,7 @@ internal class GameRecordDataPublishCommandService : ICommandService<GameRecordD
         _sender = sender ?? throw new ArgumentNullException(nameof(sender));
     }
 
-    public ValueTask ExecuteAsync(GameRecordDataPublishCommand command, CancellationToken cancellationToken = default)
+    public async ValueTask ExecuteAsync(GameRecordDataPublishCommand command, CancellationToken cancellationToken = default)
     {
         var data = new GameRecordPublish
         {
@@ -51,10 +51,18 @@ internal class GameRecordDataPublishCommandService : ICommandService<GameRecordD
             PlayerWinLoss = command.PlayerWinLoss,
             AdditionalData = command.AdditionalData
         };
-        return _sender
+        await _sender
+            .PublishAsync(
+            subject: "game.gamerecord.data.publish",
+            data: data.ToByteArray(),
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        await _sender
             .PublishAsync(
             subject: NatsConst.GameRecordHandleDataPublish,
             data: data.ToByteArray(),
-            cancellationToken: cancellationToken);
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
     }
 }
