@@ -53,7 +53,7 @@ internal class GameRecordDataPublishCommandService : ICommandService<GameRecordD
         };
         return _sender
             .PublishAsync(
-            subject: NatsConst.GameRecordDataPublish,
+            subject: NatsConst.GameRecordHandleDataPublish,
             data: data.ToByteArray(),
             cancellationToken: cancellationToken);
     }
