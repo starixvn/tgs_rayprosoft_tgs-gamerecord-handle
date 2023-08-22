@@ -13,24 +13,24 @@ public static class ServiceRegisterExtensions
             var client = scope.ServiceProvider.GetRequiredService<IGameCommandClient>();
             var gameProvider = scope.ServiceProvider.GetRequiredService<IGameProvider>();
             var game = scope.ServiceProvider.GetRequiredService<IGame>();
-            var gameProviderIdInfos = await client
-                .GameProviderGetGameProviderIdsAsync()
+            var gameProviderInfos = await client
+                .GameProviderQueryAsync()
                 .ToArrayAsync()
                 .ConfigureAwait(false)
-                ?? Enumerable.Empty<GameProviderIdInfo>();
+                ?? Enumerable.Empty<GameProviderInfo>();
 
-            foreach (var gameProviderIdInfo in gameProviderIdInfos)
+            foreach (var gameProviderInfo in gameProviderInfos)
             {
                 try
                 {
                     var gameProviderId = await gameProvider
                         .GetIdAsync(
-                        code: gameProviderIdInfo.GameProviderCode)
+                        code: gameProviderInfo.GameProviderCode)
                         .ConfigureAwait(false);
 
                     var gameInfos = await client
                         .GameQueryAsync(
-                        gameProviderCode: gameProviderIdInfo.GameProviderCode)
+                        gameProviderCode: gameProviderInfo.GameProviderCode)
                         .ToArrayAsync()
                         .ConfigureAwait(false)
                         ?? Enumerable.Empty<GameInfo>();
