@@ -4,8 +4,8 @@ namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 internal class GameRecordHandleCommandService : ICommandService<GameRecordHandleCommand>
 {
-    private readonly ICommandService<GameRecordHandleDataPublishCommand> _handleDataPublishCommandService;
     private readonly IGetService<GameRecordInfoQuery, GameRecordInfoResult> _gameRecordService;
+    private readonly ICommandService<GameRecordHandleDataPublishCommand> _handleDataPublishCommandService;
     private readonly ICommandService<GameRoundsWorkPublishCommand> _workPublishCommandService;
 
     public GameRecordHandleCommandService(
