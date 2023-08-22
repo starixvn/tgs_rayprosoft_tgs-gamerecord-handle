@@ -64,7 +64,7 @@ message GameRecordPublish {
     string additional_data = 30;
     google.protobuf.Timestamp handle_on = 31;
     google.protobuf.Timestamp created_on = 32;
-    google.protobuf.Timestamp closed_on = 33;
+    google.protobuf.Timestamp updated_on = 33;
 }
 
 enum GameRecordStatus {
