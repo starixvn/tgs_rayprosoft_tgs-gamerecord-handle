@@ -49,7 +49,10 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
             Commission = command.Commission,
             Turnover = command.Turnover,
             PlayerWinLoss = command.PlayerWinLoss,
-            AdditionalData = command.AdditionalData
+            AdditionalData = command.AdditionalData,
+            HandleOn = DateTimeOffset.UtcNow.ToTimestamp(),
+            CreatedOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
+            ClosedOn = DateTimeOffset.UnixEpoch.ToTimestamp()
         };
 
         return _sender
