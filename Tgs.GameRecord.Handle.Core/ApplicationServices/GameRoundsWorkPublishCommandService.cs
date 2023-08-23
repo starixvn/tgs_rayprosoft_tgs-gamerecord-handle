@@ -52,7 +52,8 @@ internal class GameRoundsWorkPublishCommandService : ICommandService<GameRoundsW
             AdditionalData = command.AdditionalData,
             HandleOn = DateTimeOffset.UtcNow.ToTimestamp(),
             CreatedOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
-            UpdatedOn = DateTimeOffset.UnixEpoch.ToTimestamp()
+            ClosedOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
+            UpdatedOn = DateTimeOffset.UtcNow.ToTimestamp(),
         };
         return _sender
             .PublishAsync(
