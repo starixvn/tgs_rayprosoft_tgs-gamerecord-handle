@@ -63,9 +63,10 @@ message GameRecordPublish {
     phoenix.protobuf.DecimalValue player_win_loss = 29;
     string additional_data = 30;
     google.protobuf.Timestamp handle_on = 31;
-    google.protobuf.Timestamp created_on = 32;
-    google.protobuf.Timestamp closed_on = 33;
-    google.protobuf.Timestamp updated_on = 34;
+    google.protobuf.Timestamp rapid_test_on = 32;
+    google.protobuf.Timestamp created_on = 33;
+    google.protobuf.Timestamp closed_on = 34;
+    google.protobuf.Timestamp updated_on = 35;
 }
 
 enum GameRecordStatus {
