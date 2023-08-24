@@ -67,8 +67,8 @@ message GameRecordPublish {
     google.protobuf.Timestamp created_on = 33;
     google.protobuf.Timestamp closed_on = 34;
     google.protobuf.Timestamp updated_on = 35;
-    string external_wagers_id =36;
-    WagersType wagers_type = 37;
+    string external_wager_id =36;
+    WagerType wager_type = 37;
 }
 
 enum GameRecordStatus {
@@ -77,13 +77,13 @@ enum GameRecordStatus {
     GAME_RECORD_STATUS_CLOSED = 2;
 }
 
-enum WagersType {
+enum WagerType {
     //正常
-    WAGERS_TYPE_NORMAL = 0;
+    WAGER_TYPE_NORMAL = 0;
     //免費遊戲
-    WAGERS_TYPE_FREE_GAME = 1;
+    WAGER_TYPE_FREE_GAME = 1;
     //博取游戏
-    WAGERS_TYPE_GAMBLEE = 2;
+    WAGER_TYPE_GAMBLEE = 2;
 }
 
 
