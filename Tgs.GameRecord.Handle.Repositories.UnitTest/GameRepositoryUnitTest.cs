@@ -2,6 +2,7 @@
 using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
+using Tgs.GameRecord.Handle.Common.Protos;
 
 namespace Tgs.GameRecord.Handle.Repositories.UnitTest;
 
@@ -68,6 +69,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.CardGame, actual.GameCategory);
         Assert.Equal((int)info.Type, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -140,6 +142,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.CardGame, actual.GameCategory);
         Assert.Equal((int)GameType.CardGame, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -212,6 +215,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.Sportsbook, actual.GameCategory);
         Assert.Equal((int)info.Type, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -284,6 +288,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.Slot, actual.GameCategory);
         Assert.Equal((int)GameType.Fishing, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -356,6 +361,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.LiveDealer, actual.GameCategory);
         Assert.Equal((int)info.Type, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -428,6 +434,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.LiveDealer, actual.GameCategory);
         Assert.Equal((int)GameType.LiveDealer, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -500,6 +507,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.Lottery, actual.GameCategory);
         Assert.Equal((int)GameType.Lottery, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -572,6 +580,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.Lottery, actual.GameCategory);
         Assert.Equal((int)GameType.Lottery, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -682,6 +691,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.Slot, actual.GameCategory);
         Assert.Equal((int)GameType.Slot, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -754,6 +764,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.Sportsbook, actual.GameCategory);
         Assert.Equal((int)info.Type, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -826,6 +837,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.Slot, actual.GameCategory);
         Assert.Equal((int)GameType.TableGame, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -898,6 +910,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.VirtualSports, actual.GameCategory);
         Assert.Equal((int)info.Type, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 
@@ -970,6 +983,7 @@ public class GameRepositoryUnitTest
         Assert.Equal(info.GameProviderCode, actual.GameProviderCode);
         Assert.Equal(externaGamelId, actual.ExternalGameId);
         Assert.Equal(info.GameExternalId, actual.ExternalGameId);
+        Assert.Equal(GameCategories.VirtualSports, actual.GameCategory);
         Assert.Equal((int)GameType.VirtualSports, (int)actual.GameType);
         Assert.Equal(info.SubGameProviderCode, actual.SubGameProviderCode);
 

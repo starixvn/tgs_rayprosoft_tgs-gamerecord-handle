@@ -90,6 +90,7 @@ internal class GameRecordInfoGetService : IGetService<GameRecordInfoQuery, GameR
             GameProviderConfigurationId: gameProviderConfigurationId,
             SubGameProviderCode: game.SubGameProviderCode,
             GameId: game.GameId,
+            GameCategory: game.GameCategory,
             GameType: game.GameType,
             ResellerId: player.ResellerId,
             ResellerCode: player.ResellerCode,

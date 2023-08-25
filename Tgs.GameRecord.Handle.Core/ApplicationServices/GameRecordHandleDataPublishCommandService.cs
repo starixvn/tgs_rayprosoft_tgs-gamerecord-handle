@@ -18,13 +18,27 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
 
     public ValueTask ExecuteAsync(GameRecordHandleDataPublishCommand command, CancellationToken cancellationToken = default)
     {
-        var data = new GameRecordPublish
+        var wagerState = command.Status != GameRecordStatus.Closed
+            ? WagerStates.Running
+            : command.ClientStatus switch
+            {
+                GameRecordClientStatus.New => WagerStates.Running,
+                GameRecordClientStatus.Open => WagerStates.Running,
+                GameRecordClientStatus.Void => WagerStates.Void,
+                GameRecordClientStatus.Win => WagerStates.Win,
+                GameRecordClientStatus.Loss => WagerStates.Lose,
+                GameRecordClientStatus.Draw => WagerStates.Draw,
+                _ => WagerStates.Waiting
+            };
+
+        var data = new GameWagerPublish
         {
             GameProviderId = command.GameProviderId,
             GameProviderCode = command.GameProviderCode,
             GameProviderConfigurationId = command.GameProviderConfigurationId,
             SubGameProviderCode = command.SubGameProviderCode,
             GameId = command.GameId,
+            GameCategory = command.GameCategory,
             GameType = command.GameType,
             ResellerId = command.ResellerId,
             ResellerCode = command.ResellerCode,
@@ -36,14 +50,14 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
             Username = command.Username,
             CurrencyCode = command.CurrencyCode,
             WalletId = command.WalletId,
-            Status = command.Status,
-            ClientStatus = command.ClientStatus,
-            WagerType = WagerType.Normal,
+            WagerState = wagerState,
+            WagerType = WagerTypes.Normal,
             ExternalRoundId = command.ExternalRoundId,
             ExternalWagerId = command.ExternalRoundId,
             ExternalGameId = command.ExternalGameId,
             ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
             ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
+            ExternalPayoffOn = command.ExternalClosedOn.ToTimestamp(),
             ExchangeRate = command.ExchangeRate,
             Bet = command.Bet,
             ValidBet = command.ValidBet,

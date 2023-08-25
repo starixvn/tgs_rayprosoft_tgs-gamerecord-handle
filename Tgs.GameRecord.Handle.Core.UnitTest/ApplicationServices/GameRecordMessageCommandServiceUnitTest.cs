@@ -20,7 +20,7 @@ public class GameRecordMessageCommandServiceUnitTest
             GameProviderConfigurationId: Guid.NewGuid(),
             SubGameProviderCode: "KY",
             GameId: 1000017,
-            GameType: GameRecordGameType.CardGame,
+            GameType: GameTypes.CardGame,
             ResellerId: Guid.NewGuid(),
             ResellerCode: "TGS",
             LicenseeId: Guid.NewGuid(),

@@ -8,7 +8,7 @@ public record GameRoundsWorkPublishCommand(
     Guid GameProviderConfigurationId,
     string SubGameProviderCode,
     int GameId,
-    GameRecordGameType GameType,
+    GameTypes GameType,
     Guid ResellerId,
     string ResellerCode,
     Guid LicenseeId,

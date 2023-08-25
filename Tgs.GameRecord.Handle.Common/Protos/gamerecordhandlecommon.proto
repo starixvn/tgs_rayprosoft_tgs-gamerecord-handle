@@ -37,7 +37,7 @@ message GameRecordPublish {
     phoenix.protobuf.GuidValue game_provider_configuration_id = 3;
     string sub_game_provider_code = 4;
     int32 game_id = 5;
-    GameRecordGameType game_type = 6;
+    GameTypes game_type = 6;
     phoenix.protobuf.GuidValue reseller_id = 7;
     string reseller_code = 8;
     phoenix.protobuf.GuidValue licensee_id = 9;
@@ -68,24 +68,110 @@ message GameRecordPublish {
     google.protobuf.Timestamp closed_on = 34;
     google.protobuf.Timestamp updated_on = 35;
     string external_wager_id =36;
-    WagerType wager_type = 37;
+    WagerTypes wager_type = 37;
 }
+
+message GameWagerPublish {
+    phoenix.protobuf.GuidValue game_provider_id = 1;
+    string game_provider_code = 2;
+    phoenix.protobuf.GuidValue game_provider_configuration_id = 3;
+    string sub_game_provider_code = 4;
+    int32 game_id = 5;
+    GameCategories game_category = 7;
+    GameTypes game_type = 8;
+    phoenix.protobuf.GuidValue reseller_id = 9;
+    string reseller_code = 10;
+    phoenix.protobuf.GuidValue licensee_id = 11;
+    string licensee_code = 12;
+    phoenix.protobuf.GuidValue brand_id = 13;
+    string brand_code = 14;
+    string player_code = 15;
+    string username = 16;
+    string currency_code = 17;
+    phoenix.protobuf.GuidValue wallet_id = 18;
+    WagerStates wager_state = 19;
+    WagerTypes wager_type = 20;
+    string external_round_id = 21;
+    string external_wager_id = 22;
+    string external_game_id = 23;
+    google.protobuf.Timestamp external_created_on = 24;
+    google.protobuf.Timestamp external_closed_on = 25;
+    google.protobuf.Timestamp external_payoff_on = 26;
+    phoenix.protobuf.DecimalValue exchange_rate = 27;
+    phoenix.protobuf.DecimalValue bet = 28;
+    phoenix.protobuf.DecimalValue validBet = 29;
+    phoenix.protobuf.DecimalValue settle = 30;
+    phoenix.protobuf.DecimalValue commission = 31;
+    phoenix.protobuf.DecimalValue turnover = 32;
+    phoenix.protobuf.DecimalValue player_win_loss = 33;
+    string additional_data = 34;
+    google.protobuf.Timestamp handle_on = 35;
+    google.protobuf.Timestamp rapid_test_on = 36;
+    google.protobuf.Timestamp created_on = 37;
+    google.protobuf.Timestamp closed_on = 38;
+    google.protobuf.Timestamp updated_on = 39;
+}
+
+enum WagerStates{
+    //等待中: 我们交易员因为可能因为赔率的转换等因素，还未接受这张注单。
+    WAGER_STATES_WAITING = 0;
+    //進行中: 此註單還沒有結算。(注單還沒有結算的狀態有可能是這場比賽還沒有結算之類的情形。)
+    WAGER_STATES_RUNNING = 1;
+    //作廢: 在註單為 RUNNING 的狀態下，玩家下註註金返回。原因可能為我們交易員對此場賽事有些疑慮。可與我們聯繫詢問發生什麼狀況。
+    WAGER_STATES_VOID= 2;
+    //退款: 在註單為 RUNNING 的狀態下，玩家下註註金返回。原因有可能是賽事取消或發生什麼意外。
+    WAGER_STATES_REFUND = 3;
+    //已取消: 在註單為 WAITING 的狀態下，玩家下註註金返回。可能狀況很多。
+    WAGER_STATES_REJECT = 4;
+    //輸: 此註單已結算且玩家輸了此註單。
+    WAGER_STATES_LOSE = 5;
+    //贏: 此注单已结算且玩家赢了此注单。
+    WAGER_STATES_WIN = 6;
+    //和局: 此註單已結算且此註單為和局。
+    WAGER_STATES_DRAW = 7;
+    //半赢: 此註單已結算且玩家贏了下注額一半。
+    WAGER_STATES_HALF_WON = 8;
+    //半輸:  此註單已結算且玩家輸了下注額一半。
+    WAGER_STATES_HALF_LOSE = 9;
+}
+
+enum GameCategories{
+    GAME_CATEGORIES_UNKNOWN = 0;
+    GAME_CATEGORIES_SPORTSBOOK = 1;
+    GAME_CATEGORIES_VIRTUAL_SPORTS = 2;
+    GAME_CATEGORIES_LIVE_DEALER = 3;
+    GAME_CATEGORIES_CARD_GAME = 4;
+    GAME_CATEGORIES_LOTTERY = 5;
+    GAME_CATEGORIES_SLOT = 6;
+    GAME_CATEGORIES_OTHER = 99;
+}
+
+enum GameTypes{
+    GAME_TYPES_UNKNOWN = 0;
+    GAME_TYPES_SPORTSBOOK = 1;
+    GAME_TYPES_VIRTUAL_SPORTS = 2;
+    GAME_TYPES_E_SPORTS = 4;
+    GAME_TYPES_LIVE_DEALER = 5;
+    GAME_TYPES_CARD_GAME = 7;
+    GAME_TYPES_FISHING = 9;
+    GAME_TYPES_ARCADE = 11;
+    GAME_TYPES_LOTTERY = 13;
+    GAME_TYPES_SLOT = 15;
+    GAME_TYPES_TABLE_GAME = 16;
+    GAME_TYPES_OTHER = 99;
+}
+
+enum WagerTypes {
+    //正常
+    WAGER_TYPES_NORMAL = 0;
+}
+
 
 enum GameRecordStatus {
     GAME_RECORD_STATUS_NEW = 0;
     GAME_RECORD_STATUS_OPEN = 1;
     GAME_RECORD_STATUS_CLOSED = 2;
 }
-
-enum WagerType {
-    //正常
-    WAGER_TYPE_NORMAL = 0;
-    //免費遊戲
-    WAGER_TYPE_FREE_GAME = 1;
-    //博取游戏
-    WAGER_TYPE_GAMBLEE = 2;
-}
-
 
 enum GameRecordClientStatus{
     GAME_RECORD_CLIENT_STATUS_NEW = 0;

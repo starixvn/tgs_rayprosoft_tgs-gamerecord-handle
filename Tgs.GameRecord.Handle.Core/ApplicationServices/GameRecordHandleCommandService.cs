@@ -88,6 +88,7 @@ internal class GameRecordHandleCommandService : ICommandService<GameRecordHandle
             GameProviderConfigurationId: gameRecordInfoResult.GameProviderConfigurationId,
             SubGameProviderCode: gameRecordInfoResult.SubGameProviderCode,
             GameId: gameRecordInfoResult.GameId,
+            GameCategory: gameRecordInfoResult.GameCategory,
             GameType: gameRecordInfoResult.GameType,
             ResellerId: gameRecordInfoResult.ResellerId,
             ResellerCode: gameRecordInfoResult.ResellerCode,

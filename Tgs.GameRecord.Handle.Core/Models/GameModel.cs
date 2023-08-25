@@ -8,5 +8,6 @@ public record GameModel(
     Guid GameProviderId,
     string GameProviderCode,
     string ExternalGameId,
-    GameRecordGameType GameType,
+    GameCategories GameCategory,
+    GameTypes GameType,
     string SubGameProviderCode);

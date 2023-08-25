@@ -42,23 +42,39 @@ internal class GameRepository : IGame
 
             var gameType = info.Type switch
             {
-                GameType.Sportsbook => GameRecordGameType.Sportsbook,
-                GameType.VirtualSports => GameRecordGameType.VirtualSports,
-                GameType.VirtualSportsLobby => GameRecordGameType.VirtualSports,
-                GameType.ESports => GameRecordGameType.ESports,
-                GameType.LiveDealer => GameRecordGameType.LiveDealer,
-                GameType.LiveDealerLobby => GameRecordGameType.LiveDealer,
-                GameType.CardGame => GameRecordGameType.CardGame,
-                GameType.CardGameLobby => GameRecordGameType.CardGame,
-                GameType.Fishing => GameRecordGameType.Fishing,
-                GameType.FishingLobby => GameRecordGameType.Fishing,
-                GameType.Arcade => GameRecordGameType.Arcade,
-                GameType.ArcadeLobby => GameRecordGameType.Arcade,
-                GameType.Lottery => GameRecordGameType.Lottery,
-                GameType.LotteryLobby => GameRecordGameType.Lottery,
-                GameType.Slot => GameRecordGameType.Slot,
-                GameType.TableGame => GameRecordGameType.TableGame,
-                _ => GameRecordGameType.Other
+                GameType.Sportsbook => GameTypes.Sportsbook,
+                GameType.VirtualSports => GameTypes.VirtualSports,
+                GameType.VirtualSportsLobby => GameTypes.VirtualSports,
+                GameType.ESports => GameTypes.ESports,
+                GameType.LiveDealer => GameTypes.LiveDealer,
+                GameType.LiveDealerLobby => GameTypes.LiveDealer,
+                GameType.CardGame => GameTypes.CardGame,
+                GameType.CardGameLobby => GameTypes.CardGame,
+                GameType.Fishing => GameTypes.Fishing,
+                GameType.FishingLobby => GameTypes.Fishing,
+                GameType.Arcade => GameTypes.Arcade,
+                GameType.ArcadeLobby => GameTypes.Arcade,
+                GameType.Lottery => GameTypes.Lottery,
+                GameType.LotteryLobby => GameTypes.Lottery,
+                GameType.Slot => GameTypes.Slot,
+                GameType.TableGame => GameTypes.TableGame,
+                _ => GameTypes.Other
+            };
+
+            var gameCategory = gameType switch
+            {
+                GameTypes.Sportsbook => GameCategories.Sportsbook,
+                GameTypes.VirtualSports => GameCategories.VirtualSports,
+                GameTypes.ESports => GameCategories.Sportsbook,
+                GameTypes.LiveDealer => GameCategories.LiveDealer,
+                GameTypes.CardGame => GameCategories.CardGame,
+                GameTypes.Fishing => GameCategories.Slot,
+                GameTypes.Arcade => GameCategories.Slot,
+                GameTypes.Lottery => GameCategories.Lottery,
+                GameTypes.Slot => GameCategories.Slot,
+                GameTypes.TableGame => GameCategories.Slot,
+                GameTypes.Other => GameCategories.Other,
+                _ => GameCategories.Other
             };
 
             game = new GameModel(
@@ -67,6 +83,7 @@ internal class GameRepository : IGame
                GameProviderId: info.GameProviderId,
                GameProviderCode: info.GameProviderCode,
                ExternalGameId: info.GameExternalId,
+               GameCategory: gameCategory,
                GameType: gameType,
                SubGameProviderCode: info.SubGameProviderCode ?? info.GameProviderCode);
 

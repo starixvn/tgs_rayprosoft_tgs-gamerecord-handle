@@ -38,7 +38,7 @@ internal class GameRoundsWorkPublishCommandService : ICommandService<GameRoundsW
             WalletId = command.WalletId,
             Status = command.Status,
             ClientStatus = command.ClientStatus,
-            WagerType = WagerType.Normal,
+            WagerType = WagerTypes.Normal,
             ExternalRoundId = command.ExternalRoundId,
             ExternalWagerId = command.ExternalRoundId,
             ExternalGameId = command.ExternalGameId,

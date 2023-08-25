@@ -71,7 +71,8 @@ public class GameRecordInfoGetServiceUnitTest
             gameProviderId,
             "KY",
             "910",
-            GameRecordGameType.CardGame,
+            GameCategories.CardGame,
+            GameTypes.CardGame,
             "KY");
         _ = fakeGame
             .GetAsync(
@@ -209,7 +210,8 @@ public class GameRecordInfoGetServiceUnitTest
             gameProviderId,
             "KY",
             "910",
-            GameRecordGameType.CardGame,
+            GameCategories.CardGame,
+            GameTypes.CardGame,
             "KY");
         _ = fakeGame
             .GetAsync(
@@ -347,7 +349,8 @@ public class GameRecordInfoGetServiceUnitTest
             gameProviderId,
             "KY",
             "910",
-            GameRecordGameType.CardGame,
+            GameCategories.CardGame,
+            GameTypes.CardGame,
             "KY");
         _ = fakeGame
             .GetAsync(
@@ -485,7 +488,8 @@ public class GameRecordInfoGetServiceUnitTest
             gameProviderId,
             "KY",
             "910",
-            GameRecordGameType.CardGame,
+            GameCategories.CardGame,
+            GameTypes.CardGame,
             "KY");
         _ = fakeGame
             .GetAsync(
