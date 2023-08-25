@@ -18,7 +18,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "OTEL_SERVICE_NAME": "Game-GameRecord-Handle(local)",
-        "NODE_IP": "otel.rpgp.cc"
+        "NODE_IP": "otel.rpgp.cc",
+        "POD_IP": "127.0.0.1"
       }
     },
     "https": {
@@ -30,7 +31,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "OTEL_SERVICE_NAME": "Game-GameRecord-Handle(local)",
-        "NODE_IP": "otel.rpgp.cc"
+        "NODE_IP": "otel.rpgp.cc",
+        "POD_IP": "127.0.0.1"
       }
     }
   }

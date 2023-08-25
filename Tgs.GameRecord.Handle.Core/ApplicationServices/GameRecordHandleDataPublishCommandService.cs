@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.Extensions.Logging;
 using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.MessageQueue;
@@ -9,18 +10,36 @@ namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 internal class GameRecordHandleDataPublishCommandService : ICommandService<GameRecordHandleDataPublishCommand>
 {
+    private readonly ILogger<GameRecordHandleDataPublishCommandService> _logger;
     private readonly IMessageSender _sender;
+    private readonly ISnowflakeWork _work;
 
-    public GameRecordHandleDataPublishCommandService(IMessageSender sender)
+    public GameRecordHandleDataPublishCommandService(
+         ILogger<GameRecordHandleDataPublishCommandService> logger,
+        ISnowflakeWork work,
+        IMessageSender sender)
     {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _work = work ?? throw new ArgumentNullException(nameof(work));
         _sender = sender ?? throw new ArgumentNullException(nameof(sender));
     }
 
     public ValueTask ExecuteAsync(GameRecordHandleDataPublishCommand command, CancellationToken cancellationToken = default)
     {
-        var wagerState = command.Status != GameRecordStatus.Closed
-            ? WagerStates.Running
-            : command.ClientStatus switch
+        var wagerId = _work.NextId();
+        var closedState = ClosedStates.Normal;
+        var voidState = VoidStates.Normal;
+        var cancelState = CancelStates.Normal;
+        var cashoutState = CashoutStates.Normal;
+
+        var wagerState = WagerStates.Waiting;
+        if (command.Status == GameRecordStatus.Open)
+        {
+            wagerState = WagerStates.Running;
+        }
+        if (command.Status == GameRecordStatus.Closed)
+        {
+            wagerState = command.ClientStatus switch
             {
                 GameRecordClientStatus.New => WagerStates.Running,
                 GameRecordClientStatus.Open => WagerStates.Running,
@@ -30,9 +49,26 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
                 GameRecordClientStatus.Draw => WagerStates.Draw,
                 _ => WagerStates.Waiting
             };
+            closedState = ClosedStates.Closed;
+            if (wagerState == WagerStates.Void)
+            {
+                voidState = VoidStates.Void;
+            }
 
-        var data = new GameWagerPublish
+            if (wagerState == WagerStates.Reject)
+            {
+                cancelState = CancelStates.Cancel;
+            }
+
+            if (wagerState == WagerStates.Refund)
+            {
+                cashoutState = CashoutStates.Cashout;
+            }
+        }
+
+        var publish = new GameWagerPublish
         {
+            WagerId = wagerId,
             GameProviderId = command.GameProviderId,
             GameProviderCode = command.GameProviderCode,
             GameProviderConfigurationId = command.GameProviderConfigurationId,
@@ -52,6 +88,10 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
             WalletId = command.WalletId,
             WagerState = wagerState,
             WagerType = WagerTypes.Normal,
+            ClosedState = closedState,
+            VoidState = voidState,
+            CancelState = cancelState,
+            CashoutState = cashoutState,
             ExternalRoundId = command.ExternalRoundId,
             ExternalWagerId = command.ExternalRoundId,
             ExternalGameId = command.ExternalGameId,
@@ -73,10 +113,15 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
             UpdatedOn = DateTimeOffset.UtcNow.ToTimestamp()
         };
 
+        _logger.LogInformation("LogOn:{logOn} Subject:{subject} Message:This published message.({publish})",
+            DateTime.Now.ToString("o"),
+            NatsConst.GameRecordHandleDataPublish,
+            publish);
+
         return _sender
             .PublishAsync(
             subject: NatsConst.GameRecordHandleDataPublish,
-            data: data.ToByteArray(),
+            data: publish.ToByteArray(),
             cancellationToken: cancellationToken);
     }
 }

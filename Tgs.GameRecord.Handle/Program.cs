@@ -1,4 +1,6 @@
-﻿using System.Net.Mime;
+﻿using System.Net;
+using System.Net.Mime;
+using System.Net.Sockets;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Instrumentation.AspNetCore;
@@ -50,6 +52,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddHandleService(
+    (options, sp) =>
+    {
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        options.IPAddress = builder.Configuration.GetSection("POD_IP").Value
+        ?? Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).Single().ToString();
+    },
     (options, sp) =>
     {
         var configuration = sp.GetRequiredService<IConfiguration>();
