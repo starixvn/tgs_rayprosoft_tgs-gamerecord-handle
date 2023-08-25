@@ -15,7 +15,7 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
     private readonly ISnowflakeWork _work;
 
     public GameRecordHandleDataPublishCommandService(
-         ILogger<GameRecordHandleDataPublishCommandService> logger,
+        ILogger<GameRecordHandleDataPublishCommandService> logger,
         ISnowflakeWork work,
         IMessageSender sender)
     {
