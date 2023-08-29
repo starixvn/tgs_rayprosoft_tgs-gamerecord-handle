@@ -1,0 +1,38 @@
+﻿using Tgs.GameRecord.Handle.Common.Protos;
+
+namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
+
+public record GameWagerPublishRoundWorkCommand(
+    Guid GameProviderId,
+    string GameProviderCode,
+    Guid GameProviderConfigurationId,
+    string SubGameProviderCode,
+    int GameId,
+    GameCategories GameCategory,
+    GameTypes GameType,
+    Guid ResellerId,
+    string ResellerCode,
+    Guid LicenseeId,
+    string LicenseeCode,
+    Guid BrandId,
+    string BrandCode,
+    string PlayerCode,
+    string Username,
+    string CurrencyCode,
+    Guid WalletId,
+    WagerStates WagerState,
+    WagerTypes WagerType,
+    ClosedStates ClosedState,
+    string ExternalRoundId,
+    string ExternalWagerId,
+    string ExternalGameId,
+    DateTimeOffset ExternalCreatedOn,
+    DateTimeOffset ExternalClosedOn,
+    decimal ExchangeRate,
+    decimal Bet,
+    decimal ValidBet,
+    decimal Settle,
+    decimal Commission,
+    decimal Turnover,
+    decimal WinLoss,
+    string AdditionalData);

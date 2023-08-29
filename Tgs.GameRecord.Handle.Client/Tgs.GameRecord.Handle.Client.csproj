@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.0.18</Version>
+		<Version>0.0.19</Version>
 		<Authors>Raypro</Authors>
 		<RootNamespace>Tgs.GameRecord.Handle.Client</RootNamespace>
 		<PackageId>Tgs.GameRecord.Handle.Client</PackageId>

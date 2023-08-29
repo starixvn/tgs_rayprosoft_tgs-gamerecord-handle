@@ -80,7 +80,8 @@ builder.Services
             options.Url = configuration.GetConnectionString("Nats")!;
         })
         .AddHandler<GameRecordMessageHandler>(subject: "game.gamerecord.handle.publish", group: "game.gamerecord.publish.handle")
-        .AddHandler<GameRecordMessageHandler>(subject: NatsConst.GameRecordPublish, group: "game.gamerecord.publish.handle");
+        .AddHandler<GameRecordMessageHandler>(subject: NatsConst.GameRecordPublish, group: "game.gamerecord.publish.handle")
+        .AddHandler<GameWagerMessageHandler>(subject: NatsConst.GameRecordWagerPublish, group: "game.gamerecord.wager.publish.handle");
     })
     .ClearAllExchanges()
     .AddNatsGlobPatternExchange("*");

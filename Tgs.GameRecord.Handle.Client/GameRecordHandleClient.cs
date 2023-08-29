@@ -32,7 +32,6 @@ internal class GameRecordHandleClient : IGameRecordHandleClient
         decimal playerWinLoss,
         string additionalData,
         CancellationToken cancellationToken)
-
     {
         var request = new GameRecordHandleRequest
         {
@@ -55,6 +54,131 @@ internal class GameRecordHandleClient : IGameRecordHandleClient
         return _messageSender
             .PublishAsync(
                 subject: NatsConst.GameRecordPublish,
+                data: request.ToByteArray(),
+                cancellationToken: cancellationToken);
+    }
+
+    public ValueTask MessageAsync(
+        string gameProviderCode,
+        string playerCode,
+        WagerStates wagerState,
+        WagerTypes wagerType,
+        ClosedStates closedState,
+        VoidStates voidState,
+        CancelStates cancelState,
+        FreeGameStates freeGameState,
+        GambleStates gambleState,
+        CashoutStates cashoutState,
+        ResettleStates resettleState,
+        string externalRoundId,
+        string externalWagerId,
+        string externalGameId,
+        DateTimeOffset externalCreatedOn,
+        DateTimeOffset? externalClosedOn,
+        DateTimeOffset? externalPayoffOn,
+        DateTimeOffset? externalResettleOn,
+        decimal bet,
+        decimal validBet,
+        decimal settle,
+        decimal commission,
+        decimal turnover,
+        decimal winLoss,
+        string additionalData,
+        CancellationToken cancellationToken)
+    {
+        var request = new GameWagerRequest
+        {
+            GameProviderCode = gameProviderCode,
+            PlayerCode = playerCode,
+            WagerState = wagerState,
+            WagerType = wagerType,
+            ClosedState = closedState,
+            VoidState = voidState,
+            CancelState = cancelState,
+            FreeGameState = freeGameState,
+            GambleState = gambleState,
+            CashoutState = cashoutState,
+            ResettleState = resettleState,
+            ExternalRoundId = externalRoundId,
+            ExternalWagerId = externalWagerId,
+            ExternalGameId = externalGameId,
+            ExternalCreatedOn = externalCreatedOn.ToTimestamp(),
+            ExternalClosedOn = (externalClosedOn ?? DateTimeOffset.UnixEpoch).ToTimestamp(),
+            ExternalPayoffOn = (externalPayoffOn ?? DateTimeOffset.UnixEpoch).ToTimestamp(),
+            ExternalResettleOn = (externalResettleOn ?? DateTimeOffset.UnixEpoch).ToTimestamp(),
+            Bet = bet,
+            ValidBet = validBet,
+            Settle = settle,
+            Commission = commission,
+            Turnover = turnover,
+            WinLoss = winLoss,
+            AdditionalData = additionalData
+        };
+        return _messageSender
+            .PublishAsync(
+                subject: NatsConst.GameRecordWagerPublish,
+                data: request.ToByteArray(),
+                cancellationToken: cancellationToken);
+    }
+
+    public ValueTask MessageAsync(
+        string gameProviderCode,
+        string playerCode,
+        WagerStates wagerState,
+        WagerTypes wagerType,
+        ClosedStates closedState,
+        VoidStates voidState,
+        CancelStates cancelState,
+        FreeGameStates freeGameState,
+        GambleStates gambleState,
+        CashoutStates cashoutState,
+        ResettleStates resettleState,
+        string externalRoundId,
+        string externalWagerId,
+        string externalGameId,
+        DateTimeOffset externalCreatedOn,
+        DateTimeOffset? externalClosedOn,
+        DateTimeOffset? externalResettleOn,
+        decimal bet,
+        decimal validBet,
+        decimal settle,
+        decimal commission,
+        decimal turnover,
+        decimal winLoss,
+        string additionalData,
+        CancellationToken cancellationToken)
+    {
+        var request = new GameWagerRequest
+        {
+            GameProviderCode = gameProviderCode,
+            PlayerCode = playerCode,
+            WagerState = wagerState,
+            WagerType = wagerType,
+            ClosedState = closedState,
+            VoidState = voidState,
+            CancelState = cancelState,
+            FreeGameState = freeGameState,
+            GambleState = gambleState,
+            CashoutState = cashoutState,
+            ResettleState = resettleState,
+            ExternalRoundId = externalRoundId,
+            ExternalWagerId = externalWagerId,
+            ExternalGameId = externalGameId,
+            ExternalCreatedOn = externalCreatedOn.ToTimestamp(),
+            ExternalClosedOn = (externalClosedOn ?? DateTimeOffset.UnixEpoch).ToTimestamp(),
+            ExternalPayoffOn = (externalClosedOn ?? DateTimeOffset.UnixEpoch).ToTimestamp(),
+            ExternalResettleOn = (externalResettleOn ?? DateTimeOffset.UnixEpoch).ToTimestamp(),
+            Bet = bet,
+            ValidBet = validBet,
+            Settle = settle,
+            Commission = commission,
+            Turnover = turnover,
+            WinLoss = winLoss,
+            AdditionalData = additionalData
+        };
+        return _messageSender
+            .PublishAsync(
+                subject: NatsConst.GameRecordWagerPublish,
                 data: request.ToByteArray(),
                 cancellationToken: cancellationToken);
     }

@@ -30,6 +30,59 @@ message GameRecordHandleRequest {
     string additional_data = 15;
 }
 
+message GameWagerRequest {
+    // 遊戲供應商代碼
+    string game_provider_code = 1;
+    // 玩家代碼
+    string player_code = 2;
+    // 投注狀態
+    WagerStates wager_state = 3;
+    // 投注類型
+    WagerTypes wager_type = 4;
+    // 關閉狀態
+    ClosedStates closed_state = 5;
+    // 作廢狀態
+    VoidStates void_state = 6;
+    // 取消狀態
+    CancelStates cancel_state = 7;
+    // 免費遊戲狀態
+    FreeGameStates free_game_state = 8;
+    // 博取遊戲
+    GambleStates gamble_state = 9;
+    // 兌現狀態
+    CashoutStates cashout_state = 10;
+    // 重新結算狀態
+    ResettleStates resettle_state = 11;
+    // 三方局/回合識別碼
+    string external_round_id = 12;
+    // 三方投注識別碼
+    string external_wager_id = 13;
+    // 三方遊戲識別碼
+    string external_game_id = 14;
+    // 三方下注/創建時間
+    google.protobuf.Timestamp external_created_on = 15;
+    // 三方結算/結束時間
+    google.protobuf.Timestamp external_closed_on = 16;
+    // 三方派彩時間
+    google.protobuf.Timestamp external_payoff_on = 17;
+    // 三方重新結算時間
+    google.protobuf.Timestamp external_resettle_on = 18;
+    // 下注
+    phoenix.protobuf.DecimalValue bet = 19;
+    // 實際/有效下注
+    phoenix.protobuf.DecimalValue validBet = 20;
+    // 結算(包含本金)
+    phoenix.protobuf.DecimalValue settle = 21;
+    // 佣金
+    phoenix.protobuf.DecimalValue commission = 22;
+    // 遊戲平台有效投注
+    phoenix.protobuf.DecimalValue turnover = 23;
+    // 玩家損益/淨利
+    phoenix.protobuf.DecimalValue win_loss = 24;
+    // 遊戲數據
+    string additional_data = 25;
+}
+
 // The response message containing the greetings.
 message GameRecordPublish {
     phoenix.protobuf.GuidValue game_provider_id = 1;
@@ -72,51 +125,103 @@ message GameRecordPublish {
 }
 
 message GameWagerPublish {
+    // 平台投注識別碼
     int64 wager_id = 1;
+    // 遊戲供應商識別碼
     phoenix.protobuf.GuidValue game_provider_id = 2;
+    // 遊戲供應商代碼
     string game_provider_code = 3;
+    // 遊戲供應設定識別碼
     phoenix.protobuf.GuidValue game_provider_configuration_id = 4;
+    // 子遊戲供應商代碼
     string sub_game_provider_code = 5;
+    // 遊戲識別碼
     int32 game_id = 6;
+    // 遊戲大類
     GameCategories game_category = 7;
+    // 遊戲類型
     GameTypes game_type = 8;
+    // 總公司識別碼
     phoenix.protobuf.GuidValue reseller_id = 9;
+    // 總公司代碼
     string reseller_code = 10;
+    // 公司識別碼
     phoenix.protobuf.GuidValue licensee_id = 11;
+    // 公司代碼
     string licensee_code = 12;
+    // 平台識別碼
     phoenix.protobuf.GuidValue brand_id = 13;
+    // 平台代碼
     string brand_code = 14;
+    // 玩家代碼
     string player_code = 15;
+    // 用戶名
     string username = 16;
+    // 貨幣代碼
     string currency_code = 17;
+    // 錢包識別碼
     phoenix.protobuf.GuidValue wallet_id = 18;
+    // 投注狀態
     WagerStates wager_state = 19;
+    // 投注類型
     WagerTypes wager_type = 20;
+    // 關閉狀態
     ClosedStates closed_state = 21;
+    // 作廢狀態
     VoidStates void_state = 22;
+    // 取消狀態
     CancelStates cancel_state = 23;
-    CashoutStates cashout_state = 24;
-    string external_round_id = 25;
-    string external_wager_id = 26;
-    string external_game_id = 27;
-    google.protobuf.Timestamp external_created_on = 28;
-    google.protobuf.Timestamp external_closed_on = 29;
-    google.protobuf.Timestamp external_payoff_on = 30;
-    phoenix.protobuf.DecimalValue exchange_rate = 31;
-    phoenix.protobuf.DecimalValue bet = 32;
-    phoenix.protobuf.DecimalValue validBet = 33;
-    phoenix.protobuf.DecimalValue settle = 34;
-    phoenix.protobuf.DecimalValue commission = 35;
-    phoenix.protobuf.DecimalValue turnover = 36;
-    phoenix.protobuf.DecimalValue player_win_loss = 37;
-    string additional_data = 38;
-    google.protobuf.Timestamp handle_on = 39;
-    google.protobuf.Timestamp rapid_test_on = 40;
-    google.protobuf.Timestamp created_on = 41;
-    google.protobuf.Timestamp closed_on = 42;
-    google.protobuf.Timestamp updated_on = 43;
+    // 免費遊戲狀態
+    FreeGameStates free_game_state = 24;
+    // 博取遊戲狀態
+    GambleStates gamble_state = 25;
+    // 兌現狀態
+    CashoutStates cashout_state = 26;
+    // 重新結算狀態
+    ResettleStates resettle_state = 27;
+    // 三方局/回合識別碼
+    string external_round_id = 28;
+    // 三方投注識別碼
+    string external_wager_id = 29;
+    // 三方遊戲識別碼
+    string external_game_id = 30;
+    // 三方下注/創建時間
+    google.protobuf.Timestamp external_created_on = 31;
+    // 三方結算/結束時間
+    google.protobuf.Timestamp external_closed_on = 32;
+    // 三方派彩時間
+    google.protobuf.Timestamp external_payoff_on = 33;
+    // 三方重新結算時間
+    google.protobuf.Timestamp external_resettle_on = 34;
+    // 匯率
+    phoenix.protobuf.DecimalValue exchange_rate = 35;
+    // 下注
+    phoenix.protobuf.DecimalValue bet = 36;
+    // 實際/有效下注
+    phoenix.protobuf.DecimalValue validBet = 37;
+    // 結算(包含本金)
+    phoenix.protobuf.DecimalValue settle = 38;
+    // 傭金
+    phoenix.protobuf.DecimalValue commission = 39;
+    // 遊戲平台有效投注
+    phoenix.protobuf.DecimalValue turnover = 40;
+    // 玩家損益/淨利
+    phoenix.protobuf.DecimalValue win_loss = 41;
+    // 遊戲數據
+    string additional_data = 42;
+    // 處理時間
+    google.protobuf.Timestamp handle_on = 43;
+    // 快篩時間
+    google.protobuf.Timestamp rapid_test_on = 44;
+    // 創建時間
+    google.protobuf.Timestamp created_on = 45;
+    // 結束時間
+    google.protobuf.Timestamp closed_on = 46;
+    // 更新時間
+    google.protobuf.Timestamp updated_on = 47;
 }
 
+// 遊戲大類
 enum GameCategories{
     GAME_CATEGORIES_UNKNOWN = 0;
     GAME_CATEGORIES_SPORTSBOOK = 1;
@@ -128,6 +233,7 @@ enum GameCategories{
     GAME_CATEGORIES_OTHER = 99;
 }
 
+// 遊戲類型
 enum GameTypes{
     GAME_TYPES_UNKNOWN = 0;
     GAME_TYPES_SPORTSBOOK = 1;
@@ -143,6 +249,7 @@ enum GameTypes{
     GAME_TYPES_OTHER = 99;
 }
 
+// 投注狀態
 enum WagerStates{
     //等待中: 我们交易员因为可能因为赔率的转换等因素，还未接受这张注单。
     WAGER_STATES_WAITING = 0;
@@ -166,32 +273,53 @@ enum WagerStates{
     WAGER_STATES_HALF_LOSE = 9;
 }
 
+// 投注類型
 enum WagerTypes {
     //正常
     WAGER_TYPES_NORMAL = 0;
 }
 
+// 關閉狀態
 enum ClosedStates{
     CLOSED_STATES_NORMAL = 0;
     CLOSED_STATES_CLOSED = 1;
 }
 
+// 作廢狀態
 enum VoidStates{
     VOID_STATES_NORMAL = 0;
     VOID_STATES_VOID = 1;
 }
 
+// 取消狀態
 enum CancelStates{
     CANCEL_STATES_NORMAL = 0;
     CANCEL_STATES_CANCEL = 1;
 }
 
+// 免費遊戲狀態
+enum FreeGameStates{
+    FREE_GAME_STATES_NORMAL = 0;
+    FREE_GAME_STATES_FREE_GAME = 1;
+}
+
+// 博取遊戲
+enum GambleStates{
+    GAMBLE_STATES_NORMAL = 0;
+    GAMBLE_STATES_GAMBLE = 1;
+}
+
+// 兌現狀態
 enum CashoutStates{
     CASHOUT_STATES_NORMAL = 0;
     CASHOUT_STATES_CASHOUT = 1;
 }
 
-
+// 重新结算狀態
+enum ResettleStates{
+    RESETTLE_STATES_NORMAL = 0;
+    RESETTLE_STATES_RESETTLE = 1;
+}
 
 enum GameRecordStatus {
     GAME_RECORD_STATUS_NEW = 0;

@@ -27,12 +27,16 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
     public ValueTask ExecuteAsync(GameRecordHandleDataPublishCommand command, CancellationToken cancellationToken = default)
     {
         var wagerId = _work.NextId();
+        var wagerState = WagerStates.Waiting;
+        var wagerType = WagerTypes.Normal;
         var closedState = ClosedStates.Normal;
         var voidState = VoidStates.Normal;
         var cancelState = CancelStates.Normal;
+        var freeGameState = FreeGameStates.Normal;
+        var gambleState = GambleStates.Normal;
         var cashoutState = CashoutStates.Normal;
+        var resettleState = ResettleStates.Normal;
 
-        var wagerState = WagerStates.Waiting;
         if (command.Status == GameRecordStatus.Open)
         {
             wagerState = WagerStates.Running;
@@ -50,6 +54,7 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
                 _ => WagerStates.Waiting
             };
             closedState = ClosedStates.Closed;
+
             if (wagerState == WagerStates.Void)
             {
                 voidState = VoidStates.Void;
@@ -58,11 +63,6 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
             if (wagerState == WagerStates.Reject)
             {
                 cancelState = CancelStates.Cancel;
-            }
-
-            if (wagerState == WagerStates.Refund)
-            {
-                cashoutState = CashoutStates.Cashout;
             }
         }
 
@@ -87,24 +87,28 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
             CurrencyCode = command.CurrencyCode,
             WalletId = command.WalletId,
             WagerState = wagerState,
-            WagerType = WagerTypes.Normal,
+            WagerType = wagerType,
             ClosedState = closedState,
             VoidState = voidState,
             CancelState = cancelState,
+            FreeGameState = freeGameState,
+            GambleState = gambleState,
             CashoutState = cashoutState,
+            ResettleState = resettleState,
             ExternalRoundId = command.ExternalRoundId,
             ExternalWagerId = command.ExternalRoundId,
             ExternalGameId = command.ExternalGameId,
             ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
             ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
             ExternalPayoffOn = command.ExternalClosedOn.ToTimestamp(),
+            ExternalResettleOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
             ExchangeRate = command.ExchangeRate,
             Bet = command.Bet,
             ValidBet = command.ValidBet,
             Settle = command.Settle,
             Commission = command.Commission,
             Turnover = command.Turnover,
-            PlayerWinLoss = command.PlayerWinLoss,
+            WinLoss = command.PlayerWinLoss,
             AdditionalData = command.AdditionalData,
             HandleOn = DateTimeOffset.UtcNow.ToTimestamp(),
             RapidTestOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
