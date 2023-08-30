@@ -29,13 +29,13 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
         var wagerId = _work.NextId();
         var wagerState = WagerStates.Waiting;
         var wagerType = WagerTypes.Normal;
-        var closedState = ClosedStates.Normal;
-        var voidState = VoidStates.Normal;
-        var cancelState = CancelStates.Normal;
-        var freeGameState = FreeGameStates.Normal;
-        var gambleState = GambleStates.Normal;
-        var cashoutState = CashoutStates.Normal;
-        var resettleState = ResettleStates.Normal;
+        var closedState = ClosedStates.None;
+        var voidState = VoidStates.None;
+        var cancelState = CancelStates.None;
+        var freeGameState = FreeGameStates.None;
+        var gambleState = GambleStates.None;
+        var cashoutState = CashoutStates.None;
+        var resettleState = ResettleStates.None;
 
         if (command.Status == GameRecordStatus.Open)
         {

@@ -60,7 +60,7 @@ internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWag
         var turnover = 0.0m;
         var winLoss = 0.0m;
 
-        if (query.ClosedState == ClosedStates.Closed)
+        if (query.WagerState is not WagerStates.Waiting and not WagerStates.Running)
         {
             settle = query.Settle;
             commission = query.Commission;

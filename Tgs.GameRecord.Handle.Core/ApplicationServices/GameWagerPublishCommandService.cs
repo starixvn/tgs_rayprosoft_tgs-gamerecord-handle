@@ -28,6 +28,24 @@ internal class GameWagerPublishCommandService : ICommandService<GameWagerPublish
     {
         var wagerId = _work.NextId();
 
+        var closedState = ClosedStates.None;
+        var voidState = VoidStates.None;
+        var cancelState = CancelStates.None;
+        if (command.WagerState is not WagerStates.Waiting and not WagerStates.Running)
+        {
+            closedState = ClosedStates.Closed;
+
+            if (command.WagerState == WagerStates.Void)
+            {
+                voidState = VoidStates.Void;
+            }
+
+            if (command.WagerState == WagerStates.Reject)
+            {
+                cancelState = CancelStates.Cancel;
+            }
+        }
+
         var publish = new GameWagerPublish
         {
             WagerId = wagerId,
@@ -50,9 +68,9 @@ internal class GameWagerPublishCommandService : ICommandService<GameWagerPublish
             WalletId = command.WalletId,
             WagerState = command.WagerState,
             WagerType = command.WagerType,
-            ClosedState = command.ClosedState,
-            VoidState = command.VoidState,
-            CancelState = command.CancelState,
+            ClosedState = closedState,
+            VoidState = voidState,
+            CancelState = cancelState,
             FreeGameState = command.FreeGameState,
             GambleState = command.GambleState,
             CashoutState = command.CashoutState,

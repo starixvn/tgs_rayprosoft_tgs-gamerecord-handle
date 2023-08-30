@@ -34,7 +34,6 @@ public class GameWagerPublishRoundWorkCommandServiceUnitTest
             WalletId: Guid.NewGuid(),
             WagerState: WagerStates.Win,
             WagerType: WagerTypes.Normal,
-            ClosedState: ClosedStates.Closed,
             ExternalRoundId: "50-1691469296-370404138-1",
             ExternalWagerId: "50-1691469296-370404138-1",
             ExternalGameId: "910",

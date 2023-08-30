@@ -58,7 +58,7 @@ internal class GameRepository : IGame
                 GameType.LotteryLobby => GameTypes.Lottery,
                 GameType.Slot => GameTypes.Slot,
                 GameType.TableGame => GameTypes.TableGame,
-                _ => GameTypes.Other
+                _ => GameTypes.None
             };
 
             var gameCategory = gameType switch
@@ -73,8 +73,7 @@ internal class GameRepository : IGame
                 GameTypes.Lottery => GameCategories.Lottery,
                 GameTypes.Slot => GameCategories.Slot,
                 GameTypes.TableGame => GameCategories.Slot,
-                GameTypes.Other => GameCategories.Other,
-                _ => GameCategories.Other
+                _ => GameCategories.None
             };
 
             game = new GameModel(

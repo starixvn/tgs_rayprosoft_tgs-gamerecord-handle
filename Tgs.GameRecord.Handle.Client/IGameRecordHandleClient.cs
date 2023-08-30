@@ -30,9 +30,6 @@ public interface IGameRecordHandleClient
     /// <param name="playerCode">The player code.</param>
     /// <param name="wagerState">State of the wager.</param>
     /// <param name="wagerType">Type of the wager.</param>
-    /// <param name="closedState">State of the closed.</param>
-    /// <param name="voidState">State of the void.</param>
-    /// <param name="cancelState">State of the cancel.</param>
     /// <param name="freeGameState">State of the free game.</param>
     /// <param name="gambleState">State of the gamble.</param>
     /// <param name="cashoutState">State of the cashout.</param>
@@ -58,9 +55,6 @@ public interface IGameRecordHandleClient
         string playerCode,
         WagerStates wagerState,
         WagerTypes wagerType,
-        ClosedStates closedState,
-        VoidStates voidState,
-        CancelStates cancelState,
         FreeGameStates freeGameState,
         GambleStates gambleState,
         CashoutStates cashoutState,
@@ -88,9 +82,6 @@ public interface IGameRecordHandleClient
     /// <param name="playerCode">The player code.</param>
     /// <param name="wagerState">State of the wager.</param>
     /// <param name="wagerType">Type of the wager.</param>
-    /// <param name="closedState">State of the closed.</param>
-    /// <param name="voidState">State of the void.</param>
-    /// <param name="cancelState">State of the cancel.</param>
     /// <param name="freeGameState">State of the free game.</param>
     /// <param name="gambleState">State of the gamble.</param>
     /// <param name="cashoutState">State of the cashout.</param>
@@ -115,9 +106,6 @@ public interface IGameRecordHandleClient
         string playerCode,
         WagerStates wagerState,
         WagerTypes wagerType,
-        ClosedStates closedState,
-        VoidStates voidState,
-        CancelStates cancelState,
         FreeGameStates freeGameState,
         GambleStates gambleState,
         CashoutStates cashoutState,

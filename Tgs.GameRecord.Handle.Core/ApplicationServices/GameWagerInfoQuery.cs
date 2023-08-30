@@ -6,7 +6,7 @@ public record GameWagerInfoQuery(
     string GameProviderCode,
     string PlayerCode,
     string ExternalGameId,
-    ClosedStates ClosedState,
+    WagerStates WagerState,
     decimal Bet,
     decimal ValidBet,
     decimal Settle,

@@ -9,5 +9,6 @@ public class NatsConst
     public const string GameRoundSettleDataPublish = "game.gameround.settle.data.publish";
     public const string GameRoundUnsettleDataPublish = "game.gameround.unsettle.data.publish";
     public const string GameRoundWagerDataPublish = "game.gameround.wager.data.publish";
+    public const string GameRoundWagerFirstDataPublish = "game.gameround.wager.first.data.publish";
     public const string GameRoundWorkerPublish = "game.gameround.worker.publish";
 }

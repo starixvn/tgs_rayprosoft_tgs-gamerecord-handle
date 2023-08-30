@@ -22,7 +22,6 @@ public record GameWagerPublishRoundWorkCommand(
     Guid WalletId,
     WagerStates WagerState,
     WagerTypes WagerType,
-    ClosedStates ClosedState,
     string ExternalRoundId,
     string ExternalWagerId,
     string ExternalGameId,
