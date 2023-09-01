@@ -213,6 +213,10 @@ message GameWagerPublish {
     google.protobuf.Timestamp closed_on = 46;
     // 更新時間
     google.protobuf.Timestamp updated_on = 47;
+    // 重置狀態
+    ResetStates reset_state = 48;
+    // 重置時間
+    google.protobuf.Timestamp reset_on = 49;
 }
 
 // 遊戲大類
@@ -311,6 +315,12 @@ enum CashoutStates{
 enum ResettleStates{
     RESETTLE_STATES_NONE = 0;
     RESETTLE_STATES_RESETTLE = 1;
+}
+
+// 重置狀態
+enum ResetStates{
+    RESET_STATES_NONE = 0;
+    RESET_STATES_RESET = 1;
 }
 
 enum GameRecordStatus {

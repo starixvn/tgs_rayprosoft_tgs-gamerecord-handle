@@ -94,7 +94,9 @@ internal class GameWagerPublishCommandService : ICommandService<GameWagerPublish
             RapidTestOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
             CreatedOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
             ClosedOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
-            UpdatedOn = DateTimeOffset.UtcNow.ToTimestamp()
+            UpdatedOn = DateTimeOffset.UtcNow.ToTimestamp(),
+            ResetState = ResetStates.None,
+            ResetOn = DateTimeOffset.UnixEpoch.ToTimestamp()
         };
 
         _logger.LogInformation("LogOn:{logOn} Subject:{subject} Message:This published message.({publish})",
