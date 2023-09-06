@@ -101,7 +101,7 @@ message GameRecordPublish {
     string external_game_id = 20;
     google.protobuf.Timestamp external_created_on = 21;
     google.protobuf.Timestamp external_closed_on = 22;
-    phoenix.protobuf.DecimalValue exchange_rate = 23;
+    phoenix.protobuf.DecimalValue currency_ratio = 23;
     phoenix.protobuf.DecimalValue bet = 24;
     phoenix.protobuf.DecimalValue validBet = 25;
     phoenix.protobuf.DecimalValue settle = 26;
@@ -188,7 +188,7 @@ message GameWagerPublish {
     // 三方重新結算時間
     google.protobuf.Timestamp external_resettle_on = 34;
     // 匯率
-    phoenix.protobuf.DecimalValue exchange_rate = 35;
+    phoenix.protobuf.DecimalValue currency_ratio = 35;
     // 下注
     phoenix.protobuf.DecimalValue bet = 36;
     // 實際/有效下注
