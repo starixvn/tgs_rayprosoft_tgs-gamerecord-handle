@@ -12,7 +12,6 @@ public class GameWagerHandleCommandServiceUnitTest
     public async Task Normal()
     {
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
-        var fakePublishRoundWorkService = Substitute.For<ICommandService<GameWagerPublishRoundWorkCommand>>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
 
         var command = new GameWagerHandleCommand(
@@ -108,53 +107,12 @@ public class GameWagerHandleCommandServiceUnitTest
 
         var service = new GameWagerHandleCommandService(
             fakeInfoService,
-            fakePublishRoundWorkService,
             fakePublishService);
 
         await service
             .ExecuteAsync(
             command: command)
             .ConfigureAwait(false);
-
-        var publishRoundWorkCommand = new GameWagerPublishRoundWorkCommand(
-            GameProviderId: result.GameProviderId,
-            GameProviderCode: result.GameProviderCode,
-            GameProviderConfigurationId: result.GameProviderConfigurationId,
-            SubGameProviderCode: result.SubGameProviderCode,
-            GameId: result.GameId,
-            GameCategory: result.GameCategory,
-            GameType: result.GameType,
-            ResellerId: result.ResellerId,
-            ResellerCode: result.ResellerCode,
-            LicenseeId: result.LicenseeId,
-            LicenseeCode: result.LicenseeCode,
-            BrandId: result.BrandId,
-            BrandCode: result.BrandCode,
-            PlayerCode: result.PlayerCode,
-            Username: result.Username,
-            CurrencyCode: result.CurrencyCode,
-            WalletId: result.WalletId,
-            WagerState: command.WagerState,
-            WagerType: command.WagerType,
-            ExternalRoundId: command.ExternalRoundId,
-            ExternalWagerId: command.ExternalWagerId,
-            ExternalGameId: command.ExternalGameId,
-            ExternalCreatedOn: command.ExternalCreatedOn,
-            ExternalClosedOn: command.ExternalClosedOn,
-            CurrencyRatio: result.CurrencyRatio,
-            Bet: result.Bet,
-            ValidBet: result.ValidBet,
-            Settle: result.Settle,
-            Commission: result.Commission,
-            Turnover: result.Turnover,
-            WinLoss: result.WinLoss,
-            AdditionalData: command.AdditionalData);
-
-        _ = fakePublishRoundWorkService
-            .Received(1)
-            .ExecuteAsync(
-            command: Arg.Is(publishRoundWorkCommand),
-            cancellationToken: Arg.Any<CancellationToken>());
 
         var publishCommand = new GameWagerPublishCommand(
             GameProviderId: result.GameProviderId,

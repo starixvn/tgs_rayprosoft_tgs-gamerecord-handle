@@ -5,16 +5,13 @@ namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCommand>
 {
     private readonly IGetService<GameWagerInfoQuery, GameWagerInfoResult> _infoService;
-    private readonly ICommandService<GameWagerPublishRoundWorkCommand> _publishRoundWorkService;
     private readonly ICommandService<GameWagerPublishCommand> _publishService;
 
     public GameWagerHandleCommandService(
         IGetService<GameWagerInfoQuery, GameWagerInfoResult> infoService,
-        ICommandService<GameWagerPublishRoundWorkCommand> publishRoundWorkService,
         ICommandService<GameWagerPublishCommand> publishService)
     {
         _infoService = infoService ?? throw new ArgumentNullException(nameof(infoService));
-        _publishRoundWorkService = publishRoundWorkService ?? throw new ArgumentNullException(nameof(publishRoundWorkService));
         _publishService = publishService ?? throw new ArgumentNullException(nameof(publishService));
     }
 
@@ -38,46 +35,6 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
             .GetAsync(
             query: query,
             cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-
-        var publishRoundWorkCommand = new GameWagerPublishRoundWorkCommand(
-            GameProviderId: result.GameProviderId,
-            GameProviderCode: result.GameProviderCode,
-            GameProviderConfigurationId: result.GameProviderConfigurationId,
-            SubGameProviderCode: result.SubGameProviderCode,
-            GameId: result.GameId,
-            GameCategory: result.GameCategory,
-            GameType: result.GameType,
-            ResellerId: result.ResellerId,
-            ResellerCode: result.ResellerCode,
-            LicenseeId: result.LicenseeId,
-            LicenseeCode: result.LicenseeCode,
-            BrandId: result.BrandId,
-            BrandCode: result.BrandCode,
-            PlayerCode: result.PlayerCode,
-            Username: result.Username,
-            CurrencyCode: result.CurrencyCode,
-            WalletId: result.WalletId,
-            WagerState: command.WagerState,
-            WagerType: command.WagerType,
-            ExternalRoundId: command.ExternalRoundId,
-            ExternalWagerId: command.ExternalWagerId,
-            ExternalGameId: command.ExternalGameId,
-            ExternalCreatedOn: command.ExternalCreatedOn,
-            ExternalClosedOn: command.ExternalClosedOn,
-            CurrencyRatio: result.CurrencyRatio,
-            Bet: result.Bet,
-            ValidBet: result.ValidBet,
-            Settle: result.Settle,
-            Commission: result.Commission,
-            Turnover: result.Turnover,
-            WinLoss: result.WinLoss,
-            AdditionalData: command.AdditionalData);
-
-        await _publishRoundWorkService
-            .ExecuteAsync(
-            publishRoundWorkCommand,
-            cancellationToken)
             .ConfigureAwait(false);
 
         var publishCommand = new GameWagerPublishCommand(
