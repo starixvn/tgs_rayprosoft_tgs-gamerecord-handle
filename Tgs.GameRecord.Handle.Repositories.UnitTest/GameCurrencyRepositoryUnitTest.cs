@@ -55,7 +55,7 @@ public class GameCurrencyRepositoryUnitTest
             .ConfigureAwait(false);
 
         Assert.NotNull(actual);
-        Assert.Equal(1, actual.ExchangeRate);
+        Assert.Equal(1, actual.CurrencyRatio);
         Assert.Equal(4m, actual.Bet);
         Assert.Equal(4m, actual.ValidBet);
         Assert.Equal(8m, actual.Settle);
@@ -115,7 +115,7 @@ public class GameCurrencyRepositoryUnitTest
             .ConfigureAwait(false);
 
         Assert.NotNull(actual);
-        Assert.Equal(1000m, actual.ExchangeRate);
+        Assert.Equal(1000m, actual.CurrencyRatio);
         Assert.Equal(20000m, actual.Bet);
         Assert.Equal(8000m, actual.ValidBet);
         Assert.Equal(8000m, actual.Settle);

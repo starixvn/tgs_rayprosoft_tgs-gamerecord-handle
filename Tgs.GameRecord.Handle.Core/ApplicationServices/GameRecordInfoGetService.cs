@@ -108,7 +108,7 @@ internal class GameRecordInfoGetService : IGetService<GameRecordInfoQuery, GameR
             ExternalGameId: query.ExternalGameId,
             ExternalCreatedOn: externalCreatedOn,
             ExternalClosedOn: externalClosedOn,
-            ExchangeRate: gameCurrencyResult.ExchangeRate,
+            CurrencyRatio: gameCurrencyResult.CurrencyRatio,
             Bet: gameCurrencyResult.Bet,
             ValidBet: gameCurrencyResult.ValidBet,
             Settle: gameCurrencyResult.Settle,

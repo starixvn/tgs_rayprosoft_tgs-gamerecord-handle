@@ -58,7 +58,7 @@ internal class GameWagerPublishRoundWorkCommandService : ICommandService<GameWag
             ExternalGameId = command.ExternalGameId,
             ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
             ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-            CurrencyRatio = command.ExchangeRate,
+            CurrencyRatio = command.CurrencyRatio,
             Bet = command.Bet,
             ValidBet = command.ValidBet,
             Settle = command.Settle,

@@ -99,7 +99,7 @@ internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWag
             Username: player.Username,
             CurrencyCode: player.DefaultWalletCurrencyCode,
             WalletId: player.DefaultWalletId,
-            ExchangeRate: gameCurrencyResult.ExchangeRate,
+            CurrencyRatio: gameCurrencyResult.CurrencyRatio,
             Bet: gameCurrencyResult.Bet,
             ValidBet: gameCurrencyResult.ValidBet,
             Settle: gameCurrencyResult.Settle,

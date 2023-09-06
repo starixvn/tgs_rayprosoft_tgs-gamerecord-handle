@@ -82,7 +82,7 @@ public class GameRecordInfoGetServiceUnitTest
             .Returns(game);
 
         var gameCurrencyResult = new GameCurrencyModel(
-            ExchangeRate: 1000,
+            CurrencyRatio: 1000,
             Bet: 20000,
             ValidBet: 8000,
             Settle: 8000,
@@ -138,7 +138,7 @@ public class GameRecordInfoGetServiceUnitTest
         Assert.Equal(query.ExternalGameId, actual.ExternalGameId);
         Assert.Equal(query.ExternalCreatedOn, actual.ExternalCreatedOn);
         Assert.Equal(query.ExternalClosedOn, actual.ExternalClosedOn);
-        Assert.Equal(1000, actual.ExchangeRate);
+        Assert.Equal(1000, actual.CurrencyRatio);
         Assert.Equal(gameCurrencyResult.Bet, actual.Bet);
         Assert.Equal(gameCurrencyResult.ValidBet, actual.ValidBet);
         Assert.Equal(gameCurrencyResult.Settle, actual.Settle);
@@ -221,7 +221,7 @@ public class GameRecordInfoGetServiceUnitTest
             .Returns(game);
 
         var gameCurrencyResult = new GameCurrencyModel(
-            ExchangeRate: 1,
+            CurrencyRatio: 1,
             Bet: 4,
             ValidBet: 4,
             Settle: 0,
@@ -277,7 +277,7 @@ public class GameRecordInfoGetServiceUnitTest
         Assert.Equal(query.ExternalGameId, actual.ExternalGameId);
         Assert.Equal(query.ExternalCreatedOn, actual.ExternalCreatedOn);
         Assert.Equal(query.ExternalClosedOn, actual.ExternalClosedOn);
-        Assert.Equal(1, actual.ExchangeRate);
+        Assert.Equal(1, actual.CurrencyRatio);
         Assert.Equal(gameCurrencyResult.Bet, actual.Bet);
         Assert.Equal(gameCurrencyResult.ValidBet, actual.ValidBet);
         Assert.Equal(gameCurrencyResult.Settle, actual.Settle);
@@ -360,7 +360,7 @@ public class GameRecordInfoGetServiceUnitTest
             .Returns(game);
 
         var gameCurrencyResult = new GameCurrencyModel(
-            ExchangeRate: 1,
+            CurrencyRatio: 1,
             Bet: 4,
             ValidBet: 4,
             Settle: 0,
@@ -416,7 +416,7 @@ public class GameRecordInfoGetServiceUnitTest
         Assert.Equal(query.ExternalGameId, actual.ExternalGameId);
         Assert.Equal(query.ExternalCreatedOn, actual.ExternalCreatedOn);
         Assert.Equal(DateTime.UnixEpoch, actual.ExternalClosedOn);
-        Assert.Equal(1, actual.ExchangeRate);
+        Assert.Equal(1, actual.CurrencyRatio);
         Assert.Equal(gameCurrencyResult.Bet, actual.Bet);
         Assert.Equal(gameCurrencyResult.ValidBet, actual.ValidBet);
         Assert.Equal(gameCurrencyResult.Settle, actual.Settle);
@@ -499,7 +499,7 @@ public class GameRecordInfoGetServiceUnitTest
             .Returns(game);
 
         var gameCurrencyResult = new GameCurrencyModel(
-            ExchangeRate: 1,
+            CurrencyRatio: 1,
             Bet: 4,
             ValidBet: 4,
             Settle: 8,
@@ -555,7 +555,7 @@ public class GameRecordInfoGetServiceUnitTest
         Assert.Equal(query.ExternalGameId, actual.ExternalGameId);
         Assert.Equal(query.ExternalCreatedOn, actual.ExternalCreatedOn);
         Assert.Equal(query.ExternalClosedOn, actual.ExternalClosedOn);
-        Assert.Equal(1, actual.ExchangeRate);
+        Assert.Equal(1, actual.CurrencyRatio);
         Assert.Equal(gameCurrencyResult.Bet, actual.Bet);
         Assert.Equal(gameCurrencyResult.ValidBet, actual.ValidBet);
         Assert.Equal(gameCurrencyResult.Settle, actual.Settle);

@@ -20,7 +20,7 @@ public record GameWagerInfoResult(
     string Username,
     string CurrencyCode,
     Guid WalletId,
-    decimal ExchangeRate,
+    decimal CurrencyRatio,
     decimal Bet,
     decimal ValidBet,
     decimal Settle,

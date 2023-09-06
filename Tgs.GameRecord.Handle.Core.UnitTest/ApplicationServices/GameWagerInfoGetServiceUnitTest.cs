@@ -78,7 +78,7 @@ public class GameWagerInfoGetServiceUnitTest
             .Returns(game);
 
         var gameCurrencyResult = new GameCurrencyModel(
-            ExchangeRate: 1000,
+            CurrencyRatio: 1000,
             Bet: 20000,
             ValidBet: 8000,
             Settle: 8000,
@@ -128,7 +128,7 @@ public class GameWagerInfoGetServiceUnitTest
         Assert.Equal(player.Username, actual.Username);
         Assert.Equal(player.DefaultWalletCurrencyCode, actual.CurrencyCode);
         Assert.Equal(player.DefaultWalletId, actual.WalletId);
-        Assert.Equal(1000, actual.ExchangeRate);
+        Assert.Equal(1000, actual.CurrencyRatio);
         Assert.Equal(gameCurrencyResult.Bet, actual.Bet);
         Assert.Equal(gameCurrencyResult.ValidBet, actual.ValidBet);
         Assert.Equal(gameCurrencyResult.Settle, actual.Settle);
@@ -207,7 +207,7 @@ public class GameWagerInfoGetServiceUnitTest
             .Returns(game);
 
         var gameCurrencyResult = new GameCurrencyModel(
-            ExchangeRate: 1,
+            CurrencyRatio: 1,
             Bet: 4,
             ValidBet: 4,
             Settle: 0,
@@ -257,7 +257,7 @@ public class GameWagerInfoGetServiceUnitTest
         Assert.Equal(player.Username, actual.Username);
         Assert.Equal(player.DefaultWalletCurrencyCode, actual.CurrencyCode);
         Assert.Equal(player.DefaultWalletId, actual.WalletId);
-        Assert.Equal(1, actual.ExchangeRate);
+        Assert.Equal(1, actual.CurrencyRatio);
         Assert.Equal(gameCurrencyResult.Bet, actual.Bet);
         Assert.Equal(gameCurrencyResult.ValidBet, actual.ValidBet);
         Assert.Equal(gameCurrencyResult.Settle, actual.Settle);
@@ -336,7 +336,7 @@ public class GameWagerInfoGetServiceUnitTest
             .Returns(game);
 
         var gameCurrencyResult = new GameCurrencyModel(
-            ExchangeRate: 1,
+            CurrencyRatio: 1,
             Bet: 4.0m,
             ValidBet: 4.0m,
             Settle: 0.0m,
@@ -386,7 +386,7 @@ public class GameWagerInfoGetServiceUnitTest
         Assert.Equal(player.Username, actual.Username);
         Assert.Equal(player.DefaultWalletCurrencyCode, actual.CurrencyCode);
         Assert.Equal(player.DefaultWalletId, actual.WalletId);
-        Assert.Equal(1, actual.ExchangeRate);
+        Assert.Equal(1, actual.CurrencyRatio);
         Assert.Equal(gameCurrencyResult.Bet, actual.Bet);
         Assert.Equal(gameCurrencyResult.ValidBet, actual.ValidBet);
         Assert.Equal(0.0m, actual.Settle);
@@ -465,7 +465,7 @@ public class GameWagerInfoGetServiceUnitTest
             .Returns(game);
 
         var gameCurrencyResult = new GameCurrencyModel(
-            ExchangeRate: 1,
+            CurrencyRatio: 1,
             Bet: 4.0m,
             ValidBet: 4.0m,
             Settle: 0.0m,
@@ -515,7 +515,7 @@ public class GameWagerInfoGetServiceUnitTest
         Assert.Equal(player.Username, actual.Username);
         Assert.Equal(player.DefaultWalletCurrencyCode, actual.CurrencyCode);
         Assert.Equal(player.DefaultWalletId, actual.WalletId);
-        Assert.Equal(1, actual.ExchangeRate);
+        Assert.Equal(1, actual.CurrencyRatio);
         Assert.Equal(gameCurrencyResult.Bet, actual.Bet);
         Assert.Equal(gameCurrencyResult.ValidBet, actual.ValidBet);
         Assert.Equal(0.0m, actual.Settle);
@@ -594,7 +594,7 @@ public class GameWagerInfoGetServiceUnitTest
             .Returns(game);
 
         var gameCurrencyResult = new GameCurrencyModel(
-            ExchangeRate: 1,
+            CurrencyRatio: 1,
             Bet: 4,
             ValidBet: 4,
             Settle: 8,
@@ -644,7 +644,7 @@ public class GameWagerInfoGetServiceUnitTest
         Assert.Equal(player.Username, actual.Username);
         Assert.Equal(player.DefaultWalletCurrencyCode, actual.CurrencyCode);
         Assert.Equal(player.DefaultWalletId, actual.WalletId);
-        Assert.Equal(1, actual.ExchangeRate);
+        Assert.Equal(1, actual.CurrencyRatio);
         Assert.Equal(gameCurrencyResult.Bet, actual.Bet);
         Assert.Equal(gameCurrencyResult.ValidBet, actual.ValidBet);
         Assert.Equal(gameCurrencyResult.Settle, actual.Settle);

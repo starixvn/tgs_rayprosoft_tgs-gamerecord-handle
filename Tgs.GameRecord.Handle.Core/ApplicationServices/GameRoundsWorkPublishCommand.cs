@@ -25,7 +25,7 @@ public record GameRoundsWorkPublishCommand(
     string ExternalGameId,
     DateTimeOffset ExternalCreatedOn,
     DateTimeOffset ExternalClosedOn,
-    decimal ExchangeRate,
+    decimal CurrencyRatio,
     decimal Bet,
     decimal ValidBet,
     decimal Settle,

@@ -102,7 +102,7 @@ internal class GameRecordHandleDataPublishCommandService : ICommandService<GameR
             ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
             ExternalPayoffOn = command.ExternalClosedOn.ToTimestamp(),
             ExternalResettleOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
-            CurrencyRatio = command.ExchangeRate,
+            CurrencyRatio = command.CurrencyRatio,
             Bet = command.Bet,
             ValidBet = command.ValidBet,
             Settle = command.Settle,

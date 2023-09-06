@@ -33,7 +33,7 @@ public record GameWagerPublishCommand(
     DateTimeOffset ExternalClosedOn,
     DateTimeOffset ExternalPayoffOn,
     DateTimeOffset ExternalResettleOn,
-    decimal ExchangeRate,
+    decimal CurrencyRatio,
     decimal Bet,
     decimal ValidBet,
     decimal Settle,

@@ -40,7 +40,7 @@ internal class GameCurrencyRepository : IGameCurrency
             .ConfigureAwait(false);
 
         return new GameCurrencyModel(
-            ExchangeRate: result.ExchangeRate,
+            CurrencyRatio: result.ExchangeRate,
             Bet: result.Bet,
             ValidBet: result.ValidBet,
             Settle: result.Settle,

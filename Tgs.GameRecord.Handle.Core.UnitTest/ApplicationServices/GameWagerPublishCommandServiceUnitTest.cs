@@ -48,7 +48,7 @@ public class GameWagerPublishCommandServiceUnitTest
             ExternalClosedOn: DateTimeOffset.Parse("2023-08-08 12:35:18.000 +0800"),
             ExternalPayoffOn: DateTimeOffset.Parse("2023-08-08 12:35:18.000 +0800"),
             ExternalResettleOn: DateTimeOffset.UnixEpoch,
-            ExchangeRate: 1,
+            CurrencyRatio: 1,
             Bet: 4,
             ValidBet: 4,
             Settle: 8,

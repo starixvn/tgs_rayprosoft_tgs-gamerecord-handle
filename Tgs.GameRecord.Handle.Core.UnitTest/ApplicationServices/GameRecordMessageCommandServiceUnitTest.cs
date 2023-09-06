@@ -37,7 +37,7 @@ public class GameRecordMessageCommandServiceUnitTest
             ExternalGameId: "910",
             ExternalCreatedOn: DateTimeOffset.Parse("2023-08-08 12:34:56.000 +0800"),
             ExternalClosedOn: DateTimeOffset.Parse("2023-08-08 12:35:18.000 +0800"),
-            ExchangeRate: 1,
+            CurrencyRatio: 1,
             Bet: 4,
             ValidBet: 4,
             Settle: 8,

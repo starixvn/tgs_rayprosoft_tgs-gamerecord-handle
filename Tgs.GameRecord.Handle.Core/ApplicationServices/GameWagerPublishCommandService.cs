@@ -82,7 +82,7 @@ internal class GameWagerPublishCommandService : ICommandService<GameWagerPublish
             ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
             ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
             ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
-            CurrencyRatio = command.ExchangeRate,
+            CurrencyRatio = command.CurrencyRatio,
             Bet = command.Bet,
             ValidBet = command.ValidBet,
             Settle = command.Settle,
