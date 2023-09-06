@@ -22,6 +22,7 @@ internal class GameWagerPublishRoundWorkCommandService : ICommandService<GameWag
         var clientStatus = GameRecordClientStatus.Open;
         if (command.WagerState is not WagerStates.Waiting and not WagerStates.Running)
         {
+            status = GameRecordStatus.Closed;
             clientStatus = command.WagerState switch
             {
                 WagerStates.Win => GameRecordClientStatus.Win,
