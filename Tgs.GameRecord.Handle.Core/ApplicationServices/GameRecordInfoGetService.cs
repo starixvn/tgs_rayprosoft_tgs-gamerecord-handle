@@ -51,7 +51,13 @@ internal class GameRecordInfoGetService : IGetService<GameRecordInfoQuery, GameR
             gameProviderId: gameProviderId,
             externaGamelId: query.ExternalGameId,
             cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? throw new NullReferenceException($"This game does not exist.({new
+            {
+                query.GameProviderCode,
+                query.PlayerCode,
+                query.ExternalGameId
+            }})");
 
         var externalCreatedOn = query.ExternalCreatedOn;
         var externalClosedOn = DateTimeOffset.UnixEpoch;

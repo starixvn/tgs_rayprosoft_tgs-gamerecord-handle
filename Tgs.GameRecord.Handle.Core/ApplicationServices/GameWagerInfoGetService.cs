@@ -51,7 +51,13 @@ internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWag
             gameProviderId: gameProviderId,
             externaGamelId: query.ExternalGameId,
             cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? throw new NullReferenceException($"This game does not exist.({new
+            {
+                query.GameProviderCode,
+                query.PlayerCode,
+                query.ExternalGameId
+            }})");
 
         var bet = query.Bet;
         var validBet = query.ValidBet;
@@ -80,6 +86,7 @@ internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWag
             playerWinLoss: winLoss,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
+
 
         return new GameWagerInfoResult(
             GameProviderId: game.GameProviderId,

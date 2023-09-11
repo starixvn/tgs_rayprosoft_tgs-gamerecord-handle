@@ -63,6 +63,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -136,6 +137,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -209,6 +211,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -282,6 +285,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -355,6 +359,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -428,6 +433,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -501,6 +507,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -574,6 +581,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -593,7 +601,7 @@ public class GameRepositoryUnitTest
     }
 
     [Fact]
-    public async Task No_Data()
+    public async Task No_DataAsync()
     {
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
@@ -621,13 +629,13 @@ public class GameRepositoryUnitTest
             fakeClient,
             absoluteExpirationRelativeToNow);
 
-        _ = await Assert.ThrowsAsync<NullReferenceException>(
-             () => repository
-             .GetAsync(
-                 gameProviderId: gameProviderId,
-                 externaGamelId: externaGamelId)
-             .AsTask())
-            .ConfigureAwait(false);
+        var actual = await repository
+            .GetAsync(
+            gameProviderId: gameProviderId,
+            externaGamelId: externaGamelId)
+             .ConfigureAwait(false);
+
+        Assert.Null(actual);
     }
 
     [Fact]
@@ -685,6 +693,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -758,6 +767,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -831,6 +841,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -904,6 +915,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);
@@ -977,6 +989,7 @@ public class GameRepositoryUnitTest
             externaGamelId: externaGamelId)
             .ConfigureAwait(false);
 
+        Assert.NotNull(actual);
         Assert.Equal(info.GameId, actual.GameId);
         Assert.Equal(info.GameCode, actual.GameCode);
         Assert.Equal(info.GameProviderId, actual.GameProviderId);

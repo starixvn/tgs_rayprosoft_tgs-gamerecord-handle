@@ -4,7 +4,7 @@ namespace Tgs.GameRecord.Handle.Core;
 
 public interface IGame
 {
-    public ValueTask<GameModel> GetAsync(
+    public ValueTask<GameModel?> GetAsync(
         Guid gameProviderId,
         string externaGamelId,
         CancellationToken cancellationToken = default);

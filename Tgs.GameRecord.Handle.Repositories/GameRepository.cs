@@ -23,7 +23,7 @@ internal class GameRepository : IGame
         _absoluteExpirationRelativeToNow = absoluteExpirationRelativeToNow;
     }
 
-    public async ValueTask<GameModel> GetAsync(
+    public async ValueTask<GameModel?> GetAsync(
         Guid gameProviderId,
         string externaGamelId,
         CancellationToken cancellationToken = default)
@@ -37,8 +37,12 @@ internal class GameRepository : IGame
                gameProviderId: gameProviderId,
                gameExternalId: externaGamelId,
                cancellationToken: cancellationToken)
-              .ConfigureAwait(false)
-              ?? throw new NullReferenceException($"This game does not exist.({externaGamelId})");
+              .ConfigureAwait(false);
+
+            if (info == null)
+            {
+                return null;
+            }
 
             var gameType = info.Type switch
             {
@@ -92,6 +96,6 @@ internal class GameRepository : IGame
                 absoluteExpirationRelativeToNow: _absoluteExpirationRelativeToNow);
         }
 
-        return game ?? throw new NullReferenceException($"This game does not exist.({externaGamelId})");
+        return game;
     }
 }
