@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -12,9 +12,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.0" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue.Direct" Version="1.0.0" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="1.0.0" />
 		<PackageReference Include="PhoenixToolkits.Protobuf.ExtendTypes" Version="0.0.6" />
 	</ItemGroup>
 
