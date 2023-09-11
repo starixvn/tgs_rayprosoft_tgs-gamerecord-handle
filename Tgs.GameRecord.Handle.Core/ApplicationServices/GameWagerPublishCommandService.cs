@@ -3,8 +3,8 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging;
 using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Common.Protos;
-using Tgs.MessageQueue;
 using Tgs.ServiceUtility;
+using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 

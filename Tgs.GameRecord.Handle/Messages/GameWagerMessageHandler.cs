@@ -1,7 +1,7 @@
 ﻿using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
-using Tgs.MessageQueue;
 using Tgs.ServiceUtility;
+using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Messages;
 

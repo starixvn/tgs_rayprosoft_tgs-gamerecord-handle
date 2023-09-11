@@ -87,7 +87,6 @@ internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWag
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-
         return new GameWagerInfoResult(
             GameProviderId: game.GameProviderId,
             GameProviderCode: game.GameProviderCode,

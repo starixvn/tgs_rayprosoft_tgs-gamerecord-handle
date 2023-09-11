@@ -2,7 +2,7 @@
 using Google.Protobuf.WellKnownTypes;
 using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Common.Protos;
-using Tgs.MessageQueue;
+using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Client;
 

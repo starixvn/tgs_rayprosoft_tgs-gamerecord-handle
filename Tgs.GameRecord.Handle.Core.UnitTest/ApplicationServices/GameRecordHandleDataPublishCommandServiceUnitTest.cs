@@ -4,7 +4,7 @@ using NSubstitute;
 using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
-using Tgs.MessageQueue;
+using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Core.UnitTest.ApplicationServices;
 
