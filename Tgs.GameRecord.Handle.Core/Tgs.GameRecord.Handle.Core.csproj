@@ -9,9 +9,9 @@
 	<ItemGroup>
 		<PackageReference Include="MongoDB.Bson" Version="2.21.0" />
 		<PackageReference Include="MongoDB.Driver" Version="2.21.0" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.0" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue.Direct" Version="1.0.0" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="1.0.0" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.3" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue.Direct" Version="1.0.3" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="1.0.3" />
 		<PackageReference Include="Snowflake.Core" Version="2.0.0" />
 		<PackageReference Include="System.Linq.Async" Version="6.0.1" />
 		<PackageReference Include="Tgs.GameCommand.Client" Version="0.0.10" />

@@ -106,10 +106,7 @@ public class GameWagerInfoGetServiceUnitTest
             fakePlayer,
             fakeGameCurrency);
 
-        var actual = await service
-            .GetAsync(
-            query: query)
-            .ConfigureAwait(false);
+        var actual = await service.GetAsync(query: query);
 
         Assert.NotNull(actual);
         Assert.Equal(game.GameProviderId, actual.GameProviderId);
@@ -235,10 +232,7 @@ public class GameWagerInfoGetServiceUnitTest
             fakePlayer,
             fakeGameCurrency);
 
-        var actual = await service
-            .GetAsync(
-            query: query)
-            .ConfigureAwait(false);
+        var actual = await service.GetAsync(query: query);
 
         Assert.NotNull(actual);
         Assert.Equal(game.GameProviderId, actual.GameProviderId);
@@ -364,10 +358,7 @@ public class GameWagerInfoGetServiceUnitTest
             fakePlayer,
             fakeGameCurrency);
 
-        var actual = await service
-            .GetAsync(
-            query: query)
-            .ConfigureAwait(false);
+        var actual = await service.GetAsync(query: query);
 
         Assert.NotNull(actual);
         Assert.Equal(game.GameProviderId, actual.GameProviderId);
@@ -493,10 +484,7 @@ public class GameWagerInfoGetServiceUnitTest
             fakePlayer,
             fakeGameCurrency);
 
-        var actual = await service
-            .GetAsync(
-            query: query)
-            .ConfigureAwait(false);
+        var actual = await service.GetAsync(query: query);
 
         Assert.NotNull(actual);
         Assert.Equal(game.GameProviderId, actual.GameProviderId);
@@ -622,10 +610,7 @@ public class GameWagerInfoGetServiceUnitTest
             fakePlayer,
             fakeGameCurrency);
 
-        var actual = await service
-            .GetAsync(
-            query: query)
-            .ConfigureAwait(false);
+        var actual = await service.GetAsync(query: query);
 
         Assert.NotNull(actual);
         Assert.Equal(game.GameProviderId, actual.GameProviderId);

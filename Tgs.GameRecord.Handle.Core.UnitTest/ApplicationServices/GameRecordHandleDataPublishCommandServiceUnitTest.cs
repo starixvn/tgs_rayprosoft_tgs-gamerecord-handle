@@ -58,10 +58,7 @@ public class GameRecordHandleDataPublishCommandServiceUnitTest
             fakeSnowflakeWork,
             fakeMessageSender);
 
-        await service
-            .ExecuteAsync(
-            command: command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command: command);
 
         _ = fakeMessageSender
             .Received(1)

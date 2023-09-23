@@ -38,8 +38,7 @@ public class GameProviderRepositoryUnitTest
              () => repository
              .GetIdAsync(
                  code: code)
-             .AsTask())
-            .ConfigureAwait(false);
+             .AsTask());
     }
 
     [Fact]
@@ -71,18 +70,15 @@ public class GameProviderRepositoryUnitTest
             fakeClient,
             absoluteExpirationRelativeToNow);
 
-        var actual = await repository
-            .GetIdAsync(
-            code: code)
-            .ConfigureAwait(false);
+        var actual = await repository.GetIdAsync(code: code);
 
         Assert.Equal(id, actual);
 
         _ = fakeMemoryCache
             .Received(1)
             .Set(
-                key: key,
-                value: id,
-                absoluteExpirationRelativeToNow: absoluteExpirationRelativeToNow);
+            key: key,
+            value: id,
+            absoluteExpirationRelativeToNow: absoluteExpirationRelativeToNow);
     }
 }

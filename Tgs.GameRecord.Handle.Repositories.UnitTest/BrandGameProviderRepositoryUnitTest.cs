@@ -41,8 +41,7 @@ public class BrandGameProviderRepositoryUnitTest
              .GetGameProviderConfigurationIdAsync(
                  brandId: brandId,
                  gameProviderId: gameProviderId)
-             .AsTask())
-            .ConfigureAwait(false);
+             .AsTask());
     }
 
     [Fact]
@@ -79,8 +78,7 @@ public class BrandGameProviderRepositoryUnitTest
         var actual = await repository
             .GetGameProviderConfigurationIdAsync(
             brandId: brandId,
-            gameProviderId: gameProviderId)
-            .ConfigureAwait(false);
+            gameProviderId: gameProviderId);
 
         Assert.Equal(gameProviderConfigurationId, actual);
 

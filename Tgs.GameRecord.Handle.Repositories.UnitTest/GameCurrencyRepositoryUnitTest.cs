@@ -51,8 +51,7 @@ public class GameCurrencyRepositoryUnitTest
             settle: settle,
             commission: commission,
             turnover: turnover,
-            playerWinLoss: playerWinLoss)
-            .ConfigureAwait(false);
+            playerWinLoss: playerWinLoss);
 
         Assert.NotNull(actual);
         Assert.Equal(1, actual.CurrencyRatio);
@@ -111,8 +110,7 @@ public class GameCurrencyRepositoryUnitTest
             settle: settle,
             commission: commission,
             turnover: turnover,
-            playerWinLoss: playerWinLoss)
-            .ConfigureAwait(false);
+            playerWinLoss: playerWinLoss);
 
         Assert.NotNull(actual);
         Assert.Equal(1000m, actual.CurrencyRatio);

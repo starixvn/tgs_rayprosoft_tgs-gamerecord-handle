@@ -39,8 +39,7 @@ public class PlayerRepositoryUnitTest
              () => repository
              .GetAsync(
                  playerCode: playerCode)
-             .AsTask())
-            .ConfigureAwait(false);
+             .AsTask());
     }
 
     [Fact]
@@ -82,10 +81,7 @@ public class PlayerRepositoryUnitTest
             fakeClient,
             absoluteExpirationRelativeToNow);
 
-        var actual = await repository
-            .GetAsync(
-            playerCode: playerCode)
-            .ConfigureAwait(false);
+        var actual = await repository.GetAsync(playerCode: playerCode);
 
         Assert.NotNull(actual);
         Assert.Equal(info.PlayerCode, actual.PlayerCode);

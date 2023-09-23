@@ -16,8 +16,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.0" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="1.0.0" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.3" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="1.0.3" />
 		<PackageReference Include="PhoenixToolkits.NuGet.BuildTools" Version="0.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -90,10 +90,7 @@ public class GameRecordHandleCommandServiceUnitTest
             fakeGameRecordInfo,
             fakeHandleDataPublishCommandService);
 
-        await service
-            .ExecuteAsync(
-            command: command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command: command);
 
         var handleDataPublishCommand = new GameRecordHandleDataPublishCommand(
             GameProviderId: gameRecordInfoResult.GameProviderId,

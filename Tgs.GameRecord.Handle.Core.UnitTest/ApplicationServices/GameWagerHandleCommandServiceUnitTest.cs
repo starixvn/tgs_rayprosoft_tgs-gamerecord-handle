@@ -109,10 +109,7 @@ public class GameWagerHandleCommandServiceUnitTest
             fakeInfoService,
             fakePublishService);
 
-        await service
-            .ExecuteAsync(
-            command: command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
             GameProviderId: result.GameProviderId,
