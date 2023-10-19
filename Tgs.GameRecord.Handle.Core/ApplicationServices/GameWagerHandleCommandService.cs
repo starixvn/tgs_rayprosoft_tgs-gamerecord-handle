@@ -1,4 +1,5 @@
-﻿using Tgs.ServiceUtility;
+﻿using Tgs.GameRecord.Handle.Common.Protos;
+using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
@@ -6,12 +7,15 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
 {
     private readonly IGetService<GameWagerInfoQuery, GameWagerInfoResult> _infoService;
     private readonly ICommandService<GameWagerPublishCommand> _publishService;
+    private readonly ISnowflakeWork _work;
 
     public GameWagerHandleCommandService(
         IGetService<GameWagerInfoQuery, GameWagerInfoResult> infoService,
+        ISnowflakeWork work,
         ICommandService<GameWagerPublishCommand> publishService)
     {
         _infoService = infoService ?? throw new ArgumentNullException(nameof(infoService));
+        _work = work ?? throw new ArgumentNullException(nameof(work));
         _publishService = publishService ?? throw new ArgumentNullException(nameof(publishService));
     }
 
@@ -19,6 +23,29 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
         GameWagerHandleCommand command,
         CancellationToken cancellationToken = default)
     {
+        if (command.ExternalRoundId is null || string.IsNullOrWhiteSpace(command.ExternalRoundId))
+        {
+            throw new ArgumentException($"This ExternalRoundId is empty/null .({new
+            {
+                command.GameProviderCode,
+                command.ExternalRoundId,
+                command.ExternalWagerId,
+                command.PlayerCode,
+                command.ExternalGameId
+            }})");
+        }
+
+        if (command.ExternalWagerId is null || string.IsNullOrWhiteSpace(command.ExternalWagerId))
+        {
+            throw new ArgumentException($"This ExternalWagerId is empty/null .({new
+            {
+                command.GameProviderCode,
+                command.ExternalRoundId,
+                command.ExternalWagerId,
+                command.PlayerCode,
+                command.ExternalGameId
+            }})");
+        }
         var query = new GameWagerInfoQuery(
             GameProviderCode: command.GameProviderCode,
             PlayerCode: command.PlayerCode,
@@ -31,13 +58,33 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
             Turnover: command.Turnover,
             WinLoss: command.WinLoss);
 
-        var result = await _infoService
-            .GetAsync(
+        var result = await _infoService.GetAsync(
             query: query,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
+        var wagerId = _work.GetWagerId();
+
+        var closedState = ClosedStates.None;
+        var voidState = VoidStates.None;
+        var cancelState = CancelStates.None;
+        if (command.WagerState is not WagerStates.Waiting and not WagerStates.Running)
+        {
+            closedState = ClosedStates.Closed;
+
+            if (command.WagerState == WagerStates.Void)
+            {
+                voidState = VoidStates.Void;
+            }
+
+            if (command.WagerState == WagerStates.Reject)
+            {
+                cancelState = CancelStates.Cancel;
+            }
+        }
+
         var publishCommand = new GameWagerPublishCommand(
+            WagerId: wagerId,
             GameProviderId: result.GameProviderId,
             GameProviderCode: result.GameProviderCode,
             GameProviderConfigurationId: result.GameProviderConfigurationId,
@@ -57,6 +104,9 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
             WalletId: result.WalletId,
             WagerState: command.WagerState,
             WagerType: command.WagerType,
+            ClosedState: closedState,
+            VoidState: voidState,
+            CancelState: cancelState,
             FreeGameState: command.FreeGameState,
             GambleState: command.GambleState,
             CashoutState: command.CashoutState,
@@ -77,10 +127,9 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
             WinLoss: result.WinLoss,
             AdditionalData: command.AdditionalData);
 
-        await _publishService
-            .ExecuteAsync(
-            publishCommand,
-            cancellationToken)
+        await _publishService.ExecuteAsync(
+            command: publishCommand,
+            cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 }

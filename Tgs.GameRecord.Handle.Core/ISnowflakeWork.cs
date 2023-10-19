@@ -1,10 +1,14 @@
-﻿namespace Tgs.GameRecord.Handle.Core;
+﻿using System.Net;
+
+namespace Tgs.GameRecord.Handle.Core;
 
 public interface ISnowflakeWork
 {
     long GetDatacenterId();
 
-    long GetWorkerId();
+    IPAddress GetIPAddress();
 
-    long NextId();
+    long GetWagerId();
+
+    long GetWorkerId();
 }

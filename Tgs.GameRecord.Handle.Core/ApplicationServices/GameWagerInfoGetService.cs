@@ -27,27 +27,23 @@ internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWag
 
     public async ValueTask<GameWagerInfoResult> GetAsync(GameWagerInfoQuery query, CancellationToken cancellationToken = default)
     {
-        var gameProviderId = await _gameProvider
-            .GetIdAsync(
+        var gameProviderId = await _gameProvider.GetIdAsync(
             code: query.GameProviderCode,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        var player = await _player
-            .GetAsync(
+        var player = await _player.GetAsync(
             playerCode: query.PlayerCode,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        var gameProviderConfigurationId = await _brandGameProvider
-            .GetGameProviderConfigurationIdAsync(
+        var gameProviderConfigurationId = await _brandGameProvider.GetGameProviderConfigurationIdAsync(
             brandId: player.BrandId,
             gameProviderId: gameProviderId,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        var game = await _game
-            .GetAsync(
+        var game = await _game.GetAsync(
             gameProviderId: gameProviderId,
             externaGamelId: query.ExternalGameId,
             cancellationToken: cancellationToken)
@@ -74,8 +70,7 @@ internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWag
             winLoss = query.WinLoss;
         }
 
-        var gameCurrencyResult = await _gameCurrency
-            .GetAsync(
+        var gameCurrencyResult = await _gameCurrency.GetAsync(
             gameProviderCode: game.GameProviderCode,
             currencyCode: player.DefaultWalletCurrencyCode,
             bet: bet,

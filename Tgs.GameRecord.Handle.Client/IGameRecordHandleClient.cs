@@ -4,25 +4,6 @@ namespace Tgs.GameRecord.Handle.Client;
 
 public interface IGameRecordHandleClient
 {
-    [Obsolete("已過時，請使用Wager")]
-    public ValueTask MessageAsync(
-        string gameProviderCode,
-        string externalRoundId,
-        string externalGameId,
-        string playerCode,
-        GameRecordStatus status,
-        GameRecordClientStatus clientStatus,
-        DateTimeOffset externalCreatedOn,
-        DateTimeOffset? externalClosedOn,
-        decimal bet,
-        decimal validBet,
-        decimal settle,
-        decimal commission,
-        decimal turnover,
-        decimal playerWinLoss,
-        string additionalData,
-        CancellationToken cancellationToken);
-
     /// <summary>
     /// Messages the asynchronous.
     /// </summary>
@@ -50,30 +31,7 @@ public interface IGameRecordHandleClient
     /// <param name="additionalData">The additional data.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns></returns>
-    public ValueTask MessageAsync(
-        string gameProviderCode,
-        string playerCode,
-        WagerStates wagerState,
-        WagerTypes wagerType,
-        FreeGameStates freeGameState,
-        GambleStates gambleState,
-        CashoutStates cashoutState,
-        ResettleStates resettleState,
-        string externalRoundId,
-        string externalWagerId,
-        string externalGameId,
-        DateTimeOffset externalCreatedOn,
-        DateTimeOffset? externalClosedOn,
-        DateTimeOffset? externalPayoffOn,
-        DateTimeOffset? externalResettleOn,
-        decimal bet,
-        decimal validBet,
-        decimal settle,
-        decimal commission,
-        decimal turnover,
-        decimal winLoss,
-        string additionalData,
-        CancellationToken cancellationToken);
+    public ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, WagerTypes wagerType, FreeGameStates freeGameState, GambleStates gambleState, CashoutStates cashoutState, ResettleStates resettleState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset? externalClosedOn, DateTimeOffset? externalPayoffOn, DateTimeOffset? externalResettleOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, string additionalData, CancellationToken cancellationToken);
 
     /// <summary>
     /// Messages the asynchronous.
@@ -101,27 +59,5 @@ public interface IGameRecordHandleClient
     /// <param name="additionalData">The additional data.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns></returns>
-    public ValueTask MessageAsync(
-        string gameProviderCode,
-        string playerCode,
-        WagerStates wagerState,
-        WagerTypes wagerType,
-        FreeGameStates freeGameState,
-        GambleStates gambleState,
-        CashoutStates cashoutState,
-        ResettleStates resettleState,
-        string externalRoundId,
-        string externalWagerId,
-        string externalGameId,
-        DateTimeOffset externalCreatedOn,
-        DateTimeOffset? externalClosedOn,
-        DateTimeOffset? externalResettleOn,
-        decimal bet,
-        decimal validBet,
-        decimal settle,
-        decimal commission,
-        decimal turnover,
-        decimal winLoss,
-        string additionalData,
-        CancellationToken cancellationToken);
+    public ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, WagerTypes wagerType, FreeGameStates freeGameState, GambleStates gambleState, CashoutStates cashoutState, ResettleStates resettleState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset? externalClosedOn, DateTimeOffset? externalResettleOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, string additionalData, CancellationToken cancellationToken);
 }

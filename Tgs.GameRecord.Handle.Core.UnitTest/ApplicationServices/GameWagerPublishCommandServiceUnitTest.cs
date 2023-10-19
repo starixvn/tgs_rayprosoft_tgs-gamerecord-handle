@@ -14,10 +14,10 @@ public class GameWagerPublishCommandServiceUnitTest
     public async Task Normal()
     {
         var faceLogger = NullLogger<GameWagerPublishCommandService>.Instance;
-        var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var command = new GameWagerPublishCommand(
+            WagerId: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
             GameProviderId: Guid.NewGuid(),
             GameProviderCode: "KY",
             GameProviderConfigurationId: Guid.NewGuid(),
@@ -37,6 +37,9 @@ public class GameWagerPublishCommandServiceUnitTest
             WalletId: Guid.NewGuid(),
             WagerState: WagerStates.Win,
             WagerType: WagerTypes.Normal,
+            ClosedState: ClosedStates.Closed,
+            VoidState: VoidStates.None,
+            CancelState: CancelStates.None,
             FreeGameState: FreeGameStates.None,
             GambleState: GambleStates.None,
             CashoutState: CashoutStates.None,
@@ -59,14 +62,9 @@ public class GameWagerPublishCommandServiceUnitTest
             {
                 ["externalRoundId"] = "50-1691469296-370404138-1"
             }.ToJsonString());
-        var wagerId = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        _ = fakeSnowflakeWork
-            .NextId()
-            .Returns(wagerId);
 
         var service = new GameWagerPublishCommandService(
             faceLogger,
-            fakeSnowflakeWork,
             fakeMessageSender);
 
         await service.ExecuteAsync(command: command);

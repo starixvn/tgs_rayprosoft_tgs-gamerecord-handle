@@ -56,7 +56,8 @@ builder.Services.AddHandleService(
     {
         var configuration = sp.GetRequiredService<IConfiguration>();
         options.IPAddress = builder.Configuration.GetSection("POD_IP").Value
-        ?? Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).Single().ToString();
+        ?? Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault()?.ToString()
+        ?? "127.0.0.1";
     },
     (options, sp) =>
     {
@@ -79,8 +80,6 @@ builder.Services
             var configuration = sp.GetRequiredService<IConfiguration>();
             options.Url = configuration.GetConnectionString("Nats")!;
         })
-        .AddHandler<GameRecordMessageHandler>(subject: "game.gamerecord.handle.publish", group: "game.gamerecord.publish.handle")
-        .AddHandler<GameRecordMessageHandler>(subject: NatsConst.GameRecordPublish, group: "game.gamerecord.publish.handle")
         .AddHandler<GameWagerMessageHandler>(subject: NatsConst.GameRecordWagerPublish, group: "game.gamerecord.wager.publish.handle");
     })
     .ClearAllExchanges()

@@ -3,6 +3,7 @@
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 public record GameWagerPublishCommand(
+    long WagerId,
     Guid GameProviderId,
     string GameProviderCode,
     Guid GameProviderConfigurationId,
@@ -22,6 +23,9 @@ public record GameWagerPublishCommand(
     Guid WalletId,
     WagerStates WagerState,
     WagerTypes WagerType,
+    ClosedStates ClosedState,
+    VoidStates VoidState,
+    CancelStates CancelState,
     FreeGameStates FreeGameState,
     GambleStates GambleState,
     CashoutStates CashoutState,

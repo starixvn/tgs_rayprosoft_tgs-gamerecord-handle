@@ -12,43 +12,20 @@ internal class GameWagerPublishCommandService : ICommandService<GameWagerPublish
 {
     private readonly ILogger<GameWagerPublishCommandService> _logger;
     private readonly IMessageSender _sender;
-    private readonly ISnowflakeWork _work;
 
     public GameWagerPublishCommandService(
         ILogger<GameWagerPublishCommandService> logger,
-        ISnowflakeWork work,
         IMessageSender sender)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _work = work ?? throw new ArgumentNullException(nameof(work));
         _sender = sender ?? throw new ArgumentNullException(nameof(sender));
     }
 
     public ValueTask ExecuteAsync(GameWagerPublishCommand command, CancellationToken cancellationToken = default)
     {
-        var wagerId = _work.NextId();
-
-        var closedState = ClosedStates.None;
-        var voidState = VoidStates.None;
-        var cancelState = CancelStates.None;
-        if (command.WagerState is not WagerStates.Waiting and not WagerStates.Running)
-        {
-            closedState = ClosedStates.Closed;
-
-            if (command.WagerState == WagerStates.Void)
-            {
-                voidState = VoidStates.Void;
-            }
-
-            if (command.WagerState == WagerStates.Reject)
-            {
-                cancelState = CancelStates.Cancel;
-            }
-        }
-
         var publish = new GameWagerPublish
         {
-            WagerId = wagerId,
+            WagerId = command.WagerId,
             GameProviderId = command.GameProviderId,
             GameProviderCode = command.GameProviderCode,
             GameProviderConfigurationId = command.GameProviderConfigurationId,
@@ -68,9 +45,9 @@ internal class GameWagerPublishCommandService : ICommandService<GameWagerPublish
             WalletId = command.WalletId,
             WagerState = command.WagerState,
             WagerType = command.WagerType,
-            ClosedState = closedState,
-            VoidState = voidState,
-            CancelState = cancelState,
+            ClosedState = command.ClosedState,
+            VoidState = command.VoidState,
+            CancelState = command.CancelState,
             FreeGameState = command.FreeGameState,
             GambleState = command.GambleState,
             CashoutState = command.CashoutState,
