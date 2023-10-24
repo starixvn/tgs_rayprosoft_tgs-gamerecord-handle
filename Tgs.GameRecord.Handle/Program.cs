@@ -114,9 +114,7 @@ builder.Services
             && !httpContext.Request.Path.StartsWithSegments("/hangfire")
             && !httpContext.Request.Path.StartsWithSegments("/metrics")
             && !new[] { "html", "ico", "png", "jpg" }.Any(
-                ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
-    .AddInterceptionService()
-    .AddServiceUtiltiyInterceptors();
+                ext => httpContext.Request.Path.Value.EndsWith($".{ext}")));
 
 builder.Services.AddHealthChecks();
 
