@@ -3,6 +3,7 @@
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 public record GameWagerPublishCommand(
+    Guid RoundId,
     long WagerId,
     Guid GameProviderId,
     string GameProviderCode,

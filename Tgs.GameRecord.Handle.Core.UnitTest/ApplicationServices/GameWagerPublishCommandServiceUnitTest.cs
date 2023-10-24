@@ -17,6 +17,7 @@ public class GameWagerPublishCommandServiceUnitTest
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var command = new GameWagerPublishCommand(
+            RoundId: Guid.NewGuid(),
             WagerId: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
             GameProviderId: Guid.NewGuid(),
             GameProviderCode: "KY",

@@ -25,6 +25,7 @@ internal class GameWagerPublishCommandService : ICommandService<GameWagerPublish
     {
         var publish = new GameWagerPublish
         {
+            RoundId = command.RoundId,
             WagerId = command.WagerId,
             GameProviderId = command.GameProviderId,
             GameProviderCode = command.GameProviderCode,
