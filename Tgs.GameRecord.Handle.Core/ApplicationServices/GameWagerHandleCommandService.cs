@@ -69,8 +69,7 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
 
         var wagerId = _work.GetWagerId();
 
-        var roundId = await _serialNumberGenerator.GenerateAsync(
-            cancellationToken: cancellationToken)
+        var roundId = await _serialNumberGenerator.GenerateAsync()
             .ConfigureAwait(false);
 
         var closedState = ClosedStates.None;
