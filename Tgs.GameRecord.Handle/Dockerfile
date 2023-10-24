@@ -19,11 +19,11 @@ COPY ["Tgs.GameRecord.Handle.Repositories/Tgs.GameRecord.Handle.Repositories.csp
 RUN dotnet restore "Tgs.GameRecord.Handle/Tgs.GameRecord.Handle.csproj"
 COPY . .
 WORKDIR "/src/Tgs.GameRecord.Handle"
-RUN dotnet build "Tgs.GameRecord.Handle.csproj" -c $BuildConfiguration -o /app/build
+RUN dotnet build "Tgs.GameRecord.Handle.csproj" -c Debug -o /app/build
 
 FROM build AS publish
 ARG BuildConfiguration
-RUN dotnet publish "Tgs.GameRecord.Handle.csproj" -c $BuildConfiguration -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Tgs.GameRecord.Handle.csproj" -c Debug -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
