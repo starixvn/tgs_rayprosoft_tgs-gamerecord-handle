@@ -6,7 +6,7 @@ EXPOSE 80
 EXPOSE 443
 
 RUN apt-get update \
-	&& apt-get install -y wget \
+	&& apt-get install -y wget
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 ARG BuildConfiguration=Release
