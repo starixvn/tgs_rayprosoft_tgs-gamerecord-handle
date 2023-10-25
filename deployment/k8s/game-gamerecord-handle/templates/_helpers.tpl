@@ -51,6 +51,7 @@ app: {{ include "game-gamerecord-handle.name" . }}
 tgs.kind: game
 tgs.game.kind: gamerecord
 tgs.gamerecord.kind: handle
+tgs.node.selector.kind: gamewagers
 {{- end }}
 
 {{/*
