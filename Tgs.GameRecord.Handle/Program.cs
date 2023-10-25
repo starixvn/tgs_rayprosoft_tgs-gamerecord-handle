@@ -27,6 +27,7 @@ builder.Logging
             fluentOptions.Host = nodeIp;
             fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME")!;
             fluentOptions.UseMessagePack();
+            fluentOptions.ExportProcessorType = OpenTelemetry.ExportProcessorType.Simple;
         });
     });
 

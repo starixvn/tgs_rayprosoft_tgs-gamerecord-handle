@@ -11,11 +11,6 @@ data:
           "Default": "Warning"
         }
       },
-      "OpenTelemetry": {
-        "Tracing": {
-          "ExportProcessorType": "Simple"
-        }
-      },
       "GameRecordHandle": {
         "GameCommandClientBaseUrl": "http://game-gamecommand/",
         "GameCurrencyClientBaseUrl": "http://game-gamecurrency/"
