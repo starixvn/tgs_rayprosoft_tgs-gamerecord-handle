@@ -51,6 +51,7 @@ public class GameWagerMessageHandler : IMessageHandler
 
         return _service
             .ExecuteAsync(
-            command: command);
+            command: command,
+            cancellationToken: cancellationToken);
     }
 }

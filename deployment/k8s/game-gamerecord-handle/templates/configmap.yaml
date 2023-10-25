@@ -7,9 +7,14 @@ data:
   appsettings.json: |
     {
       "Logging": {
-         "LogLevel": {
+        "LogLevel": {
           "Default": "Warning"
-          }
+        }
+      },
+      "OpenTelemetry": {
+        "Tracing": {
+          "ExportProcessorType": "Simple"
+        }
       },
       "GameRecordHandle": {
         "GameCommandClientBaseUrl": "http://game-gamecommand/",
