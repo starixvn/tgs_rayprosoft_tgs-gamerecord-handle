@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.0.32</Version>
+		<Version>0.0.33</Version>
 		<Authors>Raypro</Authors>
 		<RootNamespace>Tgs.GameRecord.Handle.Client</RootNamespace>
 		<PackageId>Tgs.GameRecord.Handle.Client</PackageId>
@@ -17,7 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.3" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="1.0.3" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="1.0.6" />
 		<PackageReference Include="PhoenixToolkits.NuGet.BuildTools" Version="0.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
