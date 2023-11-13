@@ -158,8 +158,6 @@ message GameWagerPublish {
     ResetStates reset_state = 48;
     // 重置時間
     google.protobuf.Timestamp reset_on = 49;
-    // 平台Round識別碼
-    phoenix.protobuf.GuidValue round_id = 50;
 }
 
 // 遊戲大類

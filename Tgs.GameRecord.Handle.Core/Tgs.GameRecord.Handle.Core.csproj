@@ -16,7 +16,6 @@
 		<PackageReference Include="System.Linq.Async" Version="6.0.1" />
 		<PackageReference Include="Tgs.GameCommand.Client" Version="0.0.10" />
 		<PackageReference Include="Tgs.GameCurrency.Client" Version="0.0.11" />
-		<PackageReference Include="Tgs.SerialNumberGenerator" Version="1.0.1" />
 		<PackageReference Include="TGS.ServiceUtility" Version="0.2.0" />
 	</ItemGroup>
 

@@ -3,7 +3,6 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
-using Tgs.SerialNumberGenerator;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Handle.Core.UnitTest.ApplicationServices;
@@ -15,7 +14,6 @@ public class GameWagerHandleCommandServiceUnitTest
     {
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
-        var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
 
         var command = new GameWagerHandleCommand(
@@ -112,21 +110,14 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetWagerId()
             .Returns(wagerId);
 
-        var roundId = Guid.NewGuid();
-        _ = fakeSerialNumberGenerator.GenerateAsync(
-            cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(roundId);
-
         var service = new GameWagerHandleCommandService(
             fakeInfoService,
             fakeSnowflakeWork,
-            fakeSerialNumberGenerator,
             fakePublishService);
 
         await service.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
-            RoundId: roundId,
             WagerId: wagerId,
             GameProviderId: result.GameProviderId,
             GameProviderCode: result.GameProviderCode,
@@ -182,7 +173,6 @@ public class GameWagerHandleCommandServiceUnitTest
     {
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
-        var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
 
         var command = new GameWagerHandleCommand(
@@ -279,21 +269,14 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetWagerId()
             .Returns(wagerId);
 
-        var roundId = Guid.NewGuid();
-        _ = fakeSerialNumberGenerator.GenerateAsync(
-            cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(roundId);
-
         var service = new GameWagerHandleCommandService(
             fakeInfoService,
             fakeSnowflakeWork,
-            fakeSerialNumberGenerator,
             fakePublishService);
 
         await service.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
-            RoundId: roundId,
             WagerId: wagerId,
             GameProviderId: result.GameProviderId,
             GameProviderCode: result.GameProviderCode,
@@ -349,7 +332,6 @@ public class GameWagerHandleCommandServiceUnitTest
     {
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
-        var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
 
         var command = new GameWagerHandleCommand(
@@ -404,7 +386,6 @@ public class GameWagerHandleCommandServiceUnitTest
         var service = new GameWagerHandleCommandService(
             fakeInfoService,
             fakeSnowflakeWork,
-            fakeSerialNumberGenerator,
             fakePublishService);
 
         _ = await Assert.ThrowsAsync<ArgumentException>(
@@ -434,7 +415,6 @@ public class GameWagerHandleCommandServiceUnitTest
     {
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
-        var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
 
         var command = new GameWagerHandleCommand(
@@ -489,7 +469,6 @@ public class GameWagerHandleCommandServiceUnitTest
         var service = new GameWagerHandleCommandService(
             fakeInfoService,
             fakeSnowflakeWork,
-            fakeSerialNumberGenerator,
             fakePublishService);
 
         _ = await Assert.ThrowsAsync<ArgumentException>(
@@ -519,7 +498,6 @@ public class GameWagerHandleCommandServiceUnitTest
     {
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
-        var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
 
         var command = new GameWagerHandleCommand(
@@ -580,7 +558,6 @@ public class GameWagerHandleCommandServiceUnitTest
         var service = new GameWagerHandleCommandService(
             fakeInfoService,
             fakeSnowflakeWork,
-            fakeSerialNumberGenerator,
             fakePublishService);
 
         _ = await Assert.ThrowsAsync<NullReferenceException>(
@@ -604,7 +581,6 @@ public class GameWagerHandleCommandServiceUnitTest
     {
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
-        var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
 
         var command = new GameWagerHandleCommand(
@@ -701,21 +677,14 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetWagerId()
             .Returns(wagerId);
 
-        var roundId = Guid.NewGuid();
-        _ = fakeSerialNumberGenerator.GenerateAsync(
-            cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(roundId);
-
         var service = new GameWagerHandleCommandService(
             fakeInfoService,
             fakeSnowflakeWork,
-            fakeSerialNumberGenerator,
             fakePublishService);
 
         await service.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
-            RoundId: roundId,
             WagerId: wagerId,
             GameProviderId: result.GameProviderId,
             GameProviderCode: result.GameProviderCode,
@@ -771,7 +740,6 @@ public class GameWagerHandleCommandServiceUnitTest
     {
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
-        var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
 
         var command = new GameWagerHandleCommand(
@@ -868,21 +836,14 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetWagerId()
             .Returns(wagerId);
 
-        var roundId = Guid.NewGuid();
-        _ = fakeSerialNumberGenerator.GenerateAsync(
-            cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(roundId);
-
         var service = new GameWagerHandleCommandService(
             fakeInfoService,
             fakeSnowflakeWork,
-            fakeSerialNumberGenerator,
             fakePublishService);
 
         await service.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
-            RoundId: roundId,
             WagerId: wagerId,
             GameProviderId: result.GameProviderId,
             GameProviderCode: result.GameProviderCode,
@@ -938,7 +899,6 @@ public class GameWagerHandleCommandServiceUnitTest
     {
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
-        var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
 
         var command = new GameWagerHandleCommand(
@@ -1035,21 +995,14 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetWagerId()
             .Returns(wagerId);
 
-        var roundId = Guid.NewGuid();
-        _ = fakeSerialNumberGenerator.GenerateAsync(
-            cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(roundId);
-
         var service = new GameWagerHandleCommandService(
             fakeInfoService,
             fakeSnowflakeWork,
-            fakeSerialNumberGenerator,
             fakePublishService);
 
         await service.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
-            RoundId: roundId,
             WagerId: wagerId,
             GameProviderId: result.GameProviderId,
             GameProviderCode: result.GameProviderCode,

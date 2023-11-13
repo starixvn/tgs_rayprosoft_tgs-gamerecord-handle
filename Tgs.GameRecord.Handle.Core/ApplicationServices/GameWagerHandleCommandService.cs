@@ -1,5 +1,4 @@
 ﻿using Tgs.GameRecord.Handle.Common.Protos;
-using Tgs.SerialNumberGenerator;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
@@ -8,18 +7,15 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
 {
     private readonly IGetService<GameWagerInfoQuery, GameWagerInfoResult> _infoService;
     private readonly ICommandService<GameWagerPublishCommand> _publishService;
-    private readonly ISerialNumberGenerator _serialNumberGenerator;
     private readonly ISnowflakeWork _work;
 
     public GameWagerHandleCommandService(
         IGetService<GameWagerInfoQuery, GameWagerInfoResult> infoService,
         ISnowflakeWork work,
-        ISerialNumberGenerator serialNumberGenerator,
         ICommandService<GameWagerPublishCommand> publishService)
     {
         _infoService = infoService ?? throw new ArgumentNullException(nameof(infoService));
         _work = work ?? throw new ArgumentNullException(nameof(work));
-        _serialNumberGenerator = serialNumberGenerator ?? throw new ArgumentNullException(nameof(serialNumberGenerator));
         _publishService = publishService ?? throw new ArgumentNullException(nameof(publishService));
     }
 
@@ -69,10 +65,6 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
 
         var wagerId = _work.GetWagerId();
 
-        var roundId = await _serialNumberGenerator.GenerateAsync(
-            cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-
         var closedState = ClosedStates.None;
         var voidState = VoidStates.None;
         var cancelState = CancelStates.None;
@@ -92,7 +84,6 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
         }
 
         var publishCommand = new GameWagerPublishCommand(
-            RoundId: roundId,
             WagerId: wagerId,
             GameProviderId: result.GameProviderId,
             GameProviderCode: result.GameProviderCode,

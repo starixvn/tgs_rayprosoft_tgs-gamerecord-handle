@@ -15,6 +15,5 @@ public static class ServiceCollectionExtensions
         .RegisterAllServiceUtilityTypes(
             Assembly.GetExecutingAssembly(),
             ServiceLifetime.Transient)
-        .AddSingleton<ISnowflakeWork, SnowflakeWork>()
-        .AddSerialNumberGenerator();
+        .AddSingleton<ISnowflakeWork, SnowflakeWork>();
 }
