@@ -2,12 +2,13 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
+
+RUN apt-get update \
+	&& apt-get install -y wge
+
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
-
-RUN apt-get update \
-	&& apt-get install -y wget
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
