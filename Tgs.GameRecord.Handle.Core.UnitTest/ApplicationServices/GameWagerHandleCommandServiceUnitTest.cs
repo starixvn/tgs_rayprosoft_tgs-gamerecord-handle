@@ -107,7 +107,7 @@ public class GameWagerHandleCommandServiceUnitTest
             .Returns(result);
 
         var wagerId = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        _ = fakeSnowflakeWork.GetWagerId()
+        _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
         var service = new GameWagerHandleCommandService(
@@ -266,7 +266,7 @@ public class GameWagerHandleCommandServiceUnitTest
             .Returns(result);
 
         var wagerId = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        _ = fakeSnowflakeWork.GetWagerId()
+        _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
         var service = new GameWagerHandleCommandService(
@@ -401,7 +401,7 @@ public class GameWagerHandleCommandServiceUnitTest
 
         _ = fakeSnowflakeWork
             .Received(0)
-            .GetWagerId();
+            .GetId();
 
         _ = fakePublishService
             .Received(0)
@@ -484,7 +484,7 @@ public class GameWagerHandleCommandServiceUnitTest
 
         _ = fakeSnowflakeWork
             .Received(0)
-            .GetWagerId();
+            .GetId();
 
         _ = fakePublishService
             .Received(0)
@@ -567,7 +567,7 @@ public class GameWagerHandleCommandServiceUnitTest
 
         _ = fakeSnowflakeWork
             .Received(0)
-            .GetWagerId();
+            .GetId();
 
         _ = fakePublishService
             .Received(0)
@@ -674,7 +674,7 @@ public class GameWagerHandleCommandServiceUnitTest
             .Returns(result);
 
         var wagerId = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        _ = fakeSnowflakeWork.GetWagerId()
+        _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
         var service = new GameWagerHandleCommandService(
@@ -833,7 +833,7 @@ public class GameWagerHandleCommandServiceUnitTest
             .Returns(result);
 
         var wagerId = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        _ = fakeSnowflakeWork.GetWagerId()
+        _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
         var service = new GameWagerHandleCommandService(
@@ -992,7 +992,7 @@ public class GameWagerHandleCommandServiceUnitTest
             .Returns(result);
 
         var wagerId = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        _ = fakeSnowflakeWork.GetWagerId()
+        _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
         var service = new GameWagerHandleCommandService(

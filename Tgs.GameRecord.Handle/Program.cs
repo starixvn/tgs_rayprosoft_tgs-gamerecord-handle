@@ -10,11 +10,9 @@ using OpenTelemetry.Trace;
 using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Messages;
 
-var builder = WebApplication.CreateBuilder(args);
+var filterInstrumentations = new[] { "html", "ico", "png", "jpg" };
 
-builder.Configuration
-    .AddJsonFile("/config/appsettings.json", true)
-    .AddEnvironmentVariables();
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging
     .AddOpenTelemetry(options =>
@@ -51,11 +49,11 @@ builder.Services.AddSwaggerGen(c =>
     foreach (var xmlFileName in xmlFileNames) c.IncludeXmlComments(xmlFileName);
 });
 
-builder.Services.AddHandleService(
+builder.Services.AddGameRecordHandle(
     (options, sp) =>
     {
         var configuration = sp.GetRequiredService<IConfiguration>();
-        options.IPAddress = builder.Configuration.GetSection("POD_IP").Value
+        options.IPAddress = configuration.GetSection("POD_IP").Value
         ?? Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault()?.ToString()
         ?? "127.0.0.1";
     },
@@ -113,8 +111,7 @@ builder.Services
             && !httpContext.Request.Path.StartsWithSegments("/profiler/")
             && !httpContext.Request.Path.StartsWithSegments("/hangfire")
             && !httpContext.Request.Path.StartsWithSegments("/metrics")
-            && !new[] { "html", "ico", "png", "jpg" }.Any(
-                ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
+            && !filterInstrumentations.Any(ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
     .AddInterceptionService()
     .AddServiceUtiltiyInterceptors();
 

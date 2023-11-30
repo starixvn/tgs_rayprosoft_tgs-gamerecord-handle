@@ -7,21 +7,31 @@ namespace Tgs.GameRecord.Handle.Controllers;
 [ApiController]
 public class SnowflakeController : ControllerBase
 {
+    /// <summary>
+    /// Gets the datacenter identifier.
+    /// </summary>
+    /// <param name="work">The work.</param>
+    /// <returns></returns>
     [HttpGet("DatacenterId")]
     public long GetDatacenterId(
         [FromServices] ISnowflakeWork work)
         => work.GetDatacenterId();
 
+    /// <summary>
+    /// Gets the identifier.
+    /// </summary>
+    /// <param name="work">The work.</param>
+    /// <returns></returns>
     [HttpGet("Id")]
     public long GetId(
         [FromServices] ISnowflakeWork work)
-        => work.GetWagerId();
+        => work.GetId();
 
-    [HttpGet("IPAddress")]
-    public string GetIPAddress(
-        [FromServices] ISnowflakeWork work)
-        => work.GetIPAddress().ToString();
-
+    /// <summary>
+    /// Gets the worker identifier.
+    /// </summary>
+    /// <param name="work">The work.</param>
+    /// <returns></returns>
     [HttpGet("WorkerId")]
     public long GetWorkerId(
         [FromServices] ISnowflakeWork work)

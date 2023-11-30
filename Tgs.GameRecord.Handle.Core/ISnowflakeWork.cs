@@ -6,9 +6,7 @@ public interface ISnowflakeWork
 {
     long GetDatacenterId();
 
-    IPAddress GetIPAddress();
-
-    long GetWagerId();
+    long GetId();
 
     long GetWorkerId();
 }

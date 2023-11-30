@@ -1,4 +1,5 @@
-﻿using Tgs.GameRecord.Handle.Common.Protos;
+﻿using System.Text.Json.Nodes;
+using Tgs.GameRecord.Handle.Common.Protos;
 
 namespace Tgs.GameRecord.Handle.Client;
 
@@ -31,7 +32,7 @@ public interface IGameRecordHandleClient
     /// <param name="additionalData">The additional data.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns></returns>
-    public ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, WagerTypes wagerType, FreeGameStates freeGameState, GambleStates gambleState, CashoutStates cashoutState, ResettleStates resettleState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset? externalClosedOn, DateTimeOffset? externalPayoffOn, DateTimeOffset? externalResettleOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, string additionalData, CancellationToken cancellationToken);
+    ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, WagerTypes wagerType, FreeGameStates freeGameState, GambleStates gambleState, CashoutStates cashoutState, ResettleStates resettleState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset? externalClosedOn, DateTimeOffset? externalPayoffOn, DateTimeOffset? externalResettleOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, JsonNode additionalData, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Messages the asynchronous.
@@ -39,7 +40,57 @@ public interface IGameRecordHandleClient
     /// <param name="gameProviderCode">The game provider code.</param>
     /// <param name="playerCode">The player code.</param>
     /// <param name="wagerState">State of the wager.</param>
-    /// <param name="wagerType">Type of the wager.</param>
+    /// <param name="freeGameState">State of the free game.</param>
+    /// <param name="gambleState">State of the gamble.</param>
+    /// <param name="cashoutState">State of the cashout.</param>
+    /// <param name="externalRoundId">The external round identifier.</param>
+    /// <param name="externalWagerId">The external wager identifier.</param>
+    /// <param name="externalGameId">The external game identifier.</param>
+    /// <param name="externalCreatedOn">The external created on.</param>
+    /// <param name="externalClosedOn">The external closed on.</param>
+    /// <param name="bet">The bet.</param>
+    /// <param name="validBet">The valid bet.</param>
+    /// <param name="settle">The settle.</param>
+    /// <param name="commission">The commission.</param>
+    /// <param name="turnover">The turnover.</param>
+    /// <param name="winLoss">The win loss.</param>
+    /// <param name="additionalData">The additional data.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns></returns>
+    ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, FreeGameStates freeGameState, GambleStates gambleState, CashoutStates cashoutState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset externalClosedOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, JsonNode additionalData, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Messages the asynchronous.
+    /// </summary>
+    /// <param name="gameProviderCode">The game provider code.</param>
+    /// <param name="playerCode">The player code.</param>
+    /// <param name="wagerState">State of the wager.</param>
+    /// <param name="freeGameState">State of the free game.</param>
+    /// <param name="gambleState">State of the gamble.</param>
+    /// <param name="cashoutState">State of the cashout.</param>
+    /// <param name="externalRoundId">The external round identifier.</param>
+    /// <param name="externalWagerId">The external wager identifier.</param>
+    /// <param name="externalGameId">The external game identifier.</param>
+    /// <param name="externalCreatedOn">The external created on.</param>
+    /// <param name="externalClosedOn">The external closed on.</param>
+    /// <param name="externalPayoffOn">The external payoff on.</param>
+    /// <param name="bet">The bet.</param>
+    /// <param name="validBet">The valid bet.</param>
+    /// <param name="settle">The settle.</param>
+    /// <param name="commission">The commission.</param>
+    /// <param name="turnover">The turnover.</param>
+    /// <param name="winLoss">The win loss.</param>
+    /// <param name="additionalData">The additional data.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns></returns>
+    ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, FreeGameStates freeGameState, GambleStates gambleState, CashoutStates cashoutState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset externalClosedOn, DateTimeOffset externalPayoffOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, JsonNode additionalData, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Messages the asynchronous.
+    /// </summary>
+    /// <param name="gameProviderCode">The game provider code.</param>
+    /// <param name="playerCode">The player code.</param>
+    /// <param name="wagerState">State of the wager.</param>
     /// <param name="freeGameState">State of the free game.</param>
     /// <param name="gambleState">State of the gamble.</param>
     /// <param name="cashoutState">State of the cashout.</param>
@@ -59,7 +110,7 @@ public interface IGameRecordHandleClient
     /// <param name="additionalData">The additional data.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns></returns>
-    public ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, WagerTypes wagerType, FreeGameStates freeGameState, GambleStates gambleState, CashoutStates cashoutState, ResettleStates resettleState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset? externalClosedOn, DateTimeOffset? externalResettleOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, string additionalData, CancellationToken cancellationToken);
+    ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, FreeGameStates freeGameState, GambleStates gambleState, CashoutStates cashoutState, ResettleStates resettleState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset externalClosedOn, DateTimeOffset externalResettleOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, JsonNode additionalData, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Messages the asynchronous.
@@ -67,17 +118,11 @@ public interface IGameRecordHandleClient
     /// <param name="gameProviderCode">The game provider code.</param>
     /// <param name="playerCode">The player code.</param>
     /// <param name="wagerState">State of the wager.</param>
-    /// <param name="wagerType">Type of the wager.</param>
-    /// <param name="freeGameState">State of the free game.</param>
-    /// <param name="gambleState">State of the gamble.</param>
-    /// <param name="cashoutState">State of the cashout.</param>
-    /// <param name="resettleState">State of the resettle.</param>
     /// <param name="externalRoundId">The external round identifier.</param>
     /// <param name="externalWagerId">The external wager identifier.</param>
     /// <param name="externalGameId">The external game identifier.</param>
     /// <param name="externalCreatedOn">The external created on.</param>
     /// <param name="externalClosedOn">The external closed on.</param>
-    /// <param name="externalResettleOn">The external resettle on.</param>
     /// <param name="bet">The bet.</param>
     /// <param name="validBet">The valid bet.</param>
     /// <param name="settle">The settle.</param>
@@ -87,5 +132,23 @@ public interface IGameRecordHandleClient
     /// <param name="additionalData">The additional data.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns></returns>
-    public ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, WagerTypes wagerType, FreeGameStates freeGameState, GambleStates gambleState, CashoutStates cashoutState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset? externalClosedOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, string additionalData, CancellationToken cancellationToken);
+    ValueTask MessageAsync(string gameProviderCode, string playerCode, WagerStates wagerState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, DateTimeOffset externalClosedOn, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, JsonNode additionalData, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Messages the running asynchronous.
+    /// </summary>
+    /// <param name="gameProviderCode">The game provider code.</param>
+    /// <param name="playerCode">The player code.</param>
+    /// <param name="freeGameState">State of the free game.</param>
+    /// <param name="gambleState">State of the gamble.</param>
+    /// <param name="externalRoundId">The external round identifier.</param>
+    /// <param name="externalWagerId">The external wager identifier.</param>
+    /// <param name="externalGameId">The external game identifier.</param>
+    /// <param name="externalCreatedOn">The external created on.</param>
+    /// <param name="bet">The bet.</param>
+    /// <param name="validBet">The valid bet.</param>
+    /// <param name="additionalData">The additional data.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns></returns>
+    ValueTask MessageRunningAsync(string gameProviderCode, string playerCode, FreeGameStates freeGameState, GambleStates gambleState, string externalRoundId, string externalWagerId, string externalGameId, DateTimeOffset externalCreatedOn, decimal bet, decimal validBet, JsonNode additionalData, CancellationToken cancellationToken = default);
 }

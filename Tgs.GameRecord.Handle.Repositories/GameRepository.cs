@@ -7,22 +7,11 @@ using Tgs.GameRecord.Handle.Core.Models;
 
 namespace Tgs.GameRecord.Handle.Repositories;
 
-internal class GameRepository : IGame
+internal class GameRepository(
+    IMemoryCache memoryCache,
+    IGameCommandClient client,
+    TimeSpan absoluteExpirationRelativeToNow) : IGame
 {
-    private readonly TimeSpan _absoluteExpirationRelativeToNow;
-    private readonly IGameCommandClient _client;
-    private readonly IMemoryCache _memoryCache;
-
-    public GameRepository(
-        IMemoryCache memoryCache,
-        IGameCommandClient client,
-        TimeSpan absoluteExpirationRelativeToNow)
-    {
-        _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-        _absoluteExpirationRelativeToNow = absoluteExpirationRelativeToNow;
-    }
-
     public async ValueTask<GameModel?> GetAsync(
         Guid gameProviderId,
         string externaGamelId,
@@ -30,10 +19,9 @@ internal class GameRepository : IGame
     {
         var key = $"gamerecord:handle:game:{gameProviderId}:{externaGamelId}";
 
-        if (!_memoryCache.TryGetValue(key, out GameModel? game))
+        if (!memoryCache.TryGetValue(key, out GameModel? game))
         {
-            var info = await _client
-               .GameGetAsync(
+            var info = await client.GameGetAsync(
                gameProviderId: gameProviderId,
                gameExternalId: externaGamelId,
                cancellationToken: cancellationToken)
@@ -90,10 +78,10 @@ internal class GameRepository : IGame
                GameType: gameType,
                SubGameProviderCode: info.SubGameProviderCode ?? info.GameProviderCode);
 
-            return _memoryCache.Set(
+            return memoryCache.Set(
                 key: key,
                 value: game,
-                absoluteExpirationRelativeToNow: _absoluteExpirationRelativeToNow);
+                absoluteExpirationRelativeToNow: absoluteExpirationRelativeToNow);
         }
 
         return game;

@@ -5,25 +5,16 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Messages;
 
-public class GameWagerMessageHandler : IMessageHandler
+public class GameWagerMessageHandler(
+    ILogger<GameWagerMessageHandler> logger,
+    ICommandService<GameWagerHandleCommand> service) : IMessageHandler
 {
-    private readonly ILogger<GameWagerMessageHandler> _logger;
-    private readonly ICommandService<GameWagerHandleCommand> _service;
-
-    public GameWagerMessageHandler(
-        ILogger<GameWagerMessageHandler> logger,
-        ICommandService<GameWagerHandleCommand> service)
-    {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _service = service ?? throw new ArgumentNullException(nameof(service));
-    }
-
     public ValueTask HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
     {
         var request = GameWagerRequest.Parser.ParseFrom(data.Span)
             ?? throw new NullReferenceException("The request data resolves to a null value");
 
-        _logger.LogInformation("LogOn:{logOn} Information Request:{request}", DateTime.Now.ToString("o"), request);
+        logger.LogInformation("LogOn:{logOn} Information Request:{request}", DateTime.Now.ToString("o"), request);
 
         var command = new GameWagerHandleCommand(
             GameProviderCode: request.GameProviderCode,
@@ -49,8 +40,7 @@ public class GameWagerMessageHandler : IMessageHandler
             WinLoss: request.WinLoss.ToDecimal().GetValueOrDefault(0),
             AdditionalData: request.AdditionalData);
 
-        return _service
-            .ExecuteAsync(
+        return service.ExecuteAsync(
             command: command,
             cancellationToken: cancellationToken);
     }

@@ -4,17 +4,9 @@ using Tgs.GameRecord.Handle.Core.Models;
 
 namespace Tgs.GameRecord.Handle.Repositories;
 
-internal class GameCurrencyRepository : IGameCurrency
+internal class GameCurrencyRepository(
+    IGameCurrencyClient client) : IGameCurrency
 {
-    private readonly IGameCurrencyClient _client;
-
-    public GameCurrencyRepository(
-        IGameCurrencyClient client
-        )
-    {
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-    }
-
     public async ValueTask<GameCurrencyModel> GetAsync(
         string gameProviderCode,
         string currencyCode,
@@ -26,7 +18,7 @@ internal class GameCurrencyRepository : IGameCurrency
         decimal playerWinLoss,
         CancellationToken cancellationToken = default)
     {
-        var result = await _client
+        var result = await client
             .ConvertPlatformRoundsAsync(
             gameProviderCode: gameProviderCode,
             currencyCode: currencyCode,

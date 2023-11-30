@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.0.35</Version>
+		<Version>0.0.36</Version>
 		<Authors>Raypro</Authors>
 		<RootNamespace>Tgs.GameRecord.Handle.Client</RootNamespace>
 		<PackageId>Tgs.GameRecord.Handle.Client</PackageId>

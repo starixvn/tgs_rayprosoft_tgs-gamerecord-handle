@@ -3,47 +3,32 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
-internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWagerInfoResult>
+internal class GameWagerInfoGetService(
+    IBrandGameProvider brandGameProvider,
+    IGame game,
+    IGameProvider gameProvider,
+    IPlayer player,
+    IGameCurrency gameCurrency) : IGetService<GameWagerInfoQuery, GameWagerInfoResult>
 {
-    private readonly IBrandGameProvider _brandGameProvider;
-    private readonly IGame _game;
-    private readonly IGameCurrency _gameCurrency;
-    private readonly IGameProvider _gameProvider;
-    private readonly IPlayer _player;
-
-    public GameWagerInfoGetService(
-        IBrandGameProvider brandGameProvider,
-        IGame game,
-        IGameProvider gameProvider,
-        IPlayer player,
-        IGameCurrency gameCurrency)
-    {
-        _brandGameProvider = brandGameProvider ?? throw new ArgumentNullException(nameof(brandGameProvider));
-        _game = game ?? throw new ArgumentNullException(nameof(game));
-        _gameProvider = gameProvider ?? throw new ArgumentNullException(nameof(gameProvider));
-        _player = player ?? throw new ArgumentNullException(nameof(player));
-        _gameCurrency = gameCurrency ?? throw new ArgumentNullException(nameof(gameCurrency));
-    }
-
     public async ValueTask<GameWagerInfoResult> GetAsync(GameWagerInfoQuery query, CancellationToken cancellationToken = default)
     {
-        var gameProviderId = await _gameProvider.GetIdAsync(
+        var gameProviderId = await gameProvider.GetIdAsync(
             code: query.GameProviderCode,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        var player = await _player.GetAsync(
+        var playerInfo = await player.GetAsync(
             playerCode: query.PlayerCode,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        var gameProviderConfigurationId = await _brandGameProvider.GetGameProviderConfigurationIdAsync(
-            brandId: player.BrandId,
+        var gameProviderConfigurationId = await brandGameProvider.GetGameProviderConfigurationIdAsync(
+            brandId: playerInfo.BrandId,
             gameProviderId: gameProviderId,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        var game = await _game.GetAsync(
+        var gameModel = await game.GetAsync(
             gameProviderId: gameProviderId,
             externaGamelId: query.ExternalGameId,
             cancellationToken: cancellationToken)
@@ -70,9 +55,9 @@ internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWag
             winLoss = query.WinLoss;
         }
 
-        var gameCurrencyResult = await _gameCurrency.GetAsync(
-            gameProviderCode: game.GameProviderCode,
-            currencyCode: player.DefaultWalletCurrencyCode,
+        var gameCurrencyResult = await gameCurrency.GetAsync(
+            gameProviderCode: gameModel.GameProviderCode,
+            currencyCode: playerInfo.DefaultWalletCurrencyCode,
             bet: bet,
             validBet: validBet,
             settle: settle,
@@ -83,23 +68,23 @@ internal class GameWagerInfoGetService : IGetService<GameWagerInfoQuery, GameWag
             .ConfigureAwait(false);
 
         return new GameWagerInfoResult(
-            GameProviderId: game.GameProviderId,
-            GameProviderCode: game.GameProviderCode,
+            GameProviderId: gameModel.GameProviderId,
+            GameProviderCode: gameModel.GameProviderCode,
             GameProviderConfigurationId: gameProviderConfigurationId,
-            SubGameProviderCode: game.SubGameProviderCode,
-            GameId: game.GameId,
-            GameCategory: game.GameCategory,
-            GameType: game.GameType,
-            ResellerId: player.ResellerId,
-            ResellerCode: player.ResellerCode,
-            LicenseeId: player.LicenseeId,
-            LicenseeCode: player.LicenseeCode,
-            BrandId: player.BrandId,
-            BrandCode: player.BrandCode,
-            PlayerCode: player.PlayerCode,
-            Username: player.Username,
-            CurrencyCode: player.DefaultWalletCurrencyCode,
-            WalletId: player.DefaultWalletId,
+            SubGameProviderCode: gameModel.SubGameProviderCode,
+            GameId: gameModel.GameId,
+            GameCategory: gameModel.GameCategory,
+            GameType: gameModel.GameType,
+            ResellerId: playerInfo.ResellerId,
+            ResellerCode: playerInfo.ResellerCode,
+            LicenseeId: playerInfo.LicenseeId,
+            LicenseeCode: playerInfo.LicenseeCode,
+            BrandId: playerInfo.BrandId,
+            BrandCode: playerInfo.BrandCode,
+            PlayerCode: playerInfo.PlayerCode,
+            Username: playerInfo.Username,
+            CurrencyCode: playerInfo.DefaultWalletCurrencyCode,
+            WalletId: playerInfo.DefaultWalletId,
             CurrencyRatio: gameCurrencyResult.CurrencyRatio,
             Bet: gameCurrencyResult.Bet,
             ValidBet: gameCurrencyResult.ValidBet,

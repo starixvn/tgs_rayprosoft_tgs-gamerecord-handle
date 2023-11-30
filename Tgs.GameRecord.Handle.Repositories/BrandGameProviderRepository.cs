@@ -4,22 +4,11 @@ using Tgs.GameRecord.Handle.Core;
 
 namespace Tgs.GameRecord.Handle.Repositories;
 
-internal class BrandGameProviderRepository : IBrandGameProvider
+internal class BrandGameProviderRepository(
+    IMemoryCache memoryCache,
+    IGameCommandClient client,
+    TimeSpan absoluteExpirationRelativeToNow) : IBrandGameProvider
 {
-    private readonly TimeSpan _absoluteExpirationRelativeToNow;
-    private readonly IGameCommandClient _client;
-    private readonly IMemoryCache _memoryCache;
-
-    public BrandGameProviderRepository(
-        IMemoryCache memoryCache,
-        IGameCommandClient client,
-        TimeSpan absoluteExpirationRelativeToNow)
-    {
-        _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-        _absoluteExpirationRelativeToNow = absoluteExpirationRelativeToNow;
-    }
-
     public async ValueTask<Guid> GetGameProviderConfigurationIdAsync(
         Guid brandId,
         Guid gameProviderId,
@@ -27,9 +16,9 @@ internal class BrandGameProviderRepository : IBrandGameProvider
     {
         var key = $"gamerecord:handle:brand:gameprovider:{brandId}:{gameProviderId}";
 
-        if (!_memoryCache.TryGetValue(key, out Guid gameProviderConfigurationId))
+        if (!memoryCache.TryGetValue(key, out Guid gameProviderConfigurationId))
         {
-            gameProviderConfigurationId = await _client
+            gameProviderConfigurationId = await client
                 .BrandGetGameProviderConfigurationIdAsync(
                 brandId: brandId,
                 gameProviderId: gameProviderId,
@@ -37,10 +26,10 @@ internal class BrandGameProviderRepository : IBrandGameProvider
                 .ConfigureAwait(false)
                 ?? throw new NullReferenceException($"The game provider configuration ID does not exist.({brandId}|{gameProviderId})");
 
-            return _memoryCache.Set(
+            return memoryCache.Set(
                 key: key,
                 value: gameProviderConfigurationId,
-                absoluteExpirationRelativeToNow: _absoluteExpirationRelativeToNow);
+                absoluteExpirationRelativeToNow: absoluteExpirationRelativeToNow);
         }
 
         return gameProviderConfigurationId;

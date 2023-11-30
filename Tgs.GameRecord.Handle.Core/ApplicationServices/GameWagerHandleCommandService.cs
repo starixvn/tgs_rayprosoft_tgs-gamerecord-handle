@@ -3,22 +3,11 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
-internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCommand>
+internal class GameWagerHandleCommandService(
+    IGetService<GameWagerInfoQuery, GameWagerInfoResult> infoService,
+    ISnowflakeWork snowflakeWork,
+    ICommandService<GameWagerPublishCommand> publishService) : ICommandService<GameWagerHandleCommand>
 {
-    private readonly IGetService<GameWagerInfoQuery, GameWagerInfoResult> _infoService;
-    private readonly ICommandService<GameWagerPublishCommand> _publishService;
-    private readonly ISnowflakeWork _work;
-
-    public GameWagerHandleCommandService(
-        IGetService<GameWagerInfoQuery, GameWagerInfoResult> infoService,
-        ISnowflakeWork work,
-        ICommandService<GameWagerPublishCommand> publishService)
-    {
-        _infoService = infoService ?? throw new ArgumentNullException(nameof(infoService));
-        _work = work ?? throw new ArgumentNullException(nameof(work));
-        _publishService = publishService ?? throw new ArgumentNullException(nameof(publishService));
-    }
-
     public async ValueTask ExecuteAsync(
         GameWagerHandleCommand command,
         CancellationToken cancellationToken = default)
@@ -58,12 +47,12 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
             Turnover: command.Turnover,
             WinLoss: command.WinLoss);
 
-        var result = await _infoService.GetAsync(
+        var result = await infoService.GetAsync(
             query: query,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        var wagerId = _work.GetWagerId();
+        var wagerId = snowflakeWork.GetId();
 
         var closedState = ClosedStates.None;
         var voidState = VoidStates.None;
@@ -127,9 +116,9 @@ internal class GameWagerHandleCommandService : ICommandService<GameWagerHandleCo
             WinLoss: result.WinLoss,
             AdditionalData: command.AdditionalData);
 
-        await _publishService.ExecuteAsync(
-            command: publishCommand,
-            cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+        await publishService.ExecuteAsync(
+           command: publishCommand,
+           cancellationToken: cancellationToken)
+           .ConfigureAwait(false);
     }
 }

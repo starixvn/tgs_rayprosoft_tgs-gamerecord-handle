@@ -8,19 +8,10 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
-internal class GameWagerPublishCommandService : ICommandService<GameWagerPublishCommand>
+internal class GameWagerPublishCommandService(
+    ILogger<GameWagerPublishCommandService> logger,
+    IMessageSender messageSender) : ICommandService<GameWagerPublishCommand>
 {
-    private readonly ILogger<GameWagerPublishCommandService> _logger;
-    private readonly IMessageSender _sender;
-
-    public GameWagerPublishCommandService(
-        ILogger<GameWagerPublishCommandService> logger,
-        IMessageSender sender)
-    {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _sender = sender ?? throw new ArgumentNullException(nameof(sender));
-    }
-
     public ValueTask ExecuteAsync(GameWagerPublishCommand command, CancellationToken cancellationToken = default)
     {
         var publish = new GameWagerPublish
@@ -76,13 +67,12 @@ internal class GameWagerPublishCommandService : ICommandService<GameWagerPublish
             ResetOn = DateTimeOffset.UnixEpoch.ToTimestamp()
         };
 
-        _logger.LogInformation("LogOn:{logOn} Subject:{subject} Message:This published message.({publish})",
+        logger.LogInformation("LogOn:{logOn} Subject:{subject} Message:This published message.({publish})",
             DateTime.Now.ToString("o"),
             NatsConst.GameRecordHandleDataPublish,
             publish);
 
-        return _sender
-            .PublishAsync(
+        return messageSender.PublishAsync(
             subject: NatsConst.GameRecordHandleDataPublish,
             data: publish.ToByteArray(),
             cancellationToken: cancellationToken);
