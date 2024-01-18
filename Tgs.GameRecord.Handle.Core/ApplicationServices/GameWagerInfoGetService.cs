@@ -4,10 +4,10 @@ using Tgs.ServiceUtility;
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 internal class GameWagerInfoGetService(
-    IBrandGameProvider brandGameProvider,
-    IGame game,
-    IGameProvider gameProvider,
-    IPlayer player,
+    IBrandGameProviderRepository brandGameProvider,
+    IGameRepository game,
+    IGameProviderRepository gameProvider,
+    IPlayerRepository player,
     IGameCurrency gameCurrency) : IGetService<GameWagerInfoQuery, GameWagerInfoResult>
 {
     public async ValueTask<GameWagerInfoResult> GetAsync(GameWagerInfoQuery query, CancellationToken cancellationToken = default)
@@ -30,7 +30,7 @@ internal class GameWagerInfoGetService(
 
         var gameModel = await game.GetAsync(
             gameProviderId: gameProviderId,
-            externaGamelId: query.ExternalGameId,
+            externalGameId: query.ExternalGameId,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false)
             ?? throw new NullReferenceException($"This game does not exist.({new

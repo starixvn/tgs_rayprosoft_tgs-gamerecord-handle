@@ -4,20 +4,24 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.0.36</Version>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Version>0.0.37</Version>
 		<Authors>Raypro</Authors>
-		<RootNamespace>Tgs.GameRecord.Handle.Client</RootNamespace>
-		<PackageId>Tgs.GameRecord.Handle.Client</PackageId>
-		<Title>Tgs.GameRecord.Handle.Client</Title>
 		<PackageProjectUrl>	https://gitlab.com/rayprosoft/tgs-gamerecord-handle</PackageProjectUrl>
 		<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-gamerecord-handle.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
+		<RootNamespace>Tgs.GameRecord.Handle.Client</RootNamespace>
+		<PackageId>Tgs.GameRecord.Handle.Client</PackageId>
+		<Title>Tgs.GameRecord.Handle.Client</Title>
+		<Description>Tgs.GameRecord.Handle.Client</Description>
 		<PackageTags>Tgs GameRecord Handle Client</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.3" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="1.0.6" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="2.0.0" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="2.0.1" />
 		<PackageReference Include="PhoenixToolkits.NuGet.BuildTools" Version="0.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

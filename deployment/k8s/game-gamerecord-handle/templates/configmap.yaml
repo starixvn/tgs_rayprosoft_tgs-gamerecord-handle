@@ -12,7 +12,6 @@ data:
         }
       },
       "GameRecordHandle": {
-        "GameCommandClientBaseUrl": "http://game-gamecommand/",
         "GameCurrencyClientBaseUrl": "http://game-gamecurrency/"
       }
     }

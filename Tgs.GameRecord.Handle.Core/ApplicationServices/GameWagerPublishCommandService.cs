@@ -72,7 +72,7 @@ internal class GameWagerPublishCommandService(
             NatsConst.GameRecordHandleDataPublish,
             publish);
 
-        return messageSender.PublishAsync(
+        return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
             subject: NatsConst.GameRecordHandleDataPublish,
             data: publish.ToByteArray(),
             cancellationToken: cancellationToken);

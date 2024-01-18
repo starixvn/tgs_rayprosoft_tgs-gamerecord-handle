@@ -2,7 +2,7 @@
 
 namespace Tgs.GameRecord.Handle.Core.Models;
 
-public record GameModel(
+public record GameInfo(
     int GameId,
     string GameCode,
     Guid GameProviderId,

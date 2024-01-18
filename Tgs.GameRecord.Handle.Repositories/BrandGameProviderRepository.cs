@@ -1,37 +1,22 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Tgs.GameCommand.Client;
+﻿using Microsoft.EntityFrameworkCore;
 using Tgs.GameRecord.Handle.Core;
+using Tgs.GameRecord.Handle.Repositories.Entities;
+using Tgs.GameRecord.Handle.Repositories.Entities.Configurations;
 
 namespace Tgs.GameRecord.Handle.Repositories;
 
 internal class BrandGameProviderRepository(
-    IMemoryCache memoryCache,
-    IGameCommandClient client,
-    TimeSpan absoluteExpirationRelativeToNow) : IBrandGameProvider
+    TgsContext context) : IBrandGameProviderRepository
 {
-    public async ValueTask<Guid> GetGameProviderConfigurationIdAsync(
-        Guid brandId,
-        Guid gameProviderId,
-        CancellationToken cancellationToken = default)
+    public async ValueTask<Guid> GetGameProviderConfigurationIdAsync(Guid brandId, Guid gameProviderId, CancellationToken cancellationToken = default)
     {
-        var key = $"gamerecord:handle:brand:gameprovider:{brandId}:{gameProviderId}";
+        var brandGameProvider = await context.BrandGameProviders
+            .FirstOrDefaultAsync(
+            predicate: bgp => bgp.BrandId == brandId && bgp.GameProviderId == gameProviderId,
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false)
+            ?? throw new NullReferenceException($"The game provider configuration ID does not exist.({brandId}|{gameProviderId})");
 
-        if (!memoryCache.TryGetValue(key, out Guid gameProviderConfigurationId))
-        {
-            gameProviderConfigurationId = await client
-                .BrandGetGameProviderConfigurationIdAsync(
-                brandId: brandId,
-                gameProviderId: gameProviderId,
-                cancellationToken: cancellationToken)
-                .ConfigureAwait(false)
-                ?? throw new NullReferenceException($"The game provider configuration ID does not exist.({brandId}|{gameProviderId})");
-
-            return memoryCache.Set(
-                key: key,
-                value: gameProviderConfigurationId,
-                absoluteExpirationRelativeToNow: absoluteExpirationRelativeToNow);
-        }
-
-        return gameProviderConfigurationId;
+        return brandGameProvider.GameProviderConfigurationId;
     }
 }

@@ -1,16 +1,24 @@
-﻿using Tgs.GameRecord.Handle.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using Tgs.GameRecord.Handle.Core;
 using Tgs.GameRecord.Handle.Repositories;
+using Tgs.GameRecord.Handle.Repositories.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddGameRecordHandleRepository(
-        this IServiceCollection services)
+    public static IServiceCollection AddGameRecordHandleRepositories(
+        this IServiceCollection services,
+        Action<IServiceProvider, DbContextOptionsBuilder> dbContextOptions)
         => services
-        .AddScoped<IBrandGameProvider>(sp => ActivatorUtilities.CreateInstance<BrandGameProviderRepository>(sp, TimeSpan.FromMinutes(5)))
+        .AddDbContext<TgsContext>(dbContextOptions)
         .AddScoped<IGameCurrency, GameCurrencyRepository>()
-        .AddScoped<IGameProvider>(sp => ActivatorUtilities.CreateInstance<GameProviderRepository>(sp, TimeSpan.FromDays(1)))
-        .AddScoped<IGame>(sp => ActivatorUtilities.CreateInstance<GameRepository>(sp, TimeSpan.FromDays(1)))
-        .AddScoped<IPlayer>(sp => ActivatorUtilities.CreateInstance<PlayerRepository>(sp, TimeSpan.FromHours(1)));
+        .AddScoped<IBrandGameProviderRepository, BrandGameProviderRepository>()
+        .Decorate<IBrandGameProviderRepository, BrandGameProviderCacheRepository>()
+        .AddScoped<IGameProviderRepository, GameProviderRepository>()
+        .Decorate<IGameProviderRepository, GameProviderCacheRepository>()
+        .AddScoped<IGameRepository, GameRepository>()
+        .Decorate<IGameRepository, GameCacheRepository>()
+        .AddScoped<IPlayerRepository, PlayerRepository>()
+        .Decorate<IPlayerRepository, PlayerCacheRepository>();
 }

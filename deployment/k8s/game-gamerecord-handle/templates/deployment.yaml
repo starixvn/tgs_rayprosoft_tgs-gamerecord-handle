@@ -40,15 +40,22 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
+            - name: RELEASE_NAMESPACE
+              value: {{ .Release.Namespace }}
+            - name: POD_IP
+              valueFrom:
+               fieldRef:
+                fieldPath: status.podIP 
+            - name: ConnectionStrings__Tgs
+              valueFrom:
+                secretKeyRef:
+                  name: tgs-connections
+                  key: tgs
             - name: ConnectionStrings__Nats
               valueFrom:
                 secretKeyRef:
                   name: tgs-connections
                   key: nats
-            - name: POD_IP
-              valueFrom:
-               fieldRef:
-                fieldPath: status.podIP
           volumeMounts:
             - mountPath: /app/appsettings.Production.json
               name: appsettings

@@ -9,13 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Core"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Repositories", "Tgs.GameRecord.Handle.Repositories\Tgs.GameRecord.Handle.Repositories.csproj", "{63EE2F0C-A049-4AC4-B415-C999136855F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Repositories.UnitTest", "Tgs.GameRecord.Handle.Repositories.UnitTest\Tgs.GameRecord.Handle.Repositories.UnitTest.csproj", "{A5484F94-02CE-4179-9E16-696DA1329807}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Common", "Tgs.GameRecord.Handle.Common\Tgs.GameRecord.Handle.Common.csproj", "{B1E3FF05-367C-4762-9E08-73A0F49C41C2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Client", "Tgs.GameRecord.Handle.Client\Tgs.GameRecord.Handle.Client.csproj", "{C5F93322-6CA7-4B6E-9DE2-E72E46A300D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameRecord.Handle.Core.UnitTest", "Tgs.GameRecord.Handle.Core.UnitTest\Tgs.GameRecord.Handle.Core.UnitTest.csproj", "{DAEC4E43-D453-4754-9842-163AF31ED74D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Core.UnitTest", "Tgs.GameRecord.Handle.Core.UnitTest\Tgs.GameRecord.Handle.Core.UnitTest.csproj", "{DAEC4E43-D453-4754-9842-163AF31ED74D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{63EE2F0C-A049-4AC4-B415-C999136855F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63EE2F0C-A049-4AC4-B415-C999136855F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63EE2F0C-A049-4AC4-B415-C999136855F0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A5484F94-02CE-4179-9E16-696DA1329807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A5484F94-02CE-4179-9E16-696DA1329807}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A5484F94-02CE-4179-9E16-696DA1329807}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A5484F94-02CE-4179-9E16-696DA1329807}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B1E3FF05-367C-4762-9E08-73A0F49C41C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B1E3FF05-367C-4762-9E08-73A0F49C41C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1E3FF05-367C-4762-9E08-73A0F49C41C2}.Release|Any CPU.ActiveCfg = Release|Any CPU

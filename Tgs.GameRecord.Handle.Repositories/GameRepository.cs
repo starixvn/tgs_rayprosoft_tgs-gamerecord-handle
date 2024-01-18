@@ -1,89 +1,100 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Tgs.GameCommand.Client;
-using Tgs.GameCommand.Common;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.GameRecord.Handle.Core;
 using Tgs.GameRecord.Handle.Core.Models;
+using Tgs.GameRecord.Handle.Repositories.Entities;
 
 namespace Tgs.GameRecord.Handle.Repositories;
 
 internal class GameRepository(
-    IMemoryCache memoryCache,
-    IGameCommandClient client,
-    TimeSpan absoluteExpirationRelativeToNow) : IGame
+    TgsContext context) : IGameRepository
 {
-    public async ValueTask<GameModel?> GetAsync(
-        Guid gameProviderId,
-        string externaGamelId,
-        CancellationToken cancellationToken = default)
+    public async ValueTask<GameInfo?> GetAsync(Guid gameProviderId, string externalGameId, CancellationToken cancellationToken = default)
     {
-        var key = $"gamerecord:handle:game:{gameProviderId}:{externaGamelId}";
+        var gameInfo = await context.Games
+            .Where(predicate: g => g.GameProviderId == gameProviderId && g.ExternalId == externalGameId)
+            .Join(context.GameProviders,
+            game => game.GameProviderId,
+            gameProvider => gameProvider.Id,
+            (game, gameProvider) => new
+            {
+                GameProviderId = gameProvider.Id,
+                GameProviderCode = gameProvider.Code,
+                game.SubGameProviderCode,
+                GameId = game.Id,
+                GameCode = game.Code,
+                GameExternalId = game.ExternalId,
+                GameType = game.Type
+            })
+            .FirstOrDefaultAsync(
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
-        if (!memoryCache.TryGetValue(key, out GameModel? game))
+        if (gameInfo is null)
         {
-            var info = await client.GameGetAsync(
-               gameProviderId: gameProviderId,
-               gameExternalId: externaGamelId,
-               cancellationToken: cancellationToken)
-              .ConfigureAwait(false);
-
-            if (info == null)
-            {
-                return null;
-            }
-
-            var gameType = info.Type switch
-            {
-                GameType.Sportsbook => GameTypes.Sportsbook,
-                GameType.VirtualSports => GameTypes.VirtualSports,
-                GameType.VirtualSportsLobby => GameTypes.VirtualSports,
-                GameType.ESports => GameTypes.ESports,
-                GameType.LiveDealer => GameTypes.LiveDealer,
-                GameType.LiveDealerLobby => GameTypes.LiveDealer,
-                GameType.CardGame => GameTypes.CardGame,
-                GameType.CardGameLobby => GameTypes.CardGame,
-                GameType.Fishing => GameTypes.Fishing,
-                GameType.FishingLobby => GameTypes.Fishing,
-                GameType.Arcade => GameTypes.Arcade,
-                GameType.ArcadeLobby => GameTypes.Arcade,
-                GameType.Lottery => GameTypes.Lottery,
-                GameType.LotteryLobby => GameTypes.Lottery,
-                GameType.Slot => GameTypes.Slot,
-                GameType.TableGame => GameTypes.TableGame,
-                _ => GameTypes.None
-            };
-
-            var gameCategory = gameType switch
-            {
-                GameTypes.Sportsbook => GameCategories.Sportsbook,
-                GameTypes.VirtualSports => GameCategories.VirtualSports,
-                GameTypes.ESports => GameCategories.Sportsbook,
-                GameTypes.LiveDealer => GameCategories.LiveDealer,
-                GameTypes.CardGame => GameCategories.CardGame,
-                GameTypes.Fishing => GameCategories.Slot,
-                GameTypes.Arcade => GameCategories.Slot,
-                GameTypes.Lottery => GameCategories.Lottery,
-                GameTypes.Slot => GameCategories.Slot,
-                GameTypes.TableGame => GameCategories.Slot,
-                _ => GameCategories.None
-            };
-
-            game = new GameModel(
-               GameId: info.GameId,
-               GameCode: info.GameCode,
-               GameProviderId: info.GameProviderId,
-               GameProviderCode: info.GameProviderCode,
-               ExternalGameId: info.GameExternalId,
-               GameCategory: gameCategory,
-               GameType: gameType,
-               SubGameProviderCode: info.SubGameProviderCode ?? info.GameProviderCode);
-
-            return memoryCache.Set(
-                key: key,
-                value: game,
-                absoluteExpirationRelativeToNow: absoluteExpirationRelativeToNow);
+            return null;
         }
 
-        return game;
+        var gameType = gameInfo.GameType switch
+        {
+            1 => GameTypes.Sportsbook,
+            2 => GameTypes.VirtualSports,
+            3 => GameTypes.VirtualSports,
+            4 => GameTypes.ESports,
+            5 => GameTypes.LiveDealer,
+            6 => GameTypes.LiveDealer,
+            7 => GameTypes.CardGame,
+            8 => GameTypes.CardGame,
+            9 => GameTypes.Fishing,
+            10 => GameTypes.Fishing,
+            11 => GameTypes.Arcade,
+            12 => GameTypes.Arcade,
+            13 => GameTypes.Lottery,
+            14 => GameTypes.Lottery,
+            15 => GameTypes.Slot,
+            16 => GameTypes.TableGame,
+            _ => GameTypes.None
+        };
+
+        var gameCategory = gameType switch
+        {
+            GameTypes.Sportsbook => GameCategories.Sportsbook,
+            GameTypes.VirtualSports => GameCategories.VirtualSports,
+            GameTypes.ESports => GameCategories.Sportsbook,
+            GameTypes.LiveDealer => GameCategories.LiveDealer,
+            GameTypes.CardGame => GameCategories.CardGame,
+            GameTypes.Fishing => GameCategories.Slot,
+            GameTypes.Arcade => GameCategories.Slot,
+            GameTypes.Lottery => GameCategories.Lottery,
+            GameTypes.Slot => GameCategories.Slot,
+            GameTypes.TableGame => GameCategories.Slot,
+            _ => GameCategories.None
+        };
+
+        return new GameInfo(
+            GameId: gameInfo.GameId,
+            GameCode: gameInfo.GameCode,
+            GameProviderId: gameInfo.GameProviderId,
+            GameProviderCode: gameInfo.GameProviderCode,
+            ExternalGameId: gameInfo.GameExternalId,
+            GameCategory: gameCategory,
+            GameType: gameType,
+            SubGameProviderCode: gameInfo.SubGameProviderCode ?? gameInfo.GameProviderCode);
+    }
+
+    public IAsyncEnumerable<GameExternaldInfo> QueryByExternaldAsync(string gameProviderCode, CancellationToken cancellationToken = default)
+    {
+        gameProviderCode = gameProviderCode.ToUpper();
+
+        return context.GameProviders
+            .Where(predicate: g => g.Code == gameProviderCode)
+            .Join(context.Games,
+            gameProvider => gameProvider.Id,
+            game => game.GameProviderId,
+            (gameProvider, game) => new GameExternaldInfo(
+                gameProvider.Id,
+                game.ExternalId))
+            .ToAsyncEnumerable();
     }
 }

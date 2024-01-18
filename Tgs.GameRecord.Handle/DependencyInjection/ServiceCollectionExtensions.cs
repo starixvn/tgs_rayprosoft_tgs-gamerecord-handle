@@ -1,8 +1,7 @@
 ﻿using System.Net;
-
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Snowflake.Core;
-using Tgs.GameCommand.Client;
 using Tgs.GameCurrency.Client;
 using Tgs.GameRecord.Handle.Core;
 
@@ -13,7 +12,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddGameRecordHandle(
         this IServiceCollection services,
         Action<IPAddressOptions, IServiceProvider> ipAddressOptions,
-        Action<GameCommandClientOptions, IServiceProvider> gameCommandClientOptions,
+        Action<IServiceProvider, DbContextOptionsBuilder> dbContextOptions,
         Action<GameCurrencyClientOptions, IServiceProvider> gameCurrencyClientOptions)
         => services
         .AddOptions<IPAddressOptions>()
@@ -30,9 +29,9 @@ public static class ServiceCollectionExtensions
             var datacenterId = ((address >> 5) % 255 & 30) + 1;
             return new IdWorker(workerId, datacenterId);
         })
-        .AddGameCommandClient(gameCommandClientOptions)
         .AddGameCurrencyClient(gameCurrencyClientOptions)
         .AddMemoryCache()
         .AddGameRecordHandleCore()
-        .AddGameRecordHandleRepository();
+        .AddGameRecordHandleRepositories(
+            dbContextOptions: dbContextOptions);
 }

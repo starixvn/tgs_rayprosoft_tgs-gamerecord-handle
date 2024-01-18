@@ -37,7 +37,7 @@ internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecor
             AdditionalData = additionalData.ToJsonString()
         };
 
-        return messageSender.PublishAsync(
+        return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
             subject: NatsConst.GameRecordWagerPublish,
             data: request.ToByteArray(),
             cancellationToken: cancellationToken);
@@ -71,7 +71,7 @@ internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecor
             AdditionalData = additionalData.ToJsonString()
         };
 
-        return messageSender.PublishAsync(
+        return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
             subject: NatsConst.GameRecordWagerPublish,
             data: request.ToByteArray(),
             cancellationToken: cancellationToken);
@@ -105,7 +105,7 @@ internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecor
             AdditionalData = additionalData.ToJsonString()
         };
 
-        return messageSender.PublishAsync(
+        return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
             subject: NatsConst.GameRecordWagerPublish,
             data: request.ToByteArray(),
             cancellationToken: cancellationToken);
@@ -139,7 +139,7 @@ internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecor
             AdditionalData = additionalData.ToJsonString()
         };
 
-        return messageSender.PublishAsync(
+        return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
             subject: NatsConst.GameRecordWagerPublish,
             data: request.ToByteArray(),
             cancellationToken: cancellationToken);
@@ -173,7 +173,7 @@ internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecor
             AdditionalData = additionalData.ToJsonString()
         };
 
-        return messageSender.PublishAsync(
+        return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
             subject: NatsConst.GameRecordWagerPublish,
             data: request.ToByteArray(),
             cancellationToken: cancellationToken);
@@ -207,7 +207,7 @@ internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecor
             AdditionalData = additionalData.ToJsonString()
         };
 
-        return messageSender.PublishAsync(
+        return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
             subject: NatsConst.GameRecordWagerPublish,
             data: request.ToByteArray(),
             cancellationToken: cancellationToken);

@@ -1,5 +1,4 @@
 ﻿using NSubstitute;
-using Tgs.GameCommand.Common;
 using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
 using Tgs.GameRecord.Handle.Core.Models;
@@ -11,10 +10,10 @@ public class GameWagerInfoGetServiceUnitTest
     [Fact]
     public async Task CurrencyCode_IDR_Loss_ExchangeRate_1000()
     {
-        var fakeBrandGameProvider = Substitute.For<IBrandGameProvider>();
-        var fakeGame = Substitute.For<IGame>();
-        var fakeGameProvider = Substitute.For<IGameProvider>();
-        var fakePlayer = Substitute.For<IPlayer>();
+        var fakeBrandGameProvider = Substitute.For<IBrandGameProviderRepository>();
+        var fakeGame = Substitute.For<IGameRepository>();
+        var fakeGameProvider = Substitute.For<IGameProviderRepository>();
+        var fakePlayer = Substitute.For<IPlayerRepository>();
         var fakeGameCurrency = Substitute.For<IGameCurrency>();
 
         var query = new GameWagerInfoQuery(
@@ -61,7 +60,7 @@ public class GameWagerInfoGetServiceUnitTest
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderConfigurationId);
 
-        var game = new GameModel(
+        var game = new Models.GameInfo(
             1000017,
             "910",
             gameProviderId,
@@ -73,7 +72,7 @@ public class GameWagerInfoGetServiceUnitTest
         _ = fakeGame
             .GetAsync(
             gameProviderId: Arg.Is(gameProviderId),
-            externaGamelId: Arg.Is(query.ExternalGameId),
+            externalGameId: Arg.Is(query.ExternalGameId),
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(game);
 
@@ -137,10 +136,10 @@ public class GameWagerInfoGetServiceUnitTest
     [Fact]
     public async Task Loss()
     {
-        var fakeBrandGameProvider = Substitute.For<IBrandGameProvider>();
-        var fakeGame = Substitute.For<IGame>();
-        var fakeGameProvider = Substitute.For<IGameProvider>();
-        var fakePlayer = Substitute.For<IPlayer>();
+        var fakeBrandGameProvider = Substitute.For<IBrandGameProviderRepository>();
+        var fakeGame = Substitute.For<IGameRepository>();
+        var fakeGameProvider = Substitute.For<IGameProviderRepository>();
+        var fakePlayer = Substitute.For<IPlayerRepository>();
         var fakeGameCurrency = Substitute.For<IGameCurrency>();
 
         var query = new GameWagerInfoQuery(
@@ -187,7 +186,7 @@ public class GameWagerInfoGetServiceUnitTest
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderConfigurationId);
 
-        var game = new GameModel(
+        var game = new Models.GameInfo(
             1000017,
             "910",
             gameProviderId,
@@ -199,7 +198,7 @@ public class GameWagerInfoGetServiceUnitTest
         _ = fakeGame
             .GetAsync(
             gameProviderId: Arg.Is(gameProviderId),
-            externaGamelId: Arg.Is(query.ExternalGameId),
+            externalGameId: Arg.Is(query.ExternalGameId),
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(game);
 
@@ -263,10 +262,10 @@ public class GameWagerInfoGetServiceUnitTest
     [Fact]
     public async Task Running()
     {
-        var fakeBrandGameProvider = Substitute.For<IBrandGameProvider>();
-        var fakeGame = Substitute.For<IGame>();
-        var fakeGameProvider = Substitute.For<IGameProvider>();
-        var fakePlayer = Substitute.For<IPlayer>();
+        var fakeBrandGameProvider = Substitute.For<IBrandGameProviderRepository>();
+        var fakeGame = Substitute.For<IGameRepository>();
+        var fakeGameProvider = Substitute.For<IGameProviderRepository>();
+        var fakePlayer = Substitute.For<IPlayerRepository>();
         var fakeGameCurrency = Substitute.For<IGameCurrency>();
 
         var query = new GameWagerInfoQuery(
@@ -313,7 +312,7 @@ public class GameWagerInfoGetServiceUnitTest
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderConfigurationId);
 
-        var game = new GameModel(
+        var game = new Models.GameInfo(
             1000017,
             "910",
             gameProviderId,
@@ -325,7 +324,7 @@ public class GameWagerInfoGetServiceUnitTest
         _ = fakeGame
             .GetAsync(
             gameProviderId: Arg.Is(gameProviderId),
-            externaGamelId: Arg.Is(query.ExternalGameId),
+            externalGameId: Arg.Is(query.ExternalGameId),
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(game);
 
@@ -389,10 +388,10 @@ public class GameWagerInfoGetServiceUnitTest
     [Fact]
     public async Task Waiting()
     {
-        var fakeBrandGameProvider = Substitute.For<IBrandGameProvider>();
-        var fakeGame = Substitute.For<IGame>();
-        var fakeGameProvider = Substitute.For<IGameProvider>();
-        var fakePlayer = Substitute.For<IPlayer>();
+        var fakeBrandGameProvider = Substitute.For<IBrandGameProviderRepository>();
+        var fakeGame = Substitute.For<IGameRepository>();
+        var fakeGameProvider = Substitute.For<IGameProviderRepository>();
+        var fakePlayer = Substitute.For<IPlayerRepository>();
         var fakeGameCurrency = Substitute.For<IGameCurrency>();
 
         var query = new GameWagerInfoQuery(
@@ -439,7 +438,7 @@ public class GameWagerInfoGetServiceUnitTest
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderConfigurationId);
 
-        var game = new GameModel(
+        var game = new Models.GameInfo(
             1000017,
             "910",
             gameProviderId,
@@ -451,7 +450,7 @@ public class GameWagerInfoGetServiceUnitTest
         _ = fakeGame
             .GetAsync(
             gameProviderId: Arg.Is(gameProviderId),
-            externaGamelId: Arg.Is(query.ExternalGameId),
+            externalGameId: Arg.Is(query.ExternalGameId),
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(game);
 
@@ -515,10 +514,10 @@ public class GameWagerInfoGetServiceUnitTest
     [Fact]
     public async Task Win()
     {
-        var fakeBrandGameProvider = Substitute.For<IBrandGameProvider>();
-        var fakeGame = Substitute.For<IGame>();
-        var fakeGameProvider = Substitute.For<IGameProvider>();
-        var fakePlayer = Substitute.For<IPlayer>();
+        var fakeBrandGameProvider = Substitute.For<IBrandGameProviderRepository>();
+        var fakeGame = Substitute.For<IGameRepository>();
+        var fakeGameProvider = Substitute.For<IGameProviderRepository>();
+        var fakePlayer = Substitute.For<IPlayerRepository>();
         var fakeGameCurrency = Substitute.For<IGameCurrency>();
 
         var query = new GameWagerInfoQuery(
@@ -565,7 +564,7 @@ public class GameWagerInfoGetServiceUnitTest
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderConfigurationId);
 
-        var game = new GameModel(
+        var game = new Models.GameInfo(
             1000017,
             "910",
             gameProviderId,
@@ -577,7 +576,7 @@ public class GameWagerInfoGetServiceUnitTest
         _ = fakeGame
             .GetAsync(
             gameProviderId: Arg.Is(gameProviderId),
-            externaGamelId: Arg.Is(query.ExternalGameId),
+            externalGameId: Arg.Is(query.ExternalGameId),
             cancellationToken: Arg.Any<CancellationToken>())
             .Returns(game);
 

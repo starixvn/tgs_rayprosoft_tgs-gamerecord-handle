@@ -3,6 +3,8 @@ using System.Net.Mime;
 using System.Net.Sockets;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using NATS.Client.Core;
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -57,10 +59,10 @@ builder.Services.AddGameRecordHandle(
         ?? Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault()?.ToString()
         ?? "127.0.0.1";
     },
-    (options, sp) =>
+    (sp, dbBuilder) =>
     {
-        var configuration = sp.GetRequiredService<IConfiguration>();
-        options.BaseUrl = configuration.GetValue<Uri>("GameRecordHandle:GameCommandClientBaseUrl")!;
+        var config = sp.GetRequiredService<IConfiguration>();
+        _ = dbBuilder.UseNpgsql(config.GetConnectionString("Tgs"));
     },
     (options, sp) =>
     {
@@ -69,17 +71,14 @@ builder.Services.AddGameRecordHandle(
     });
 
 builder.Services
-    .AddMessageQueue()
-    .AddNatsMessageQueue(natsConfig =>
+    .AddKeyedSingleton("Nats", (sp, _) => new NatsConnection(NatsOpts.Default with
     {
-        _ = natsConfig
-        .ConfigQueueOptions((options, sp) =>
-        {
-            var configuration = sp.GetRequiredService<IConfiguration>();
-            options.Url = configuration.GetConnectionString("Nats")!;
-        })
-        .AddHandler<GameWagerMessageHandler>(subject: NatsConst.GameRecordWagerPublish, group: "game.gamerecord.wager.publish.handle");
-    })
+        Url = builder.Configuration.GetConnectionString("Nats")!
+    }))
+    .AddMessageQueue()
+    .AddNatsMessageQueue(config => config
+    .ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
+    .AddHandler<GameWagerMessageHandler>(subject: NatsConst.GameRecordWagerPublish, group: typeof(GameWagerMessageHandler).FullName!.ToLower()))
     .ClearAllExchanges()
     .AddNatsGlobPatternExchange("*");
 

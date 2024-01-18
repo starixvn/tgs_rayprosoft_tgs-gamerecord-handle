@@ -1,6 +1,5 @@
-﻿using Tgs.GameCommand.Client;
-using Tgs.GameCommand.Common;
-using Tgs.GameRecord.Handle.Core;
+﻿using Tgs.GameRecord.Handle.Core;
+using Tgs.GameRecord.Handle.Core.Models;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -10,39 +9,41 @@ public static class ServiceRegisterExtensions
     {
         using (var scope = app.Services.CreateScope())
         {
-            var client = scope.ServiceProvider.GetRequiredService<IGameCommandClient>();
-            var gameProvider = scope.ServiceProvider.GetRequiredService<IGameProvider>();
-            var game = scope.ServiceProvider.GetRequiredService<IGame>();
-            var gameProviderInfos = await client
-                .GameProviderQueryAsync()
+            var gameProvider = scope.ServiceProvider.GetRequiredService<IGameProviderRepository>();
+            var game = scope.ServiceProvider.GetRequiredService<IGameRepository>();
+
+            var gameProviderCodes = await gameProvider.QueryByCodeAsync()
                 .ToArrayAsync()
                 .ConfigureAwait(false)
-                ?? Enumerable.Empty<GameProviderInfo>();
+                ?? Enumerable.Empty<string>();
 
-            foreach (var gameProviderInfo in gameProviderInfos)
+            foreach (var gameProviderCode in gameProviderCodes)
             {
                 try
                 {
                     var gameProviderId = await gameProvider
                         .GetIdAsync(
-                        code: gameProviderInfo.GameProviderCode)
+                        code: gameProviderCode)
                         .ConfigureAwait(false);
 
-                    var gameInfos = await client
-                        .GameQueryAsync(
-                        gameProviderCode: gameProviderInfo.GameProviderCode)
+                    var externalGameIdInfos = await game
+                        .QueryByExternaldAsync(
+                        gameProviderCode: gameProviderCode)
                         .ToArrayAsync()
-                        .ConfigureAwait(false)
-                        ?? Enumerable.Empty<GameInfo>();
+                        .ConfigureAwait(false);
 
-                    foreach (var gameInfo in gameInfos)
+                    if (externalGameIdInfos.Length == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var (GameProviderId, ExternalGameId) in externalGameIdInfos)
                     {
                         try
                         {
-                            _ = await game
-                                .GetAsync(
-                                gameProviderId: gameProviderId,
-                                externaGamelId: gameInfo.GameExternalId)
+                            _ = await game.GetAsync(
+                                gameProviderId: GameProviderId,
+                                externalGameId: ExternalGameId)
                                 .ConfigureAwait(false);
                         }
                         catch
