@@ -9,7 +9,9 @@ internal class PlayerRepository(
     TgsContext context) : IPlayerRepository
 {
     public async ValueTask<PlayerInfo> GetAsync(string playerCode, CancellationToken cancellationToken = default)
-        => await context.Players.AsQueryable()
+    {
+        playerCode = playerCode.ToLower();
+        return await context.Players.AsQueryable()
         .Where(predicate => predicate.PlayerCode == playerCode)
         .Join(
             context.Brands,
@@ -73,4 +75,5 @@ internal class PlayerRepository(
         cancellationToken: cancellationToken)
         .ConfigureAwait(false)
         ?? throw new NullReferenceException($"This player does not exist.{playerCode}");
+    }
 }
