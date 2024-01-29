@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>0.0.37</Version>
+		<Version>1.0.0</Version>
 		<Authors>Raypro</Authors>
 		<PackageProjectUrl>	https://gitlab.com/rayprosoft/tgs-gamerecord-handle</PackageProjectUrl>
 		<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-gamerecord-handle.git</RepositoryUrl>
@@ -20,8 +20,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="2.0.0" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="2.0.1" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="2.1.0" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="2.1.2" />
 		<PackageReference Include="PhoenixToolkits.NuGet.BuildTools" Version="0.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tgs.GameRecord.Handle.Core.Models;
 using Tgs.GameRecord.Handle.Core;
+
+using Tgs.GameRecord.Handle.Core.Models;
 
 namespace Tgs.GameRecord.Handle.Controllers;
 

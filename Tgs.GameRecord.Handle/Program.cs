@@ -11,6 +11,7 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Messages;
+using Tgs.MessageQueue.Nats.Serializers;
 
 var filterInstrumentations = new[] { "html", "ico", "png", "jpg" };
 
@@ -73,7 +74,8 @@ builder.Services.AddGameRecordHandle(
 builder.Services
     .AddKeyedSingleton("Nats", (sp, _) => new NatsConnection(NatsOpts.Default with
     {
-        Url = builder.Configuration.GetConnectionString("Nats")!
+        Url = builder.Configuration.GetConnectionString("Nats")!,
+        SerializerRegistry = TgsNatsSerializerRegistration.Default
     }))
     .AddMessageQueue()
     .AddNatsMessageQueue(config => config

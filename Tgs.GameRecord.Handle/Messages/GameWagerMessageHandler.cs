@@ -7,77 +7,63 @@ namespace Tgs.GameRecord.Handle.Messages;
 
 public class GameWagerMessageHandler(
     ILogger<GameWagerMessageHandler> logger,
-    ICommandService<GameWagerHandleCommand> service) : IMessageHandler<ReadOnlyMemory<byte>>
+    ICommandService<GameWagerHandleCommand> service) : IMessageHandler<GameWagerRequest>
 {
-    public ValueTask HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
+    public ValueTask HandleAsync(string subject, GameWagerRequest data, IEnumerable<MessageHeaderValue>? headerValues, CancellationToken cancellationToken = default)
     {
-        var request = GameWagerRequest.Parser.ParseFrom(data.Span)
-            ?? throw new NullReferenceException("The request data resolves to a null value");
+        var loggerInfo = new
+        {
+            data.GameProviderCode,
+            data.PlayerCode,
+            data.WagerState,
+            data.WagerType,
+            data.FreeGameState,
+            data.GambleState,
+            data.CashoutState,
+            data.ResettleState,
+            data.ExternalRoundId,
+            data.ExternalWagerId,
+            data.ExternalGameId,
+            ExternalCreatedOn = data.ExternalCreatedOn.ToDateTimeOffset(),
+            ExternalClosedOn = data.ExternalClosedOn.ToDateTimeOffset(),
+            ExternalPayoffOn = data.ExternalPayoffOn.ToDateTimeOffset(),
+            ExternalResettleOn = data.ExternalResettleOn.ToDateTimeOffset(),
+            Bet = data.Bet.ToDecimal().GetValueOrDefault(0),
+            ValidBet = data.ValidBet.ToDecimal().GetValueOrDefault(0),
+            Settle = data.Settle.ToDecimal().GetValueOrDefault(0),
+            Commission = data.Commission.ToDecimal().GetValueOrDefault(0),
+            Turnover = data.Turnover.ToDecimal().GetValueOrDefault(0),
+            WinLoss = data.WinLoss.ToDecimal().GetValueOrDefault(0)
+        };
 
-        logger.LogInformation("LogOn:{logOn} Information Request:{request}", DateTime.Now.ToString("o"), request);
-
-        var command = new GameWagerHandleCommand(
-            GameProviderCode: request.GameProviderCode,
-            PlayerCode: request.PlayerCode,
-            WagerState: request.WagerState,
-            WagerType: request.WagerType,
-            FreeGameState: request.FreeGameState,
-            GambleState: request.GambleState,
-            CashoutState: request.CashoutState,
-            ResettleState: request.ResettleState,
-            ExternalRoundId: request.ExternalRoundId,
-            ExternalWagerId: request.ExternalWagerId,
-            ExternalGameId: request.ExternalGameId,
-            ExternalCreatedOn: request.ExternalCreatedOn.ToDateTimeOffset(),
-            ExternalClosedOn: request.ExternalClosedOn.ToDateTimeOffset(),
-            ExternalPayoffOn: request.ExternalPayoffOn.ToDateTimeOffset(),
-            ExternalResettleOn: request.ExternalResettleOn.ToDateTimeOffset(),
-            Bet: request.Bet.ToDecimal().GetValueOrDefault(0),
-            ValidBet: request.ValidBet.ToDecimal().GetValueOrDefault(0),
-            Settle: request.Settle.ToDecimal().GetValueOrDefault(0),
-            Commission: request.Commission.ToDecimal().GetValueOrDefault(0),
-            Turnover: request.Turnover.ToDecimal().GetValueOrDefault(0),
-            WinLoss: request.WinLoss.ToDecimal().GetValueOrDefault(0),
-            AdditionalData: request.AdditionalData);
-
-        return service.ExecuteAsync(
-            command: command,
-            cancellationToken: cancellationToken);
-    }
-
-    public ValueTask HandleAsync(string subject, ReadOnlyMemory<byte> data, IEnumerable<MessageHeaderValue>? headerValues, CancellationToken cancellationToken = default)
-    {
-        var request = GameWagerRequest.Parser.ParseFrom(data.Span)
-            ?? throw new NullReferenceException("The request data resolves to a null value");
-
-        logger.LogInformation("LogOn:{logOn} Subject:{subject} Mesaage:This message has been received.({message})",
+        logger.LogInformation("LogOn:{logOn} Subject:{subject} Mesaage:This message has been received.({data})",
             DateTime.Now.ToString("o"),
             subject,
-            request);
+            loggerInfo);
 
         var command = new GameWagerHandleCommand(
-            GameProviderCode: request.GameProviderCode,
-            PlayerCode: request.PlayerCode,
-            WagerState: request.WagerState,
-            WagerType: request.WagerType,
-            FreeGameState: request.FreeGameState,
-            GambleState: request.GambleState,
-            CashoutState: request.CashoutState,
-            ResettleState: request.ResettleState,
-            ExternalRoundId: request.ExternalRoundId,
-            ExternalWagerId: request.ExternalWagerId,
-            ExternalGameId: request.ExternalGameId,
-            ExternalCreatedOn: request.ExternalCreatedOn.ToDateTimeOffset(),
-            ExternalClosedOn: request.ExternalClosedOn.ToDateTimeOffset(),
-            ExternalPayoffOn: request.ExternalPayoffOn.ToDateTimeOffset(),
-            ExternalResettleOn: request.ExternalResettleOn.ToDateTimeOffset(),
-            Bet: request.Bet.ToDecimal().GetValueOrDefault(0),
-            ValidBet: request.ValidBet.ToDecimal().GetValueOrDefault(0),
-            Settle: request.Settle.ToDecimal().GetValueOrDefault(0),
-            Commission: request.Commission.ToDecimal().GetValueOrDefault(0),
-            Turnover: request.Turnover.ToDecimal().GetValueOrDefault(0),
-            WinLoss: request.WinLoss.ToDecimal().GetValueOrDefault(0),
-            AdditionalData: request.AdditionalData);
+            GameProviderCode: data.GameProviderCode,
+            PlayerCode: data.PlayerCode,
+            WagerState: data.WagerState,
+            WagerType: data.WagerType,
+            FreeGameState: data.FreeGameState,
+            GambleState: data.GambleState,
+            CashoutState: data.CashoutState,
+            ResettleState: data.ResettleState,
+            ExternalRoundId: data.ExternalRoundId,
+            ExternalWagerId: data.ExternalWagerId,
+            ExternalGameId: data.ExternalGameId,
+            ExternalCreatedOn: data.ExternalCreatedOn.ToDateTimeOffset(),
+            ExternalClosedOn: data.ExternalClosedOn.ToDateTimeOffset(),
+            ExternalPayoffOn: data.ExternalPayoffOn.ToDateTimeOffset(),
+            ExternalResettleOn: data.ExternalResettleOn.ToDateTimeOffset(),
+            Bet: data.Bet.ToDecimal().GetValueOrDefault(0),
+            ValidBet: data.ValidBet.ToDecimal().GetValueOrDefault(0),
+            Settle: data.Settle.ToDecimal().GetValueOrDefault(0),
+            Commission: data.Commission.ToDecimal().GetValueOrDefault(0),
+            Turnover: data.Turnover.ToDecimal().GetValueOrDefault(0),
+            WinLoss: data.WinLoss.ToDecimal().GetValueOrDefault(0),
+            AdditionalData: data.AdditionalData);
 
         return service.ExecuteAsync(
             command: command,
