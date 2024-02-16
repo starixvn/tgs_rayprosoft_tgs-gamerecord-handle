@@ -4,6 +4,7 @@ using Tgs.ServiceUtility;
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 internal class GameWagerHandleCommandService(
+    ISystemClock systemClock,
     IGetService<GameWagerInfoQuery, GameWagerInfoResult> infoService,
     ISnowflakeWork snowflakeWork,
     ICommandService<GameWagerPublishCommand> publishService) : ICommandService<GameWagerHandleCommand>
@@ -35,17 +36,39 @@ internal class GameWagerHandleCommandService(
                 command.ExternalGameId
             }})");
         }
+
+        if (command.WagerState is not WagerStates.Waiting and not WagerStates.Running)
+        {
+            var currentTime = systemClock.CurrentTime;
+            var externalClosedOn = command.ExternalClosedOn;
+            var diff = currentTime.Subtract(externalClosedOn);
+            if (diff.Days > 45)
+            {
+                throw new Exception($"This game bet will take more than 45 days to settle.({new
+                {
+                    command.GameProviderCode,
+                    command.ExternalRoundId,
+                    command.ExternalWagerId,
+                    command.PlayerCode,
+                    command.ExternalGameId,
+                    command.ExternalCreatedOn,
+                    command.ExternalClosedOn,
+                    systemClock.CurrentTime,
+                }})");
+            }
+        }
+
         var query = new GameWagerInfoQuery(
-            GameProviderCode: command.GameProviderCode,
-            PlayerCode: command.PlayerCode,
-            ExternalGameId: command.ExternalGameId,
-            WagerState: command.WagerState,
-            Bet: command.Bet,
-            ValidBet: command.ValidBet,
-            Settle: command.Settle,
-            Commission: command.Commission,
-            Turnover: command.Turnover,
-            WinLoss: command.WinLoss);
+        GameProviderCode: command.GameProviderCode,
+        PlayerCode: command.PlayerCode,
+        ExternalGameId: command.ExternalGameId,
+        WagerState: command.WagerState,
+        Bet: command.Bet,
+        ValidBet: command.ValidBet,
+        Settle: command.Settle,
+        Commission: command.Commission,
+        Turnover: command.Turnover,
+        WinLoss: command.WinLoss);
 
         var result = await infoService.GetAsync(
             query: query,

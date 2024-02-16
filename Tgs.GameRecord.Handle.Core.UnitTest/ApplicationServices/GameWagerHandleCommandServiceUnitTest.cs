@@ -12,6 +12,7 @@ public class GameWagerHandleCommandServiceUnitTest
     [Fact]
     public async Task CancelState_Is_Cancel()
     {
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
@@ -65,6 +66,10 @@ public class GameWagerHandleCommandServiceUnitTest
                 ["GameInfo"] = "{\"freeGameTransactionId\":\"\",\"isAdjustment\":false,\"isEndRound\":false,\"bonusTransactionId\":\"\",\"isBuyFreeSpin\":false,\"isFeature\":false}"
             }.ToJsonString());
 
+        var currentTime = new DateTimeOffset(2023, 08, 24, 05, 39, 39, TimeSpan.Zero);
+        _ = fakeSystemClock.CurrentTime
+           .Returns(currentTime);
+
         var query = new GameWagerInfoQuery(
             GameProviderCode: command.GameProviderCode,
             PlayerCode: command.PlayerCode,
@@ -110,12 +115,13 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
-        var service = new GameWagerHandleCommandService(
+        var sut = new GameWagerHandleCommandService(
+            fakeSystemClock,
             fakeInfoService,
             fakeSnowflakeWork,
             fakePublishService);
 
-        await service.ExecuteAsync(command: command);
+        await sut.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
             WagerId: wagerId,
@@ -171,6 +177,7 @@ public class GameWagerHandleCommandServiceUnitTest
     [Fact]
     public async Task ClosedState_Is_Closed()
     {
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
@@ -224,6 +231,10 @@ public class GameWagerHandleCommandServiceUnitTest
                 ["GameInfo"] = "{\"freeGameTransactionId\":\"\",\"isAdjustment\":false,\"isEndRound\":false,\"bonusTransactionId\":\"\",\"isBuyFreeSpin\":false,\"isFeature\":false}"
             }.ToJsonString());
 
+        var currentTime = new DateTimeOffset(2023, 08, 24, 05, 39, 39, TimeSpan.Zero);
+        _ = fakeSystemClock.CurrentTime
+           .Returns(currentTime);
+
         var query = new GameWagerInfoQuery(
             GameProviderCode: command.GameProviderCode,
             PlayerCode: command.PlayerCode,
@@ -269,12 +280,13 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
-        var service = new GameWagerHandleCommandService(
+        var sut = new GameWagerHandleCommandService(
+            fakeSystemClock,
             fakeInfoService,
             fakeSnowflakeWork,
             fakePublishService);
 
-        await service.ExecuteAsync(command: command);
+        await sut.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
             WagerId: wagerId,
@@ -330,6 +342,7 @@ public class GameWagerHandleCommandServiceUnitTest
     [Fact]
     public async Task ExternalRoundId_Is_Empty()
     {
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
@@ -383,13 +396,18 @@ public class GameWagerHandleCommandServiceUnitTest
                 ["GameInfo"] = "{\"freeGameTransactionId\":\"\",\"isAdjustment\":false,\"isEndRound\":false,\"bonusTransactionId\":\"\",\"isBuyFreeSpin\":false,\"isFeature\":false}"
             }.ToJsonString());
 
-        var service = new GameWagerHandleCommandService(
+        var currentTime = new DateTimeOffset(2023, 08, 24, 05, 39, 39, TimeSpan.Zero);
+        _ = fakeSystemClock.CurrentTime
+           .Returns(currentTime);
+
+        var sut = new GameWagerHandleCommandService(
+            fakeSystemClock,
             fakeInfoService,
             fakeSnowflakeWork,
             fakePublishService);
 
         _ = await Assert.ThrowsAsync<ArgumentException>(
-             () => service.ExecuteAsync(
+             () => sut.ExecuteAsync(
                  command: command)
              .AsTask());
 
@@ -413,6 +431,7 @@ public class GameWagerHandleCommandServiceUnitTest
     [Fact]
     public async Task ExternalWagerId_Is_Empty()
     {
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
@@ -466,13 +485,14 @@ public class GameWagerHandleCommandServiceUnitTest
                 ["GameInfo"] = "{\"freeGameTransactionId\":\"\",\"isAdjustment\":false,\"isEndRound\":false,\"bonusTransactionId\":\"\",\"isBuyFreeSpin\":false,\"isFeature\":false}"
             }.ToJsonString());
 
-        var service = new GameWagerHandleCommandService(
+        var sut = new GameWagerHandleCommandService(
+            fakeSystemClock,
             fakeInfoService,
             fakeSnowflakeWork,
             fakePublishService);
 
         _ = await Assert.ThrowsAsync<ArgumentException>(
-             () => service.ExecuteAsync(
+             () => sut.ExecuteAsync(
                  command: command)
              .AsTask());
 
@@ -496,6 +516,7 @@ public class GameWagerHandleCommandServiceUnitTest
     [Fact]
     public async Task Game_Does_Not_Exist()
     {
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
@@ -555,13 +576,14 @@ public class GameWagerHandleCommandServiceUnitTest
             cancellationToken: Arg.Any<CancellationToken>())
             .ThrowsForAnyArgs<NullReferenceException>();
 
-        var service = new GameWagerHandleCommandService(
+        var sut = new GameWagerHandleCommandService(
+            fakeSystemClock,
             fakeInfoService,
             fakeSnowflakeWork,
             fakePublishService);
 
         _ = await Assert.ThrowsAsync<NullReferenceException>(
-             () => service.ExecuteAsync(
+             () => sut.ExecuteAsync(
                  command: command)
              .AsTask());
 
@@ -579,6 +601,7 @@ public class GameWagerHandleCommandServiceUnitTest
     [Fact]
     public async Task VoidState_Is_void()
     {
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
@@ -632,6 +655,10 @@ public class GameWagerHandleCommandServiceUnitTest
                 ["GameInfo"] = "{\"freeGameTransactionId\":\"\",\"isAdjustment\":false,\"isEndRound\":false,\"bonusTransactionId\":\"\",\"isBuyFreeSpin\":false,\"isFeature\":false}"
             }.ToJsonString());
 
+        var currentTime = new DateTimeOffset(2023, 08, 24, 05, 39, 39, TimeSpan.Zero);
+        _ = fakeSystemClock.CurrentTime
+           .Returns(currentTime);
+
         var query = new GameWagerInfoQuery(
             GameProviderCode: command.GameProviderCode,
             PlayerCode: command.PlayerCode,
@@ -677,12 +704,13 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
-        var service = new GameWagerHandleCommandService(
+        var sut = new GameWagerHandleCommandService(
+            fakeSystemClock,
             fakeInfoService,
             fakeSnowflakeWork,
             fakePublishService);
 
-        await service.ExecuteAsync(command: command);
+        await sut.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
             WagerId: wagerId,
@@ -738,6 +766,7 @@ public class GameWagerHandleCommandServiceUnitTest
     [Fact]
     public async Task WagerStates_Is_Running()
     {
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
@@ -791,6 +820,10 @@ public class GameWagerHandleCommandServiceUnitTest
                 ["GameInfo"] = "{\"freeGameTransactionId\":\"\",\"isAdjustment\":false,\"isEndRound\":false,\"bonusTransactionId\":\"\",\"isBuyFreeSpin\":false,\"isFeature\":false}"
             }.ToJsonString());
 
+        var currentTime = new DateTimeOffset(2023, 08, 24, 05, 39, 39, TimeSpan.Zero);
+        _ = fakeSystemClock.CurrentTime
+           .Returns(currentTime);
+
         var query = new GameWagerInfoQuery(
             GameProviderCode: command.GameProviderCode,
             PlayerCode: command.PlayerCode,
@@ -836,12 +869,13 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
-        var service = new GameWagerHandleCommandService(
+        var sut = new GameWagerHandleCommandService(
+            fakeSystemClock,
             fakeInfoService,
             fakeSnowflakeWork,
             fakePublishService);
 
-        await service.ExecuteAsync(command: command);
+        await sut.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
             WagerId: wagerId,
@@ -897,6 +931,7 @@ public class GameWagerHandleCommandServiceUnitTest
     [Fact]
     public async Task WagerStates_Is_Waiting()
     {
+        var fakeSystemClock = Substitute.For<ISystemClock>();
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
         var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
         var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
@@ -950,6 +985,10 @@ public class GameWagerHandleCommandServiceUnitTest
                 ["GameInfo"] = "{\"freeGameTransactionId\":\"\",\"isAdjustment\":false,\"isEndRound\":false,\"bonusTransactionId\":\"\",\"isBuyFreeSpin\":false,\"isFeature\":false}"
             }.ToJsonString());
 
+        var currentTime = new DateTimeOffset(2023, 08, 24, 05, 39, 39, TimeSpan.Zero);
+        _ = fakeSystemClock.CurrentTime
+           .Returns(currentTime);
+
         var query = new GameWagerInfoQuery(
             GameProviderCode: command.GameProviderCode,
             PlayerCode: command.PlayerCode,
@@ -995,12 +1034,13 @@ public class GameWagerHandleCommandServiceUnitTest
         _ = fakeSnowflakeWork.GetId()
             .Returns(wagerId);
 
-        var service = new GameWagerHandleCommandService(
+        var sut = new GameWagerHandleCommandService(
+            fakeSystemClock,
             fakeInfoService,
             fakeSnowflakeWork,
             fakePublishService);
 
-        await service.ExecuteAsync(command: command);
+        await sut.ExecuteAsync(command: command);
 
         var publishCommand = new GameWagerPublishCommand(
             WagerId: wagerId,
@@ -1050,6 +1090,95 @@ public class GameWagerHandleCommandServiceUnitTest
             .Received(1)
             .ExecuteAsync(
             command: Arg.Is(publishCommand),
+            cancellationToken: Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task This_game_bet_will_take_more_than_45_days_to_settle()
+    {
+        var fakeSystemClock = Substitute.For<ISystemClock>();
+        var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
+        var fakeSnowflakeWork = Substitute.For<ISnowflakeWork>();
+        var fakePublishService = Substitute.For<ICommandService<GameWagerPublishCommand>>();
+
+        var command = new GameWagerHandleCommand(
+            GameProviderCode: "AWC_PGS",
+            PlayerCode: "4ugse0rsnufp",
+            WagerState: WagerStates.Win,
+            WagerType: WagerTypes.Normal,
+            FreeGameState: FreeGameStates.None,
+            GambleState: GambleStates.None,
+            CashoutState: CashoutStates.None,
+            ResettleState: ResettleStates.None,
+            ExternalRoundId: "1694585239319900160",
+            ExternalWagerId: "PG-1694585239319900160",
+            ExternalGameId: "PG-SLOT-051",
+            ExternalCreatedOn: DateTimeOffset.Parse("2023-08-24T05:39:39Z"),
+            ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
+            ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
+            ExternalResettleOn: DateTimeOffset.UnixEpoch,
+            Bet: 0.4m,
+            ValidBet: 0.4m,
+            Settle: 0.32m,
+            Commission: 0m,
+            Turnover: 0.4m,
+            WinLoss: -0.08m,
+            AdditionalData: new JsonObject
+            {
+                ["ExternalRoundId"] = "PG-1694585239319900160",
+                ["Platform"] = "PG",
+                ["PlatformTxId"] = "1694585239319900160",
+                ["GameType"] = "SLOT",
+                ["GameCode"] = "PG-SLOT-051",
+                ["GameName"] = "Egypt's Book of Mystery",
+                ["RoundId"] = "1694585239319900160",
+                ["UserId"] = "4ugse0rsnufp",
+                ["Currency"] = "CNY",
+                ["TxStatus"] = 1,
+                ["SettleStatus"] = 0,
+                ["BetTime"] = "2023-08-24T05:39:39Z",
+                ["TxTime"] = "2023-08-24T05:39:39Z",
+                ["UpdateTime"] = "2023-08-24T05:39:39Z",
+                ["BetType"] = "1",
+                ["BetAmount"] = 0.4,
+                ["RealBetAmount"] = 0.4,
+                ["Turnover"] = 0.4,
+                ["WinAmount"] = 0.32,
+                ["RealWinAmount"] = 0.32,
+                ["JackpotBetAmount"] = 0,
+                ["JackpotWinAmount"] = 0,
+                ["GameInfo"] = "{\"freeGameTransactionId\":\"\",\"isAdjustment\":false,\"isEndRound\":false,\"bonusTransactionId\":\"\",\"isBuyFreeSpin\":false,\"isFeature\":false}"
+            }.ToJsonString());
+
+        var currentTime = new DateTimeOffset(2024, 02, 16, 06, 33, 23, TimeSpan.Zero);
+        _ = fakeSystemClock.CurrentTime
+           .Returns(currentTime);
+
+        var sut = new GameWagerHandleCommandService(
+            fakeSystemClock,
+            fakeInfoService,
+            fakeSnowflakeWork,
+            fakePublishService);
+
+        _ = await Assert.ThrowsAsync<Exception>(
+             () => sut.ExecuteAsync(
+                 command: command)
+             .AsTask());
+
+        _ = fakeInfoService
+            .Received(0)
+            .GetAsync(
+            query: Arg.Any<GameWagerInfoQuery>(),
+            cancellationToken: Arg.Any<CancellationToken>());
+
+        _ = fakeSnowflakeWork
+            .Received(0)
+            .GetId();
+
+        _ = fakePublishService
+            .Received(0)
+            .ExecuteAsync(
+            command: Arg.Any<GameWagerPublishCommand>(),
             cancellationToken: Arg.Any<CancellationToken>());
     }
 }
