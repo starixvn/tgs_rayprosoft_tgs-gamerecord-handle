@@ -37,14 +37,15 @@ internal class GameWagerHandleCommandService(
             }})");
         }
 
+        
         if (command.WagerState is not WagerStates.Waiting and not WagerStates.Running)
         {
             var currentTime = systemClock.CurrentTime;
             var externalClosedOn = command.ExternalClosedOn;
             var diff = currentTime.Subtract(externalClosedOn);
-            if (diff.TotalDays > 45)
+            if (diff.TotalDays > 100)
             {
-                throw new Exception($"This game bet will take more than 45 days to settle.({new
+                throw new Exception($"This game bet will take more than 100 days to settle.({new
                 {
                     command.GameProviderCode,
                     command.ExternalRoundId,
@@ -57,7 +58,7 @@ internal class GameWagerHandleCommandService(
                 }})");
             }
         }
-
+        
         var query = new GameWagerInfoQuery(
         GameProviderCode: command.GameProviderCode,
         PlayerCode: command.PlayerCode,

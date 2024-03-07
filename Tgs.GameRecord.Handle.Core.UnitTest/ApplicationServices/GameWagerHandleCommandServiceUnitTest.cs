@@ -1094,7 +1094,7 @@ public class GameWagerHandleCommandServiceUnitTest
     }
 
     [Fact]
-    public async Task This_game_bet_will_take_more_than_45_days_to_settle()
+    public async Task This_game_bet_will_take_more_than_100_days_to_settle()
     {
         var fakeSystemClock = Substitute.For<ISystemClock>();
         var fakeInfoService = Substitute.For<IGetService<GameWagerInfoQuery, GameWagerInfoResult>>();
