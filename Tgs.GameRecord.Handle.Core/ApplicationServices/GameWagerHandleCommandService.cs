@@ -43,9 +43,9 @@ internal class GameWagerHandleCommandService(
             var currentTime = systemClock.CurrentTime;
             var externalClosedOn = command.ExternalClosedOn;
             var diff = currentTime.Subtract(externalClosedOn);
-            if (diff.TotalDays > 100)
+            if (diff.TotalDays > 45)
             {
-                throw new Exception($"This game bet will take more than 100 days to settle.({new
+                throw new Exception($"This game bet will take more than 45 days to settle.({new
                 {
                     command.GameProviderCode,
                     command.ExternalRoundId,
