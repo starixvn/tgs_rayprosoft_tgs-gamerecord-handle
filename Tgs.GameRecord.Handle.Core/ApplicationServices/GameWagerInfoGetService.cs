@@ -20,7 +20,15 @@ internal class GameWagerInfoGetService(
         var playerInfo = await player.GetAsync(
             playerCode: query.PlayerCode,
             cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? throw new ArgumentNullException(
+                paramName: query.PlayerCode,
+                message: $"This player does not exist.{new
+                {
+                    query.GameProviderCode,
+                    query.PlayerCode,
+                    query.ExternalGameId
+                }}");
 
         var gameProviderConfigurationId = await brandGameProvider.GetGameProviderConfigurationIdAsync(
             brandId: playerInfo.BrandId,
@@ -33,12 +41,14 @@ internal class GameWagerInfoGetService(
             externalGameId: query.ExternalGameId,
             cancellationToken: cancellationToken)
             .ConfigureAwait(false)
-            ?? throw new NullReferenceException($"This game does not exist.({new
-            {
-                query.GameProviderCode,
-                query.PlayerCode,
-                query.ExternalGameId
-            }})");
+            ?? throw new ArgumentNullException(
+                paramName: query.ExternalGameId,
+                message: $"This game does not exist.({new
+                {
+                    query.GameProviderCode,
+                    query.PlayerCode,
+                    query.ExternalGameId
+                }})");
 
         var bet = query.Bet;
         var validBet = query.ValidBet;

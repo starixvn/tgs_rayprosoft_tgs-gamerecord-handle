@@ -8,7 +8,7 @@ internal class PlayerCacheRepository(
     IPlayerRepository repository,
     IMemoryCache memoryCache) : IPlayerRepository
 {
-    public async ValueTask<PlayerInfo> GetAsync(string playerCode, CancellationToken cancellationToken = default)
+    public async ValueTask<PlayerInfo?> GetAsync(string playerCode, CancellationToken cancellationToken = default)
     {
         string key = string.Concat(typeof(PlayerCacheRepository).Namespace!.Replace(".", "-").ToLower(), ":", typeof(PlayerCacheRepository).Name!.ToLower(), ":", playerCode);
         if (!memoryCache.TryGetValue(key, out PlayerInfo? playerInfo))
@@ -16,8 +16,8 @@ internal class PlayerCacheRepository(
             playerInfo = await repository.GetAsync(
                 playerCode: playerCode,
                 cancellationToken: cancellationToken)
-                .ConfigureAwait(false)
-                ?? throw new NullReferenceException($"This player does not exist.{playerCode}");
+                .ConfigureAwait(false);
+
             if (playerInfo is not null)
             {
                 return memoryCache.Set(
@@ -27,6 +27,6 @@ internal class PlayerCacheRepository(
             }
         }
 
-        return playerInfo ?? throw new NullReferenceException($"This player does not exist.{playerCode}");
+        return playerInfo;
     }
 }

@@ -8,7 +8,7 @@ namespace Tgs.GameRecord.Handle.Repositories;
 internal class PlayerRepository(
     TgsContext context) : IPlayerRepository
 {
-    public async ValueTask<PlayerInfo> GetAsync(string playerCode, CancellationToken cancellationToken = default)
+    public async ValueTask<PlayerInfo?> GetAsync(string playerCode, CancellationToken cancellationToken = default)
     {
         playerCode = playerCode.ToLower();
         return await context.Players.AsQueryable()
@@ -73,7 +73,6 @@ internal class PlayerRepository(
             player.DefaultWalletCurrencyCode))
         .FirstOrDefaultAsync(
         cancellationToken: cancellationToken)
-        .ConfigureAwait(false)
-        ?? throw new NullReferenceException($"This player does not exist.{playerCode}");
+        .ConfigureAwait(false);
     }
 }
