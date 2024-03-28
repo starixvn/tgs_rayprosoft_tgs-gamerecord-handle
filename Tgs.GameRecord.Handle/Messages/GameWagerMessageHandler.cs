@@ -65,8 +65,30 @@ public class GameWagerMessageHandler(
             WinLoss: data.WinLoss.ToDecimal().GetValueOrDefault(0),
             AdditionalData: data.AdditionalData);
 
-        return service.ExecuteAsync(
-            command: command,
-            cancellationToken: cancellationToken);
+        try
+        {
+            return service.ExecuteAsync(
+                command: command,
+                cancellationToken: cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "LogOn:{logOn} Subject:{subject} Mesaage:This message has been received.({data})",
+                DateTime.Now.ToString("o"),
+                subject,
+                new
+                {
+                    data.GameProviderCode,
+                    data.PlayerCode,
+                    data.ExternalRoundId,
+                    data.ExternalWagerId,
+                    data.ExternalGameId,
+                    ExternalCreatedOn = data.ExternalCreatedOn.ToDateTimeOffset(),
+                    ExternalClosedOn = data.ExternalClosedOn.ToDateTimeOffset(),
+                    data.WagerState
+                });
+
+            throw;
+        }
     }
 }
