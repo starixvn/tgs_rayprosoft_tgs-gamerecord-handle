@@ -1,13 +1,9 @@
-﻿using Tgs.GameRecord.Handle.Common.Protos;
-
-namespace Tgs.GameRecord.Handle.Core.Models;
+﻿namespace Tgs.GameRecord.Handle.Core.Models;
 
 public record GameInfo(
-    int GameId,
-    string GameCode,
-    Guid GameProviderId,
-    string GameProviderCode,
-    string ExternalGameId,
-    GameCategories GameCategory,
-    GameTypes GameType,
-    string SubGameProviderCode);
+	int GameId,
+	string GameCode,
+	Guid GameProviderId,
+	string GameProviderCode,
+	string ExternalGameId,
+	string SubGameProviderCode);

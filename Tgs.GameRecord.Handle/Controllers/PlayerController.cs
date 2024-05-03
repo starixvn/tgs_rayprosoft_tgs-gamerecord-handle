@@ -9,9 +9,9 @@ namespace Tgs.GameRecord.Handle.Controllers;
 [ApiController]
 public class PlayerController : ControllerBase
 {
-    [HttpGet("{playerCode}")]
-    public ValueTask<PlayerInfo> GetIdAsync(
-    [FromServices] IPlayerRepository repository,
-    string playerCode)
-    => repository.GetAsync(playerCode, HttpContext.RequestAborted);
+	[HttpGet("{playerCode}")]
+	public ValueTask<PlayerInfo?> GetIdAsync(
+	[FromServices] IPlayerRepository repository,
+	string playerCode)
+	=> repository.GetAsync(playerCode, HttpContext.RequestAborted);
 }

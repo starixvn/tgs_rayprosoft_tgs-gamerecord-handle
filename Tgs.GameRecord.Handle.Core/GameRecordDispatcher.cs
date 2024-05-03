@@ -1,0 +1,79 @@
+﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.DependencyInjection;
+using Tgs.GameRecord.Handle.Core.ApplicationServices;
+
+namespace Tgs.GameRecord.Handle.Core;
+
+internal class GameRecordDispatcher(IServiceProvider serviceProvider) : IGameRecordDispatcher, IDisposable, IAsyncDisposable
+{
+	private readonly ConcurrentDictionary<string, GameRecordChannel> _counters = new();
+	private readonly CancellationTokenSource _cancellationTokenSource = new();
+
+	private bool _disposedValue;
+
+	~GameRecordDispatcher()
+	{
+		Dispose(false);
+	}
+
+	public async ValueTask PushCommandAsync(GameBetsRapidTestWorkerCommand command, CancellationToken cancellationToken = default)
+	{
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _cancellationTokenSource.Token);
+
+		var counter = _counters.GetOrAdd(
+			string.Concat(command.GameProviderCode, ":", command.ExternalGameId),
+			key =>
+			{
+				var scope = serviceProvider.CreateScope();
+				var newCounter = ActivatorUtilities.CreateInstance<GameRecordChannel>(
+					scope.ServiceProvider,
+					key);
+
+				newCounter.Disposed += (_, _) =>
+				{
+					_ = _counters.TryRemove(newCounter.Key, out _);
+					scope.Dispose();
+				};
+
+				return newCounter;
+			});
+
+		await counter.PrepareAsync(cts.Token).ConfigureAwait(false);
+		await counter.PushCommandAsync(command, cts.Token).ConfigureAwait(false);
+	}
+
+	public ValueTask DisposeAsync()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+
+		return ValueTask.CompletedTask;
+	}
+
+	public void Dispose()
+	{
+		// 請勿變更此程式碼。請將清除程式碼放入 'Dispose(bool disposing)' 方法
+		Dispose(disposing: true);
+		GC.SuppressFinalize(this);
+	}
+
+	public void ExtendExpiry(string gameProviderCode, string externalGameId)
+	{
+		if (_counters.TryGetValue(string.Concat(gameProviderCode, ":", externalGameId), out var counter))
+			counter.ExtendExpiry();
+	}
+
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!_disposedValue)
+		{
+			if (disposing)
+			{
+				_cancellationTokenSource.Cancel();
+			}
+
+			_cancellationTokenSource.Dispose();
+			_disposedValue = true;
+		}
+	}
+}

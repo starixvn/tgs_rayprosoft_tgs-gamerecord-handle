@@ -4,8 +4,8 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddGameRecordHandleClient(
-        this IServiceCollection services)
-        => services
-        .AddTransient<IGameRecordHandleClient, GameRecordHandleClient>();
+	public static IServiceCollection AddGameRecordHandleClient(
+		this IServiceCollection services)
+		=> services
+		.AddTransient<IGameRecordHandleClient, GameRecordHandleClient>();
 }

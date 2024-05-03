@@ -8,11 +8,14 @@ data:
     {
       "Logging": {
         "LogLevel": {
-          "Default": "Warning"
+          "Default": "Warning",
+          "Tgs.GameRecord.Handle.Messages.GameRecordHandleMessageHandler": "Information",
+          "Tgs.GameRecord.Handle.Messages.GameWagerMessageHandler": "Information"
         }
       },
-      "GameRecordHandle": {
-        "GameCurrencyClientBaseUrl": "http://game-gamecurrency/"
+      "GameRecordHandleConnectionStrings": {
+        "GameCurrencyClientBaseUrl": "http://game-gamecurrency/",
+        "GameBetsClientBaseUrl":  "http://game-gamebets/"
       }
     }
   otel-collector-config.yaml: |

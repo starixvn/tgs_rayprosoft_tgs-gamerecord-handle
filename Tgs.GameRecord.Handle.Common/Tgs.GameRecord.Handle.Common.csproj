@@ -7,16 +7,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Protos\GameRecordHandle.proto" />
 		<None Remove="Protos\gamerecordhandlecommon.proto" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.61.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
 		<PackageReference Include="PhoenixToolkits.Protobuf.ExtendTypes" Version="0.0.7" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Protos\gamerecordhandlecommon.proto" GrpcServices="Both" />
+		<Protobuf Include="Protos\GameRecordHandle.proto" />
+		<Protobuf Include="Protos\GameRecordHandleCommon.proto" GrpcServices="Both" />
 	</ItemGroup>
 
 </Project>

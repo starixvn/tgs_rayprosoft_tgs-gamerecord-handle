@@ -7,10 +7,10 @@ namespace Tgs.GameRecord.Handle.Controllers;
 [ApiController]
 public class BrandGameProviderController : ControllerBase
 {
-    [HttpGet("{brandId:guid}/{gameProviderId:guid}")]
-    public ValueTask<Guid> GetIdAsync(
-    [FromServices] IBrandGameProviderRepository repository,
-    Guid brandId,
-    Guid gameProviderId)
-    => repository.GetGameProviderConfigurationIdAsync(brandId, gameProviderId, HttpContext.RequestAborted);
+	[HttpGet("{brandId:guid}/{gameProviderId:guid}")]
+	public ValueTask<Guid> GetIdAsync(
+	[FromServices] IBrandGameProviderRepository repository,
+	Guid brandId,
+	Guid gameProviderId)
+	=> repository.GetGameProviderConfigurationIdAsync(brandId, gameProviderId, HttpContext.RequestAborted);
 }
