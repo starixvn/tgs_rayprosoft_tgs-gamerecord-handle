@@ -1,0 +1,132 @@
+﻿syntax = "proto3";
+
+//import "phoenix/protobuf/guid.proto";
+import "phoenix/protobuf/decimal.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Tgs.GameRecord.Handle.Common.Protos";
+
+package GameRecordHandleCommon;
+
+// The greeting service definition.
+
+
+// The request message containing the user's name.
+message GameWagerRequest {
+    // 遊戲供應商代碼
+    string game_provider_code = 1;
+    // 玩家代碼
+    string player_code = 2;
+    // 投注狀態
+    WagerStates wager_state = 3;
+    // 投注類型
+    WagerTypes wager_type = 4;
+    // 免費遊戲狀態
+    FreeGameStates free_game_state = 5;
+    // 博取遊戲
+    GambleStates gamble_state = 6;
+    // 兌現狀態
+    CashoutStates cashout_state = 7;
+    // 重新結算狀態
+    ResettleStates resettle_state = 8;
+    // 三方局/回合識別碼
+    string external_round_id = 9;
+    // 三方投注識別碼
+    string external_wager_id = 10;
+    // 三方遊戲識別碼
+    string external_game_id = 11;
+    // 三方下注/創建時間
+    google.protobuf.Timestamp external_created_on = 12;
+    // 三方結算/結束時間
+    google.protobuf.Timestamp external_closed_on = 13;
+    // 三方派彩時間
+    google.protobuf.Timestamp external_payoff_on = 14;
+    // 三方重新結算時間
+    google.protobuf.Timestamp external_resettle_on = 15;
+    // 下注
+    phoenix.protobuf.DecimalValue bet = 16;
+    // 實際/有效下注
+    phoenix.protobuf.DecimalValue validBet = 17;
+    // 結算(包含本金)
+    phoenix.protobuf.DecimalValue settle = 18;
+    // 佣金
+    phoenix.protobuf.DecimalValue commission = 19;
+    // 遊戲平台有效投注
+    phoenix.protobuf.DecimalValue turnover = 20;
+    // 玩家損益/淨利
+    phoenix.protobuf.DecimalValue win_loss = 21;
+    // 遊戲數據
+    string additional_data = 22;
+}
+
+// 投注狀態
+enum WagerStates{
+    //等待中: 我们交易员因为可能因为赔率的转换等因素，还未接受这张注单。
+    WAGER_STATES_WAITING = 0;
+    //進行中: 此註單還沒有結算。(注單還沒有結算的狀態有可能是這場比賽還沒有結算之類的情形。)
+    WAGER_STATES_RUNNING = 1;
+    //作廢: 在註單為 RUNNING 的狀態下，玩家下註註金返回。原因可能為我們交易員對此場賽事有些疑慮。可與我們聯繫詢問發生什麼狀況。
+    WAGER_STATES_VOID= 2;
+    //退款: 在註單為 RUNNING 的狀態下，玩家下註註金返回。原因有可能是賽事取消或發生什麼意外。
+    WAGER_STATES_REFUND = 3;
+    //已取消: 在註單為 WAITING 的狀態下，玩家下註註金返回。可能狀況很多。
+    WAGER_STATES_REJECT = 4;
+    //輸: 此註單已結算且玩家輸了此註單。
+    WAGER_STATES_LOSE = 5;
+    //贏: 此注单已结算且玩家赢了此注单。
+    WAGER_STATES_WIN = 6;
+    //和局: 此註單已結算且此註單為和局。
+    WAGER_STATES_DRAW = 7;
+    //半赢: 此註單已結算且玩家贏了下注額一半。
+    WAGER_STATES_HALF_WIN = 8;
+    //半輸:  此註單已結算且玩家輸了下注額一半。
+    WAGER_STATES_HALF_LOSE = 9;
+}
+
+// 投注類型
+enum WagerTypes {
+    //正常
+    WAGER_TYPES_NORMAL = 0;
+}
+
+// 關閉狀態
+enum ClosedStates{
+    CLOSED_STATES_NONE = 0;
+    CLOSED_STATES_CLOSED = 1;
+}
+
+// 作廢狀態
+enum VoidStates{
+    VOID_STATES_NONE = 0;
+    VOID_STATES_VOID = 1;
+}
+
+// 取消狀態
+enum CancelStates{
+    CANCEL_STATES_NONE = 0;
+    CANCEL_STATES_CANCEL = 1;
+}
+
+// 免費遊戲狀態
+enum FreeGameStates{
+    FREE_GAME_STATES_NONE = 0;
+    FREE_GAME_STATES_FREE_GAME = 1;
+}
+
+// 博取遊戲
+enum GambleStates{
+    GAMBLE_STATES_NONE = 0;
+    GAMBLE_STATES_GAMBLE = 1;
+}
+
+// 兌現狀態
+enum CashoutStates{
+    CASHOUT_STATES_NONE = 0;
+    CASHOUT_STATES_CASHOUT = 1;
+}
+
+// 重新结算狀態
+enum ResettleStates{
+    RESETTLE_STATES_NONE = 0;
+    RESETTLE_STATES_RESETTLE = 1;
+}

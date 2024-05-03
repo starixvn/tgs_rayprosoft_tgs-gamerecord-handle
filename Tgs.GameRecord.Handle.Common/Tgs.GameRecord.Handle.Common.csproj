@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<None Remove="Protos\GameRecordHandle.proto" />
+		<None Remove="Protos\GameRecordHandleCommon.proto" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -17,6 +18,7 @@
 
 	<ItemGroup>
 		<Protobuf Include="Protos\GameRecordHandle.proto" />
+		<Protobuf Include="Protos\GameRecordHandleCommon.proto" />
 	</ItemGroup>
 
 </Project>
