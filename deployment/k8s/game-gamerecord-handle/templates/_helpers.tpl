@@ -47,6 +47,7 @@ Selector labels
 */}}
 {{- define "game-gamerecord-handle.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "game-gamerecord-handle.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 app: {{ include "game-gamerecord-handle.name" . }}
 tgs.kind: game
 tgs.game.kind: gamerecord
