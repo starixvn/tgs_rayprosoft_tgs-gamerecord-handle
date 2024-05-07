@@ -1,13 +1,14 @@
-﻿using Google.Protobuf;
+﻿using System.Text.Json.Nodes;
 using Google.Protobuf.WellKnownTypes;
 using Tgs.GameRecord.Handle.Client.Models;
 using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Client;
 
-internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecordHandleClient
+internal class GameRecordHandleClient(
+	IMessageSender messageSender) : IGameRecordHandleClient
 {
-	public ValueTask RequestPublishAsyncAsync(GameRecordRequest source, CancellationToken cancellationToken = default)
+	public ValueTask RequestPublishAsyncAsync(GameRecordRequest source, JsonNode additionalData, CancellationToken cancellationToken = default)
 	{
 		var request = new Common.Protos.GameRecordHandleRequest
 		{
@@ -34,16 +35,16 @@ internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecor
 			Turnover = source.Turnover,
 			WinLoss = source.WinLoss,
 			Jackpot = source.Jackpot,
-			AdditionalData = source.AdditionalData.ToJsonString()
+			AdditionalData = additionalData.ToJsonString()
 		};
 
-		return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
+		return messageSender.PublishAsync(
 			subject: Common.GameRecordHandleNatsConst.GameRecordHandleRequest,
-			data: request.ToByteArray(),
+			data: request,
 			cancellationToken: cancellationToken);
 	}
 
-	public ValueTask RequestPublishAsyncAsync(GameRecordRunningRequest source, CancellationToken cancellationToken = default)
+	public ValueTask RequestPublishAsyncAsync(GameRecordRunningRequest source, JsonNode additionalData, CancellationToken cancellationToken = default)
 	{
 		var request = new Common.Protos.GameRecordHandleRequest
 		{
@@ -70,16 +71,16 @@ internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecor
 			Turnover = 0.0m,
 			WinLoss = 0.0m,
 			Jackpot = 0.0m,
-			AdditionalData = source.AdditionalData.ToJsonString()
+			AdditionalData = additionalData.ToJsonString()
 		};
 
-		return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
+		return messageSender.PublishAsync(
 			subject: Common.GameRecordHandleNatsConst.GameRecordHandleRequest,
-			data: request.ToByteArray(),
+			data: request,
 			cancellationToken: cancellationToken);
 	}
 
-	public ValueTask RequestPublishAsyncAsync(GameRecordClosedRequest source, CancellationToken cancellationToken = default)
+	public ValueTask RequestPublishAsyncAsync(GameRecordClosedRequest source, JsonNode additionalData, CancellationToken cancellationToken = default)
 	{
 		var request = new Common.Protos.GameRecordHandleRequest
 		{
@@ -106,12 +107,12 @@ internal class GameRecordHandleClient(IMessageSender messageSender) : IGameRecor
 			Turnover = source.Turnover,
 			WinLoss = source.WinLoss,
 			Jackpot = source.Jackpot,
-			AdditionalData = source.AdditionalData.ToJsonString()
+			AdditionalData = additionalData.ToJsonString()
 		};
 
-		return messageSender.PublishAsync<ReadOnlyMemory<byte>>(
+		return messageSender.PublishAsync(
 			subject: Common.GameRecordHandleNatsConst.GameRecordHandleRequest,
-			data: request.ToByteArray(),
+			data: request,
 			cancellationToken: cancellationToken);
 	}
 }

@@ -10,5 +10,4 @@ public record GameRecordRunningRequest(
 	DateTimeOffset ExternalCreatedOn,
 	Common.Protos.BetType BetType,
 	decimal Bet,
-	decimal ValidBet,
-	JsonNode AdditionalData);
+	decimal ValidBet);

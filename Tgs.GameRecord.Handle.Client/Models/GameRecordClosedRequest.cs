@@ -21,5 +21,4 @@ public record GameRecordClosedRequest(
 	decimal Commission,
 	decimal Turnover,
 	decimal WinLoss,
-	decimal Jackpot,
-	JsonNode AdditionalData);
+	decimal Jackpot);
