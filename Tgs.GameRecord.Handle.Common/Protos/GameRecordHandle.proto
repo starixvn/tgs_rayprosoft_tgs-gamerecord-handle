@@ -45,24 +45,22 @@ message GameRecordHandleRequest {
 	ResettleState resettle_state = 15;
     // 彩金狀態
 	JackpotState jackpot_state = 16;
-    // 匯率
-    phoenix.protobuf.DecimalValue currency_ratio = 17;
     // 下注
-    phoenix.protobuf.DecimalValue bet = 18;
+    phoenix.protobuf.DecimalValue bet = 17;
     // 實際/有效下注
-    phoenix.protobuf.DecimalValue validBet = 19;
+    phoenix.protobuf.DecimalValue validBet = 18;
     // 結算(包含本金)
-    phoenix.protobuf.DecimalValue settle = 20;
+    phoenix.protobuf.DecimalValue settle = 19;
     // 傭金
-    phoenix.protobuf.DecimalValue commission = 21;
+    phoenix.protobuf.DecimalValue commission = 20;
     // 遊戲平台有效投注
-    phoenix.protobuf.DecimalValue turnover = 22;
+    phoenix.protobuf.DecimalValue turnover = 21;
     // 玩家損益/淨利
-    phoenix.protobuf.DecimalValue win_loss = 23;
+    phoenix.protobuf.DecimalValue win_loss = 22;
     // 彩金
-	phoenix.protobuf.DecimalValue jackpot = 24;
+	phoenix.protobuf.DecimalValue jackpot = 23;
     // 附加數據
-	string additional_data = 25;
+	string additional_data = 24;
 
 }
 
