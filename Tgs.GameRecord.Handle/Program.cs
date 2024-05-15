@@ -7,7 +7,6 @@ using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Tgs.GameRecord.Handle.Common;
 using Tgs.GameRecord.Handle.Core;
 using Tgs.GameRecord.Handle.Messages;
 using Tgs.MessageQueue.Nats.Serializers;
@@ -86,13 +85,11 @@ builder.Services
 	.AddMessageQueue()
 	.AddNatsMessageQueue(config => config
 	.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
-	.AddHandler<GameRecordHandleMessageHandler>(subject: GameRecordHandleNatsConst.GameRecordHandleRequest, group: GameRecordHandleNatsConst.GameRecordHandleRequest)
-	.AddHandler<GameWagerMessageHandler>(subject: GameRecordHandleNatsConst.GameRecordWagerPublish, GameRecordHandleNatsConst.GameRecordWagerPublish)
-	.AddHandler<GameRecordHandleExpiryMessageHandler>(subject: GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, group: string.Concat(GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, Environment.MachineName)))
+	.AddHandler<GameRecordHandleMessageHandler>(subject: Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest, group: Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest)
+	.AddHandler<GameRecordHandleExpiryMessageHandler>(subject: Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, group: string.Concat(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, Environment.MachineName)))
 	.ClearAllExchanges()
-	.AddNatsGlobPatternExchange(GameRecordHandleNatsConst.GameRecordHandleRequest)
-	.AddNatsGlobPatternExchange(GameRecordHandleNatsConst.GameRecordWagerPublish)
-	.AddNatsGlobPatternExchange(GameRecordHandleNatsConst.GameRecordHandleExpiryRequest)
+	.AddNatsGlobPatternExchange(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest)
+	.AddNatsGlobPatternExchange(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest)
 	.AddNatsGlobPatternExchange(Tgs.GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest);
 
 builder.Services

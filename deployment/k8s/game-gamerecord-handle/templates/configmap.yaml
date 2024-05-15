@@ -9,8 +9,7 @@ data:
       "Logging": {
         "LogLevel": {
           "Default": "Warning",
-          "Tgs.GameRecord.Handle.Messages.GameRecordHandleMessageHandler": "Information",
-          "Tgs.GameRecord.Handle.Messages.GameWagerMessageHandler": "Information"
+          "Tgs.GameRecord.Handle.Messages.GameRecordHandleMessageHandler": "Information"
         }
       },
       "GameRecordHandleConnectionStrings": {
