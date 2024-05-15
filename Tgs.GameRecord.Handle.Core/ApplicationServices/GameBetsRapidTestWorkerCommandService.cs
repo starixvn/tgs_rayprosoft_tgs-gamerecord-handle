@@ -58,6 +58,10 @@ internal class GameBetsRapidTestWorkerCommandService(
 					command.ExternalClosedOn
 				}})");
 
+		var externalCreatedOn = command.ExternalCreatedOn;
+		var externalClosedOn = DateTimeOffset.UnixEpoch;
+		var externalPayoffOn = DateTimeOffset.UnixEpoch;
+		var externalResettleOn = DateTimeOffset.UnixEpoch;
 		var bet = command.Bet;
 		var validBet = command.ValidBet;
 		var settle = 0.0m;
@@ -68,6 +72,9 @@ internal class GameBetsRapidTestWorkerCommandService(
 
 		if (command.BetState is not GameBets.Common.Enums.BetState.Waiting and not GameBets.Common.Enums.BetState.Running)
 		{
+			externalClosedOn = command.ExternalClosedOn;
+			externalPayoffOn = command.ExternalPayoffOn;
+			externalResettleOn = command.ExternalResettleOn;
 			settle = command.Settle;
 			commission = command.Commission;
 			turnover = command.Turnover;
@@ -115,10 +122,10 @@ internal class GameBetsRapidTestWorkerCommandService(
 			ExternalRoundId: command.ExternalRoundId,
 			ExternalBetId: command.ExternalBetId,
 			ExternalGameId: command.ExternalGameId,
-			ExternalCreatedOn: command.ExternalCreatedOn,
-			ExternalClosedOn: command.ExternalClosedOn,
-			ExternalPayoffOn: command.ExternalPayoffOn,
-			ExternalResettleOn: command.ExternalResettleOn,
+			ExternalCreatedOn: externalCreatedOn,
+			ExternalClosedOn: externalClosedOn,
+			ExternalPayoffOn: externalPayoffOn,
+			ExternalResettleOn: externalResettleOn,
 			CurrencyRatio: gameCurrencyInfo.CurrencyRatio,
 			Bet: gameCurrencyInfo.Bet,
 			ValidBet: gameCurrencyInfo.ValidBet,
