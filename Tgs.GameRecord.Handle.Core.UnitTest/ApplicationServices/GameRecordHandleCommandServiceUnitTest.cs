@@ -1031,7 +1031,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	}
 
 	[Fact]
-	public async Task This_game_bet_will_take_more_than_45_days_to_settle()
+	public async Task This_game_bet_will_take_more_than_180_days_to_settle()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
 		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
@@ -1066,7 +1066,7 @@ public class GameRecordHandleCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var currentTime = new DateTimeOffset(2024, 02, 16, 06, 33, 23, TimeSpan.Zero);
+		var currentTime = new DateTimeOffset(2024, 02, 25, 06, 33, 23, TimeSpan.Zero);
 		_ = fakeTimeProvider.GetUtcNow()
 		   .Returns(currentTime);
 
