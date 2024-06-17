@@ -47,11 +47,11 @@ internal class GameRecordHandleCommandService(
 			var currentTime = timeProvider.GetUtcNow();
 			var externalClosedOn = command.ExternalClosedOn;
 			var diff = currentTime.Subtract(externalClosedOn);
-			if (diff.TotalDays > 45)
+			if (diff.TotalDays > 180)
 			{
 				throw new ArgumentOutOfRangeException(
 					paramName: command.ExternalClosedOn.ToString("u"),
-					message: $"This game bet will take more than 45 days to settle.({new
+					message: $"This game bet will take more than 180 days to settle.({new
 					{
 						command.GameProviderCode,
 						command.PlayerCode,
