@@ -25,10 +25,19 @@ internal class GameRepository(
 			.WaitAndRetryAsync(
 				retryCount: retryCount,
 				retryAttempt => TimeSpan.FromSeconds(Math.Pow(retrySeconds, retryAttempt)),
-				onRetry: (exception, retryTime, retryCount, context) => logger.LogWarning(exception, "LogOn:{logOn}  RetryTime:{retryTime} RetryCount:{retryCount}",
-					DateTime.Now.ToString("o"),
-					retryTime,
-					retryCount));
+				onRetry: (exception, retryTime, retryCount, context) => logger.LogWarning(exception, "{logWarning}",
+					new
+					{
+						LogOn = DateTime.Now.ToString("u"),
+						RetryTime = retryTime,
+						RetryCount = retryCount,
+						Data = new
+						{
+							GameProviderId = gameProviderId,
+							ExternalGameId = externalGameId
+						},
+						exception.Message
+					}));
 
 		return await retryPolicy.ExecuteAsync(() => context.Games
 			.Where(predicate: g => g.GameProviderId == gameProviderId && g.ExternalId == externalGameId)

@@ -1,8 +1,10 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using System.Text.Json.Nodes;
+using Tgs.GameBets.RapidTest.Worker.Client;
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
 using Tgs.ServiceUtility;
 using Valhalla.MessageQueue;
@@ -15,7 +17,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Waiting()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -61,17 +68,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -91,10 +98,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Waiting,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -119,7 +126,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Running()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -165,17 +177,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -195,10 +207,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Running,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -223,7 +235,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Void()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -269,17 +286,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -299,10 +316,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Void,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -327,7 +344,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Refund()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -373,17 +395,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -403,10 +425,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Refund,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -431,7 +453,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Refund_Cashout()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -477,17 +504,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -507,10 +534,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Refund,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -535,7 +562,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Cancel()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -581,17 +613,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -611,10 +643,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Cancel,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -639,7 +671,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Loss()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -685,17 +722,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -715,10 +752,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Loss,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -743,7 +780,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Win()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -789,17 +831,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -819,10 +861,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Win,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -847,7 +889,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Win_Jackpot()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -893,17 +940,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -923,10 +970,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Win,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -951,7 +998,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Win_FreeGame()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -997,17 +1049,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -1027,10 +1079,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Win,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.FreeGame,
@@ -1055,7 +1107,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_Draw()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -1101,17 +1158,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -1131,10 +1188,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.Draw,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -1159,7 +1216,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_HalfWin()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -1205,17 +1267,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -1235,10 +1297,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.HalfWin,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,
@@ -1263,7 +1325,12 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 	public async Task BetState_Is_HalfLoss()
 	{
 		var faceLogger = NullLogger<GameBetsRapidTestWorkerPublishCommandService>.Instance;
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakeOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeClient = Substitute.For<IGameBetsRapidTestWorkerClient>();
 
 		var command = new GameBetsRapidTestWorkerPublishCommand(
 			GameProviderId: Guid.NewGuid(),
@@ -1309,17 +1376,17 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				["PlatformTxId"] = "1694585239319900160"
 			}.ToJsonString());
 
-		var service = new GameBetsRapidTestWorkerPublishCommandService(
+		var sut = new GameBetsRapidTestWorkerPublishCommandService(
 			faceLogger,
-			fakeMessageSender);
+			fakeOptions,
+			fakeClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest),
-			data: Arg.Is(new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+			.HandleAsync(
+			source: Arg.Is(new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 			{
 				GameProviderId = command.GameProviderId,
 				GameProviderCode = command.GameProviderCode,
@@ -1339,10 +1406,10 @@ public class GameBetsRapidTestWorkerPublishCommandServiceUnitTest
 				ExternalRoundId = command.ExternalRoundId,
 				ExternalBetId = command.ExternalBetId,
 				ExternalGameId = command.ExternalGameId,
-				ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-				ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-				ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-				ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+				ExternalCreatedOn = command.ExternalCreatedOn,
+				ExternalClosedOn = command.ExternalClosedOn,
+				ExternalPayoffOn = command.ExternalPayoffOn,
+				ExternalResettleOn = command.ExternalResettleOn,
 				BetState = GameBets.RapidTest.Worker.Common.Protos.BetState.HalfLoss,
 				BetType = GameBets.RapidTest.Worker.Common.Protos.BetType.Normal,
 				FreeGameState = GameBets.RapidTest.Worker.Common.Protos.FreeGameState.None,

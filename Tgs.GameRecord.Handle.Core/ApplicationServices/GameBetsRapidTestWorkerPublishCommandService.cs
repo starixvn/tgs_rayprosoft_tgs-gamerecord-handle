@@ -1,14 +1,18 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Polly;
+using Tgs.GameBets.RapidTest.Worker.Client;
 using Tgs.ServiceUtility;
-using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 internal class GameBetsRapidTestWorkerPublishCommandService(
 	ILogger<GameBetsRapidTestWorkerPublishCommandService> logger,
-	IMessageSender messageSender) : ICommandService<GameBetsRapidTestWorkerPublishCommand>
+	IOptions<PolicySettingsOptions> policySettingsOptions,
+	IGameBetsRapidTestWorkerClient client) : ICommandService<GameBetsRapidTestWorkerPublishCommand>
 {
+	private readonly PolicySettingsOptions _policySettingsOptions = policySettingsOptions.Value;
+
 	public ValueTask ExecuteAsync(GameBetsRapidTestWorkerPublishCommand command, CancellationToken cancellationToken = default)
 	{
 		var betState = command.BetState switch
@@ -61,7 +65,7 @@ internal class GameBetsRapidTestWorkerPublishCommandService(
 			_ => GameBets.RapidTest.Worker.Common.Protos.JackpotState.None
 		};
 
-		var request = new GameBets.RapidTest.Worker.Common.Protos.GameBetsRapidTestWorkerRequest
+		var source = new GameBets.RapidTest.Worker.Common.ViewModels.GameBetRapidTestWorkerHandleViewModel
 		{
 			GameProviderId = command.GameProviderId,
 			GameProviderCode = command.GameProviderCode,
@@ -81,10 +85,10 @@ internal class GameBetsRapidTestWorkerPublishCommandService(
 			ExternalRoundId = command.ExternalRoundId,
 			ExternalBetId = command.ExternalBetId,
 			ExternalGameId = command.ExternalGameId,
-			ExternalCreatedOn = command.ExternalCreatedOn.ToTimestamp(),
-			ExternalClosedOn = command.ExternalClosedOn.ToTimestamp(),
-			ExternalPayoffOn = command.ExternalPayoffOn.ToTimestamp(),
-			ExternalResettleOn = command.ExternalResettleOn.ToTimestamp(),
+			ExternalCreatedOn = command.ExternalCreatedOn,
+			ExternalClosedOn = command.ExternalClosedOn,
+			ExternalPayoffOn = command.ExternalPayoffOn,
+			ExternalResettleOn = command.ExternalResettleOn,
 			BetState = betState,
 			BetType = betType,
 			FreeGameState = freeGameState,
@@ -103,28 +107,40 @@ internal class GameBetsRapidTestWorkerPublishCommandService(
 			AdditionalData = command.AdditionalData
 		};
 
-		logger.LogInformation("LogOn:{logOn} Subject:{subject} Message:This message publishes request parameters.({request})",
-			DateTime.Now.ToString("o"),
-			GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest,
-			new
-			{
-				request.GameProviderCode,
-				request.SubGameProviderCode,
-				request.GameId,
-				request.ResellerCode,
-				request.LicenseeCode,
-				request.BrandCode,
-				request.PlayerCode,
-				request.Username,
-				WalletId = request.WalletId.ToGuid(),
-				request.ExternalRoundId,
-				request.ExternalBetId,
-				ExternalCreatedOn = request.ExternalCreatedOn.ToDateTimeOffset()
-			});
+		var retryCount = _policySettingsOptions.RetryCount;
+		var retrySeconds = _policySettingsOptions.RetrySeconds;
+		var retryPolicy = Policy
+			.Handle<HttpRequestException>()
+			.WaitAndRetryAsync(
+				retryCount: retryCount,
+				retryAttempt => TimeSpan.FromSeconds(Math.Pow(retrySeconds, retryAttempt)),
+				onRetry: (exception, retryTime, retryCount, context) => logger.LogWarning(exception, "{logWarning}",
+					new
+					{
+						LogOn = DateTime.Now.ToString("u"),
+						RetryTime = retryTime,
+						RetryCount = retryCount,
+						Data = new
+						{
+							source.GameProviderCode,
+							source.SubGameProviderCode,
+							source.GameId,
+							source.ResellerCode,
+							source.LicenseeCode,
+							source.BrandCode,
+							source.PlayerCode,
+							source.Username,
+							source.CurrencyCode,
+							source.WalletId,
+							source.ExternalRoundId,
+							source.ExternalBetId,
+							source.ExternalGameId
+						},
+						exception.Message
+					}));
 
-		return messageSender.PublishAsync(
-			subject: GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest,
-			data: request,
+		return client.HandleAsync(
+			source: source,
 			cancellationToken: cancellationToken);
 	}
 }

@@ -49,22 +49,14 @@ builder.Services.AddSwaggerGen(c =>
 	}
 });
 
-builder.Services.AddGameRecordHandle(
-	(sp, dbBuilder) =>
-	{
-		var config = sp.GetRequiredService<IConfiguration>();
-		_ = dbBuilder.UseNpgsql(config.GetConnectionString("Tgs"),
-			builder => builder.EnableRetryOnFailure(
-				maxRetryCount: 5,
-				maxRetryDelay: TimeSpan.FromSeconds(10),
-				errorCodesToAdd: null));
-	})
+builder.Services
 	.AddOptions<PolicySettingsOptions>()
 	.Configure((options) => builder.Configuration.GetSection("PolicySettings").Bind(options))
 	.Services
 	.AddOptions<GameRecordHandleSettingsOptions>()
 	.Configure((options) => builder.Configuration.GetSection("GameRecordHandleSettings").Bind(options))
 	.Services
+	.AddMemoryCache()
 	.AddGameCurrencyClient(httpClientBuilder => httpClientBuilder.ConfigureHttpClient((sp, http) =>
 	{
 		var config = sp.GetRequiredService<IConfiguration>();
@@ -74,7 +66,23 @@ builder.Services.AddGameRecordHandle(
 	{
 		var config = sp.GetRequiredService<IConfiguration>();
 		http.BaseAddress = config.GetValue<Uri>("GameRecordHandleConnectionStrings:GameBetsClientBaseUrl");
-	}));
+	}))
+	.AddGameBetsRapidTestWorkerClient(httpClientBuilder => httpClientBuilder.ConfigureHttpClient((sp, http) =>
+	{
+		var config = sp.GetRequiredService<IConfiguration>();
+		http.BaseAddress = config.GetValue<Uri>("GameRecordHandleConnectionStrings:GameBetsRapidTestWorkerClientBaseUrl");
+	}))
+	.AddGameRecordHandleCore()
+	.AddGameRecordHandleRepositories(
+	(sp, dbBuilder) =>
+	{
+		var config = sp.GetRequiredService<IConfiguration>();
+		_ = dbBuilder.UseNpgsql(config.GetConnectionString("Tgs"),
+			builder => builder.EnableRetryOnFailure(
+				maxRetryCount: 5,
+				maxRetryDelay: TimeSpan.FromSeconds(10),
+				errorCodesToAdd: null));
+	});
 
 builder.Services
 	.AddKeyedSingleton("Nats", (sp, _) => new NatsConnection(NatsOpts.Default with
@@ -85,12 +93,12 @@ builder.Services
 	.AddMessageQueue()
 	.AddNatsMessageQueue(config => config
 	.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
-	.AddHandler<GameRecordHandleMessageHandler>(subject: Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest, group: Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest)
-	.AddHandler<GameRecordHandleExpiryMessageHandler>(subject: Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, group: string.Concat(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, Environment.MachineName)))
+	.AddHandler<GameRecordHandleMessageHandler>(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest, Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest)
+	.AddHandler<GameRecordHandleExpiryTempMessageHandler>(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest, string.Concat(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, ".", Environment.MachineName))
+	.AddHandler<GameRecordHandleExpiryMessageHandler>(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, string.Concat(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, ".", Environment.MachineName)))
 	.ClearAllExchanges()
 	.AddNatsGlobPatternExchange(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest)
-	.AddNatsGlobPatternExchange(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest)
-	.AddNatsGlobPatternExchange(Tgs.GameBets.RapidTest.Worker.Common.GameBetsRapidTestWorkerNatsConst.GameBetsRapidTestWorkerRequest);
+	.AddNatsGlobPatternExchange(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest);
 
 builder.Services
 	.AddOpenTelemetry()

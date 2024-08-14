@@ -1,12 +1,13 @@
 ﻿using Tgs.ServiceUtility;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
 
 internal class GameRecordHandleCommandService(
 	TimeProvider timeProvider,
-	IGameRecordDispatcher dispatcher) : ICommandService<GameRecordHandleCommand>
+	ICommandService<GameBetsRapidTestWorkerCommand> service) : ICommandService<GameRecordHandleCommand>
 {
-	public async ValueTask ExecuteAsync(GameRecordHandleCommand command, CancellationToken cancellationToken = default)
+	public ValueTask ExecuteAsync(GameRecordHandleCommand command, CancellationToken cancellationToken = default)
 	{
 		if (command.ExternalRoundId is null || string.IsNullOrWhiteSpace(command.ExternalRoundId))
 		{
@@ -47,11 +48,11 @@ internal class GameRecordHandleCommandService(
 			var currentTime = timeProvider.GetUtcNow();
 			var externalClosedOn = command.ExternalClosedOn;
 			var diff = currentTime.Subtract(externalClosedOn);
-			if (diff.TotalDays > 180)
+			if (diff.TotalDays > 60)
 			{
 				throw new ArgumentOutOfRangeException(
 					paramName: command.ExternalClosedOn.ToString("u"),
-					message: $"This game bet will take more than 180 days to settle.({new
+					message: $"This game bet will take more than 60 days to settle.({new
 					{
 						command.GameProviderCode,
 						command.PlayerCode,
@@ -116,33 +117,32 @@ internal class GameRecordHandleCommandService(
 			_ => GameBets.Common.Enums.JackpotState.None
 		};
 
-		await dispatcher.PushCommandAsync(
-		   command: new GameBetsRapidTestWorkerCommand(
-			   GameProviderCode: command.GameProviderCode,
-			   PlayerCode: command.PlayerCode,
-			   ExternalRoundId: command.ExternalRoundId,
-			   ExternalBetId: command.ExternalBetId,
-			   ExternalGameId: command.ExternalGameId,
-			   ExternalCreatedOn: command.ExternalCreatedOn,
-			   ExternalClosedOn: command.ExternalClosedOn,
-			   ExternalPayoffOn: command.ExternalPayoffOn,
-			   ExternalResettleOn: command.ExternalResettleOn,
-			   BetState: betState,
-			   BetType: betType,
-			   FreeGameState: freeGameState,
-			   GambleState: gambleState,
-			   CashoutState: cashoutState,
-			   ResettleState: resettleState,
-			   JackpotState: jackpotState,
-			   Bet: command.Bet,
-			   ValidBet: command.ValidBet,
-			   Settle: command.Settle,
-			   Commission: command.Commission,
-			   Turnover: command.Turnover,
-			   WinLoss: command.WinLoss,
-			   Jackpot: command.Jackpot,
-			   AdditionalData: command.AdditionalData),
-		   cancellationToken: cancellationToken)
-			.ConfigureAwait(false);
+		return service.ExecuteAsync(
+			command: new GameBetsRapidTestWorkerCommand(
+				GameProviderCode: command.GameProviderCode,
+				PlayerCode: command.PlayerCode,
+				ExternalRoundId: command.ExternalRoundId,
+				ExternalBetId: command.ExternalBetId,
+				ExternalGameId: command.ExternalGameId,
+				ExternalCreatedOn: command.ExternalCreatedOn,
+				ExternalClosedOn: command.ExternalClosedOn,
+				ExternalPayoffOn: command.ExternalPayoffOn,
+				ExternalResettleOn: command.ExternalResettleOn,
+				BetState: betState,
+				BetType: betType,
+				FreeGameState: freeGameState,
+				GambleState: gambleState,
+				CashoutState: cashoutState,
+				ResettleState: resettleState,
+				JackpotState: jackpotState,
+				Bet: command.Bet,
+				ValidBet: command.ValidBet,
+				Settle: command.Settle,
+				Commission: command.Commission,
+				Turnover: command.Turnover,
+				WinLoss: command.WinLoss,
+				Jackpot: command.Jackpot,
+				AdditionalData: command.AdditionalData),
+			cancellationToken: cancellationToken);
 	}
 }

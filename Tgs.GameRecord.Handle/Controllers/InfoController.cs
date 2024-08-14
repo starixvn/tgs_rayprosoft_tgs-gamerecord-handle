@@ -2,6 +2,8 @@
 using System.Net.Sockets;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Tgs.GameRecord.Handle.Core;
 
 namespace Tgs.GameRecord.Handle.Controllers;
 
@@ -10,7 +12,10 @@ namespace Tgs.GameRecord.Handle.Controllers;
 public class InfoController : ControllerBase
 {
 	[HttpGet]
-	public async Task<object> GetAsync([FromServices] IWebHostEnvironment _hostingEnvironment)
+	public async Task<object> GetAsync(
+		[FromServices] IWebHostEnvironment webHostEnvironment,
+		[FromServices] IOptions<GameRecordHandleSettingsOptions> gameRecordHandleSettingsOptions,
+		[FromServices] IOptions<PolicySettingsOptions> policySettingsOptions)
 	{
 		var hostName = Dns.GetHostName();
 		var hostEntry = await Dns.GetHostEntryAsync(hostName).ConfigureAwait(false);
@@ -21,10 +26,12 @@ public class InfoController : ControllerBase
 			Environment.MachineName,
 			HostName = hostName,
 			HostIp = hostIp?.ToString() ?? string.Empty,
-			Environment = _hostingEnvironment.EnvironmentName,
+			Environment = webHostEnvironment.EnvironmentName,
 			OsVersion = $"{Environment.OSVersion}",
 			Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(),
 			ProcessCount = Environment.ProcessorCount,
+			GameRecordHandleSettingsOptions = gameRecordHandleSettingsOptions.Value,
+			PolicySettingsOptions = policySettingsOptions.Value
 		};
 	}
 }

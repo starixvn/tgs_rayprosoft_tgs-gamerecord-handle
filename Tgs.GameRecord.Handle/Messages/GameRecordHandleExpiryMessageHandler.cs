@@ -1,4 +1,5 @@
-﻿using Tgs.GameRecord.Handle.Core;
+﻿using System.Text.Json;
+using Tgs.GameRecord.Handle.Core;
 using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Messages;
@@ -9,34 +10,22 @@ public class GameRecordHandleExpiryMessageHandler(
 {
 	public ValueTask HandleAsync(string subject, Common.Protos.GameRecordHandleExpiryRequest data, IEnumerable<MessageHeaderValue>? headerValues, CancellationToken cancellationToken = default)
 	{
-		logger.LogInformation("LogOn:{logOn} Subject:{subject} Mesaage:This message has been received.({data})",
-			DateTime.Now.ToString("o"),
-			subject,
-			new
+		logger.LogInformation("{logInformation}",
+			JsonSerializer.Serialize(new
 			{
-				data.GameProviderCode,
-				data.ExternalGameId
-			});
-
-		try
-		{
-			dispatcher.ExtendExpiry(
-				gameProviderCode: data.GameProviderCode,
-				externalGameId: data.ExternalGameId);
-		}
-		catch (Exception ex)
-		{
-			logger.LogError(ex, "LogOn:{logOn} Subject:{subject} Mesaage:This message has been received.({data})",
-				DateTime.Now.ToString("o"),
-				subject,
-				new
+				LogOn = DateTime.Now.ToString("u"),
+				Subject = subject,
+				Data = new
 				{
 					data.GameProviderCode,
 					data.ExternalGameId
-				});
+				},
+				Message = "This receive message handler."
+			}));
 
-			throw;
-		}
+		dispatcher.ExtendExpiry(
+			gameProviderCode: data.GameProviderCode,
+			externalGameId: data.ExternalGameId);
 
 		return ValueTask.CompletedTask;
 	}

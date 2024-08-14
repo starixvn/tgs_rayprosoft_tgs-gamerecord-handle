@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
 
@@ -13,12 +14,12 @@ namespace Tgs.GameRecord.Handle.Core;
 internal class GameRecordChannel(
 	ILogger<GameRecordChannel> logger,
 	IOptions<GameRecordHandleSettingsOptions> options,
-	ICommandService<GameBetsRapidTestWorkerCommand> service,
+	ICommandService<GameRecordHandleCommand> service,
 	string key) : IDisposable, IAsyncDisposable
 {
 	private static readonly ActivitySource _ActivitySource = new(name: typeof(GameRecordChannel).FullName!);
 
-	private readonly Channel<GameBetsRapidTestWorkerCommand> _channel = Channel.CreateUnbounded<GameBetsRapidTestWorkerCommand>(
+	private readonly Channel<GameRecordHandleCommand> _channel = Channel.CreateUnbounded<GameRecordHandleCommand>(
 		new UnboundedChannelOptions
 		{
 			SingleReader = true
@@ -73,7 +74,7 @@ internal class GameRecordChannel(
 		}
 	}
 
-	public async ValueTask PushCommandAsync(GameBetsRapidTestWorkerCommand command, CancellationToken cancellationToken = default)
+	public async ValueTask PushCommandAsync(GameRecordHandleCommand command, CancellationToken cancellationToken = default)
 	{
 		using var cts = CancellationTokenSource.CreateLinkedTokenSource(
 			cancellationToken,
@@ -140,20 +141,24 @@ internal class GameRecordChannel(
 					parentContext: default);
 				try
 				{
-					logger.LogInformation("LogOn:{logOn} Key:{key} Mesaage:This processing.({data})",
-						DateTime.Now.ToString("o"),
-						Key,
-						new
+					logger.LogInformation("{logInformation}",
+						JsonSerializer.Serialize(new
 						{
-							command.GameProviderCode,
-							command.PlayerCode,
-							command.ExternalRoundId,
-							command.ExternalBetId,
-							command.ExternalGameId,
-							command.ExternalCreatedOn,
-							command.ExternalClosedOn,
-							command.BetState
-						});
+							LogOn = DateTime.Now.ToString("u"),
+							Key,
+							Data = new
+							{
+								command.GameProviderCode,
+								command.PlayerCode,
+								command.ExternalRoundId,
+								command.ExternalBetId,
+								command.ExternalGameId,
+								ExternalCreatedOn = command.ExternalCreatedOn.ToString("u"),
+								ExternalClosedOn = command.ExternalClosedOn.ToString("u"),
+								command.BetState
+							},
+							Message = "This processing."
+						}));
 
 					await service.ExecuteAsync(
 						command: command,
@@ -162,20 +167,24 @@ internal class GameRecordChannel(
 				}
 				catch (Exception ex)
 				{
-					logger.LogError(ex, "LogOn:{logOn} Key:{key} Mesaage:This exception occurs.({data})",
-						DateTime.Now.ToString("o"),
-						Key,
-						new
+					logger.LogError(ex, "{logError}",
+						JsonSerializer.Serialize(new
 						{
-							command.GameProviderCode,
-							command.PlayerCode,
-							command.ExternalRoundId,
-							command.ExternalBetId,
-							command.ExternalGameId,
-							command.ExternalCreatedOn,
-							command.ExternalClosedOn,
-							command.BetState
-						});
+							LogOn = DateTime.Now.ToString("u"),
+							Key,
+							Data = new
+							{
+								command.GameProviderCode,
+								command.PlayerCode,
+								command.ExternalRoundId,
+								command.ExternalBetId,
+								command.ExternalGameId,
+								ExternalCreatedOn = command.ExternalCreatedOn.ToString("u"),
+								ExternalClosedOn = command.ExternalClosedOn.ToString("u"),
+								command.BetState
+							},
+							Message = "This exception occurs."
+						}));
 				}
 			}
 		}

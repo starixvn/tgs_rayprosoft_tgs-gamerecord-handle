@@ -27,10 +27,18 @@ internal class PlayerRepository(
 			.WaitAndRetryAsync(
 				retryCount: retryCount,
 				retryAttempt => TimeSpan.FromSeconds(Math.Pow(retrySeconds, retryAttempt)),
-				onRetry: (exception, retryTime, retryCount, context) => logger.LogWarning(exception, "LogOn:{logOn}  RetryTime:{retryTime} RetryCount:{retryCount}",
-					DateTime.Now.ToString("o"),
-					retryTime,
-					retryCount));
+				onRetry: (exception, retryTime, retryCount, context) => logger.LogWarning(exception, "{logWarning}",
+					new
+					{
+						LogOn = DateTime.Now.ToString("u"),
+						RetryTime = retryTime,
+						RetryCount = retryCount,
+						Data = new
+						{
+							PlayerCode = playerCode
+						},
+						exception.Message
+					}));
 
 		return await retryPolicy.ExecuteAsync(() => context.Players
 				.Where(predicate => predicate.PlayerCode == playerCode)
