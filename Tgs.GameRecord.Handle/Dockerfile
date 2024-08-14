@@ -14,7 +14,7 @@ COPY ["Tgs.GameRecord.Handle/Tgs.GameRecord.Handle.csproj", "Tgs.GameRecord.Hand
 COPY ["Tgs.GameRecord.Handle.Common/Tgs.GameRecord.Handle.Common.csproj", "Tgs.GameRecord.Handle.Common/"]
 COPY ["Tgs.GameRecord.Handle.Core/Tgs.GameRecord.Handle.Core.csproj", "Tgs.GameRecord.Handle.Core/"]
 COPY ["Tgs.GameRecord.Handle.Repositories/Tgs.GameRecord.Handle.Repositories.csproj", "Tgs.GameRecord.Handle.Repositories/"]
-RUN dotnet restore "./Tgs.GameRecord.Handle/./Tgs.GameRecord.Handle.csproj"
+RUN dotnet restore "./Tgs.GameRecord.Handle/Tgs.GameRecord.Handle.csproj"
 COPY . .
 WORKDIR "/src/Tgs.GameRecord.Handle"
 RUN dotnet build "./Tgs.GameRecord.Handle.csproj" -c $BUILD_CONFIGURATION -o /app/build

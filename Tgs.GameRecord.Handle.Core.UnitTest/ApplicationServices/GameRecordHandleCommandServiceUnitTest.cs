@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Nodes;
 using NSubstitute;
-using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
+using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Handle.Core.UnitTest.ApplicationServices;
 
@@ -11,7 +11,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Waiting()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -23,13 +23,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.UnixEpoch,
 			ExternalPayoffOn: DateTimeOffset.UnixEpoch,
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Waiting,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Waiting,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.32m,
@@ -50,13 +50,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -89,7 +89,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Running()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -101,13 +101,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.UnixEpoch,
 			ExternalPayoffOn: DateTimeOffset.UnixEpoch,
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Running,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Running,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.32m,
@@ -127,13 +127,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -166,7 +166,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Void()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -178,13 +178,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Void,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Void,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.0m,
@@ -204,13 +204,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -243,7 +243,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Refund()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -255,13 +255,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Refund,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Refund,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.0m,
@@ -281,13 +281,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -320,7 +320,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Refund_Cashout()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -332,13 +332,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Refund,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.Cashout,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Refund,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.Cashout,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.0m,
@@ -358,13 +358,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -397,7 +397,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Cancel()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -409,13 +409,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Cancel,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Cancel,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.0m,
@@ -435,13 +435,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -474,7 +474,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Lose()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -486,13 +486,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Loss,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Loss,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.0m,
@@ -512,13 +512,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -551,7 +551,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Win()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -563,13 +563,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Win,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Win,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.32m,
@@ -589,13 +589,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -628,7 +628,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Win_FreeGame()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -640,13 +640,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Win,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.FreeGame,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Win,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.FreeGame,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.5m,
@@ -666,13 +666,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -705,7 +705,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_Draw()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -717,13 +717,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Draw,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Draw,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.4m,
@@ -743,13 +743,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -782,7 +782,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_HalfWin()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -794,13 +794,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.HalfWin,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.HalfWin,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.2m,
@@ -820,13 +820,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -859,7 +859,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task BetStates_Is_HalfLose()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -871,13 +871,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.HalfLoss,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.HalfLoss,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.2m,
@@ -897,13 +897,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		await sut.ExecuteAsync(command: command);
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(1)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Is(new GameBetsRapidTestWorkerCommand(
 			   GameProviderCode: command.GameProviderCode,
 			   PlayerCode: command.PlayerCode,
@@ -936,7 +936,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task ExternalRoundId_Is_Empty()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -948,13 +948,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Win,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Win,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.32m,
@@ -970,13 +970,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		_ = await Assert.ThrowsAsync<ArgumentNullException>(() => sut.ExecuteAsync(command: command).AsTask());
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(0)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Any<GameBetsRapidTestWorkerCommand>(),
 			cancellationToken: Arg.Any<CancellationToken>());
 	}
@@ -985,7 +985,7 @@ public class GameRecordHandleCommandServiceUnitTest
 	public async Task ExternalBetId_Is_Empty()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -997,13 +997,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Win,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Win,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.32m,
@@ -1019,22 +1019,22 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
 		_ = await Assert.ThrowsAsync<ArgumentNullException>(() => sut.ExecuteAsync(command: command).AsTask());
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(0)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Any<GameBetsRapidTestWorkerCommand>(),
 			cancellationToken: Arg.Any<CancellationToken>());
 	}
 
 	[Fact]
-	public async Task This_game_bet_will_take_more_than_180_days_to_settle()
+	public async Task This_game_bet_will_take_more_than_60_days_to_settle()
 	{
 		var fakeTimeProvider = Substitute.For<TimeProvider>();
-		var fakeGameRecordDispatcher = Substitute.For<IGameRecordDispatcher>();
+		var fakeService = Substitute.For<ICommandService<GameBetsRapidTestWorkerCommand>>();
 
 		var command = new GameRecordHandleCommand(
 			GameProviderCode: "AWC_PGS",
@@ -1046,13 +1046,13 @@ public class GameRecordHandleCommandServiceUnitTest
 			ExternalClosedOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalPayoffOn: DateTimeOffset.Parse("2023-08-24T05:39:39"),
 			ExternalResettleOn: DateTimeOffset.UnixEpoch,
-			BetState: BetState.Win,
-			BetType: BetType.Normal,
-			FreeGameState: FreeGameState.None,
-			GambleState: GambleState.None,
-			CashoutState: CashoutState.None,
-			ResettleState: ResettleState.None,
-			JackpotState: JackpotState.None,
+			BetState: Common.Protos.BetState.Win,
+			BetType: Common.Protos.BetType.Normal,
+			FreeGameState: Common.Protos.FreeGameState.None,
+			GambleState: Common.Protos.GambleState.None,
+			CashoutState: Common.Protos.CashoutState.None,
+			ResettleState: Common.Protos.ResettleState.None,
+			JackpotState: Common.Protos.JackpotState.None,
 			Bet: 0.4m,
 			ValidBet: 0.4m,
 			Settle: 0.32m,
@@ -1072,16 +1072,13 @@ public class GameRecordHandleCommandServiceUnitTest
 
 		var sut = new GameRecordHandleCommandService(
 			fakeTimeProvider,
-			fakeGameRecordDispatcher);
+			fakeService);
 
-		_ = await Assert.ThrowsAsync<ArgumentOutOfRangeException>(
-			 () => sut.ExecuteAsync(
-				 command: command)
-			 .AsTask());
+		_ = await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => sut.ExecuteAsync(command: command).AsTask());
 
-		_ = fakeGameRecordDispatcher
+		_ = fakeService
 			.Received(0)
-			.PushCommandAsync(
+			.ExecuteAsync(
 			command: Arg.Any<GameBetsRapidTestWorkerCommand>(),
 			cancellationToken: Arg.Any<CancellationToken>());
 	}

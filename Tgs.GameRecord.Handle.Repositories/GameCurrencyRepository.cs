@@ -23,10 +23,19 @@ internal class GameCurrencyRepository(
 			.WaitAndRetryAsync(
 				retryCount: retryCount,
 				retryAttempt => TimeSpan.FromSeconds(Math.Pow(retrySeconds, retryAttempt)),
-				onRetry: (exception, retryTime, retryCount, context) => logger.LogWarning(exception, "LogOn:{logOn}  RetryTime:{retryTime} RetryCount:{retryCount}",
-					DateTime.Now.ToString("o"),
-					retryTime,
-					retryCount));
+				onRetry: (exception, retryTime, retryCount, context) => logger.LogWarning(exception, "{logWarning}",
+					new
+					{
+						LogOn = DateTime.Now.ToString("u"),
+						RetryTime = retryTime,
+						RetryCount = retryCount,
+						Data = new
+						{
+							GameProviderCode = gameProviderCode,
+							CurrencyCode = currencyCode
+						},
+						exception.Message
+					}));
 
 		var result = await retryPolicy.ExecuteAsync(() => client.ConvertPlatformRoundsAsync(
 			gameProviderCode: gameProviderCode,
