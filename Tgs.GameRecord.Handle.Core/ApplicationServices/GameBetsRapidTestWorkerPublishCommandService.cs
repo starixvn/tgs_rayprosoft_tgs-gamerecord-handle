@@ -13,7 +13,7 @@ internal class GameBetsRapidTestWorkerPublishCommandService(
 {
 	private readonly PolicySettingsOptions _policySettingsOptions = policySettingsOptions.Value;
 
-	public ValueTask ExecuteAsync(GameBetsRapidTestWorkerPublishCommand command, CancellationToken cancellationToken = default)
+	public async ValueTask ExecuteAsync(GameBetsRapidTestWorkerPublishCommand command, CancellationToken cancellationToken = default)
 	{
 		var betState = command.BetState switch
 		{
@@ -139,8 +139,9 @@ internal class GameBetsRapidTestWorkerPublishCommandService(
 						exception.Message
 					}));
 
-		return client.HandleAsync(
+		await retryPolicy.ExecuteAsync(() => client.HandleAsync(
 			source: source,
-			cancellationToken: cancellationToken);
+			cancellationToken: cancellationToken).AsTask())
+			.ConfigureAwait(false);
 	}
 }
