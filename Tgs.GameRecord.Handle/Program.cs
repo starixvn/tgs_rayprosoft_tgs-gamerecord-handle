@@ -9,12 +9,14 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Tgs.GameRecord.Handle.Core;
 using Tgs.GameRecord.Handle.Messages;
+using Tgs.GameRecord.Handle.Middlewares;
 using Tgs.MessageQueue.Nats.Serializers;
 
 var filterInstrumentations = new[] { "html", "ico", "png", "jpg" };
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseSentry();
 builder.Logging
 	.AddOpenTelemetry(options =>
 	{
@@ -134,8 +136,9 @@ builder.Services
 	.AddServiceUtiltiyInterceptors();
 
 builder.Services.AddHealthChecks();
-
+builder.Services.AddScoped<ExceptionMiddleware>();
 var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
 
 _ = app.UseSwagger();
 _ = app.UseSwaggerUI();
