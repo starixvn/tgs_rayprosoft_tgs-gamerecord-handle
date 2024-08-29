@@ -1,13 +1,9 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using System.Text.Json.Nodes;
 using Tgs.GameBets.RapidTest.Worker.Client;
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
-using Tgs.ServiceUtility;
-using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Core.UnitTest.ApplicationServices;
 

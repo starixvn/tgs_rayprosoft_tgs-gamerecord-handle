@@ -1,4 +1,4 @@
-﻿namespace Tgs.GameRecord.Handle.Common;
+﻿namespace Tgs.GameRecord.Handle.Core;
 
 public record GameRecordHandleNatsConst
 {

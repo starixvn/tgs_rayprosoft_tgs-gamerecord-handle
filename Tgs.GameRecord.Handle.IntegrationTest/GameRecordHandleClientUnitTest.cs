@@ -1,13 +1,11 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using Tgs.GameBets.RapidTest.Worker.Client;
+
+using Tgs.GameRecord.Handle.Client;
+using Tgs.GameRecord.Handle.Core;
 
 using Valhalla.MessageQueue;
-
-using Tgs.GameRecord.Handle.IntegrationTest;
-using Tgs.GameRecord.Handle.Client;
-using Tgs.GameRecord.Handle.Common;
 
 namespace Tgs.GameRecord.Handle.IntegrationTest;
 
