@@ -93,12 +93,11 @@ builder.Services
 	.AddMessageQueue()
 	.AddNatsMessageQueue(config => config
 	.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
-	.AddHandler<GameRecordHandleMessageHandler>(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest, Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest)
-	.AddHandler<GameRecordHandleExpiryTempMessageHandler>(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest, string.Concat(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, ".", Environment.MachineName))
-	.AddHandler<GameRecordHandleExpiryMessageHandler>(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, string.Concat(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, ".", Environment.MachineName)))
+	.AddHandler<GameRecordHandleMessageHandler>(GameRecordHandleNatsConst.GameRecordHandleRequest, GameRecordHandleNatsConst.GameRecordHandleRequest)
+	.AddHandler<GameRecordHandleExpiryMessageHandler>(GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, string.Concat(GameRecordHandleNatsConst.GameRecordHandleExpiryRequest, ".", Environment.MachineName)))
 	.ClearAllExchanges()
-	.AddNatsGlobPatternExchange(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest)
-	.AddNatsGlobPatternExchange(Tgs.GameRecord.Handle.Common.GameRecordHandleNatsConst.GameRecordHandleExpiryRequest);
+	.AddNatsGlobPatternExchange(GameRecordHandleNatsConst.GameRecordHandleRequest)
+	.AddNatsGlobPatternExchange(GameRecordHandleNatsConst.GameRecordHandleExpiryRequest);
 
 builder.Services
 	.AddOpenTelemetry()

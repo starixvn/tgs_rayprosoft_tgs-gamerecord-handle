@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Mvc;
-using Tgs.GameRecord.Handle.Common;
+using Tgs.GameRecord.Handle.Core;
+
 using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Handle.Controllers;

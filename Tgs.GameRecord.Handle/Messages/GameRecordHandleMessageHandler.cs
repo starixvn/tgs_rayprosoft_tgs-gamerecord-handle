@@ -1,9 +1,7 @@
 ﻿using System.Text.Json;
 using Tgs.GameRecord.Handle.Core;
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
-using Tgs.ServiceUtility;
 using Valhalla.MessageQueue;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Tgs.GameRecord.Handle.Messages;
 
