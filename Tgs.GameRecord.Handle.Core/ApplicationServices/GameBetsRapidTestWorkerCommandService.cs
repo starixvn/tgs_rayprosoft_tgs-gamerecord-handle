@@ -63,7 +63,7 @@ internal class GameBetsRapidTestWorkerCommandService(
 		var externalPayoffOn = DateTimeOffset.UnixEpoch;
 		var externalResettleOn = DateTimeOffset.UnixEpoch;
 		var bet = command.Bet;
-		var validBet = command.ValidBet;
+		var validBet = command.Bet;
 		var settle = 0.0m;
 		var commission = 0.0m;
 		var turnover = 0.0m;
@@ -75,7 +75,8 @@ internal class GameBetsRapidTestWorkerCommandService(
 			externalClosedOn = command.ExternalClosedOn;
 			externalPayoffOn = command.ExternalPayoffOn;
 			externalResettleOn = command.ExternalResettleOn;
-			settle = command.Settle;
+			validBet = command.ValidBet;
+			settle = (command.Settle > 0) ? command.Settle : 0.0m;
 			commission = command.Commission;
 			turnover = command.Turnover;
 			winLoss = command.WinLoss;
