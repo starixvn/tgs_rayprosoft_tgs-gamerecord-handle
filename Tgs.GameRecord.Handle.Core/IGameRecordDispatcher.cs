@@ -4,7 +4,7 @@ namespace Tgs.GameRecord.Handle.Core;
 
 public interface IGameRecordDispatcher
 {
-	ValueTask PushCommandAsync(GameRecordHandleCommand command, CancellationToken cancellationToken = default);
+	ValueTask PushCommandAsync(GameRecordCommandRequest command, CancellationToken cancellationToken = default);
 
 	void ExtendExpiry(string gameProviderCode, string externalGameId);
 }

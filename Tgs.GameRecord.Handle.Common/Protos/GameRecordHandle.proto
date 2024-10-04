@@ -1,6 +1,5 @@
 ﻿syntax = "proto3";
 
-//import "phoenix/protobuf/guid.proto";
 import "phoenix/protobuf/decimal.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -51,17 +50,18 @@ message GameRecordHandleRequest {
     phoenix.protobuf.DecimalValue validBet = 18;
     // 結算(包含本金)
     phoenix.protobuf.DecimalValue settle = 19;
-    // 傭金
-    phoenix.protobuf.DecimalValue commission = 20;
-    // 遊戲平台有效投注
-    phoenix.protobuf.DecimalValue turnover = 21;
     // 玩家損益/淨利
-    phoenix.protobuf.DecimalValue win_loss = 22;
+    phoenix.protobuf.DecimalValue win_loss = 20;
+    // 流水(依照遊戲商提供流水,如遊戲商未提供預設有效下注)
+    phoenix.protobuf.DecimalValue turnover = 21;
+    // 傭金
+    phoenix.protobuf.DecimalValue commission = 22;
+    // 貢獻/彩金貢獻
+    phoenix.protobuf.DecimalValue contribute = 23;
     // 彩金
-	phoenix.protobuf.DecimalValue jackpot = 23;
+	phoenix.protobuf.DecimalValue jackpot = 24;
     // 附加數據
-	string additional_data = 24;
-
+	string additional_data = 25;
 }
 
 message GameRecordHandleExpiryRequest {

@@ -8,9 +8,6 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddGameRecordHandleCore(
 		this IServiceCollection services)
 		=> services
-		.RegisterAllServiceUtilityTypes(
-			Assembly.GetExecutingAssembly(),
-			ServiceLifetime.Transient)
-		.AddSingleton(TimeProvider.System)
+		.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
 		.AddSingleton<IGameRecordDispatcher, GameRecordDispatcher>();
 }

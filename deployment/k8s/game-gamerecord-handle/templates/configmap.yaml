@@ -15,7 +15,6 @@ data:
       },
       "GameRecordHandleConnectionStrings": {
         "GameCurrencyClientBaseUrl": "http://game-gamecurrency/",
-        "GameBetsClientBaseUrl": "http://game-gamebets/",
         "GameBetsRapidTestWorkerClientBaseUrl": "http://game-gamebets-rapidtest-worker/"
       }
     }

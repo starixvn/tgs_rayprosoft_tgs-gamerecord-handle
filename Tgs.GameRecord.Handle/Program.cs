@@ -57,15 +57,11 @@ builder.Services
 	.Configure((options) => builder.Configuration.GetSection("GameRecordHandleSettings").Bind(options))
 	.Services
 	.AddMemoryCache()
+	.AddSingleton(TimeProvider.System)
 	.AddGameCurrencyClient(httpClientBuilder => httpClientBuilder.ConfigureHttpClient((sp, http) =>
 	{
 		var config = sp.GetRequiredService<IConfiguration>();
 		http.BaseAddress = config.GetValue<Uri>("GameRecordHandleConnectionStrings:GameCurrencyClientBaseUrl");
-	}))
-	.AddGameBetsClient(httpClientBuilder => httpClientBuilder.ConfigureHttpClient((sp, http) =>
-	{
-		var config = sp.GetRequiredService<IConfiguration>();
-		http.BaseAddress = config.GetValue<Uri>("GameRecordHandleConnectionStrings:GameBetsClientBaseUrl");
 	}))
 	.AddGameBetsRapidTestWorkerClient(httpClientBuilder => httpClientBuilder.ConfigureHttpClient((sp, http) =>
 	{

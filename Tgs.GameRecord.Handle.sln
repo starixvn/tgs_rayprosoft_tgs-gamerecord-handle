@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Clien
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.Core.UnitTest", "Tgs.GameRecord.Handle.Core.UnitTest\Tgs.GameRecord.Handle.Core.UnitTest.csproj", "{DAEC4E43-D453-4754-9842-163AF31ED74D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameRecord.Handle.IntegrationTest", "Tgs.GameRecord.Handle.IntegrationTest\Tgs.GameRecord.Handle.IntegrationTest.csproj", "{9E5BAFA6-E209-4CB4-A3FF-9245461741AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Handle.IntegrationTest", "Tgs.GameRecord.Handle.IntegrationTest\Tgs.GameRecord.Handle.IntegrationTest.csproj", "{9E5BAFA6-E209-4CB4-A3FF-9245461741AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameRecord.Handle.Repositories.UnitTest", "Tgs.GameRecord.Handle.Repositories.UnitTest\Tgs.GameRecord.Handle.Repositories.UnitTest.csproj", "{F5F5BCF4-8ED0-490A-92F9-2CEF6D3B9E47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{9E5BAFA6-E209-4CB4-A3FF-9245461741AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E5BAFA6-E209-4CB4-A3FF-9245461741AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E5BAFA6-E209-4CB4-A3FF-9245461741AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5F5BCF4-8ED0-490A-92F9-2CEF6D3B9E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5F5BCF4-8ED0-490A-92F9-2CEF6D3B9E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5F5BCF4-8ED0-490A-92F9-2CEF6D3B9E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5F5BCF4-8ED0-490A-92F9-2CEF6D3B9E47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

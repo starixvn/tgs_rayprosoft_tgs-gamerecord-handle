@@ -1,5 +1,7 @@
-﻿namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
-public record GameRecordHandleCommand(
+﻿using MediatR;
+
+namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
+public record GameRecordCommandRequest(
 	string GameProviderCode,
 	string PlayerCode,
 	string ExternalRoundId,
@@ -19,8 +21,9 @@ public record GameRecordHandleCommand(
 	decimal Bet,
 	decimal ValidBet,
 	decimal Settle,
-	decimal Commission,
-	decimal Turnover,
 	decimal WinLoss,
+	decimal Turnover,
+	decimal Commission,
+	decimal Contribute,
 	decimal Jackpot,
-	string AdditionalData);
+	string AdditionalData) : IRequest;
