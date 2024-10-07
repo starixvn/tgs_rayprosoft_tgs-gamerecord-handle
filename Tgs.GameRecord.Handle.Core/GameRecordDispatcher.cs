@@ -16,7 +16,7 @@ internal class GameRecordDispatcher(IServiceProvider serviceProvider) : IGameRec
 		Dispose(false);
 	}
 
-	public async ValueTask PushCommandAsync(GameRecordHandleCommand command, CancellationToken cancellationToken = default)
+	public async ValueTask PushCommandAsync(GameRecordCommandRequest command, CancellationToken cancellationToken = default)
 	{
 		using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _cancellationTokenSource.Token);
 

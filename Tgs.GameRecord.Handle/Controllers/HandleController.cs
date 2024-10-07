@@ -41,9 +41,10 @@ public class HandleController : ControllerBase
 	///				"bet": 2,
 	///				"validBet": 2,
 	///				"settle": 4,
-	///				"commission": 0,
-	///				"turnover": 2,
 	///				"winLoss": 2,
+	///				"turnover": 2,
+	///				"commission": 0,
+	///				"contribute": 0,
 	///				"jackpot": 0,
 	///				"additionalData": "{\"AllBet\": 2, \"GameID\": \"888-1722937124-92240583-21\", \"KindID\": 910, \"Profit\": 2, \"ChairID\": 0, \"Revenue\": 0, \"TableID\": 182020001, \"Accounts\": \"200995_4un4b9l34304\", \"LineCode\": \"200995_GPI\", \"ServerID\": 9101, \"CardValue\": \"0c32050b06001\", \"CellScore\": 2, \"ChannelID\": 200995, \"UserCount\": 1, \"GameEndTime\": \"2024-08-06T17:39:03+08:00\", \"GameStartTime\": \"2024-08-06T17:38:44+08:00\"}"
 	///			}
@@ -77,20 +78,19 @@ public class HandleController : ControllerBase
 					Bet = source.Bet,
 					ValidBet = source.ValidBet,
 					Settle = source.Settle,
-					Commission = source.Commission,
-					Turnover = source.Turnover,
 					WinLoss = source.WinLoss,
+					Turnover = source.Turnover,
+					Commission = source.Commission,
+					Contribute = source.Contribute,
 					Jackpot = source.Jackpot,
-					AdditionalData = source.AdditionalData
-				},
+					AdditionalData = source.AdditionalData},
 				cancellationToken: HttpContext.RequestAborted).AsTask()),
 			Task.Run( ()=>messageSender.PublishAsync(
 				subject: GameRecordHandleNatsConst.GameRecordHandleExpiryRequest,
 				data: new Common.Protos.GameRecordHandleExpiryRequest
 				{
 					GameProviderCode = source.GameProviderCode,
-					ExternalGameId = source.ExternalGameId
-				},
+					ExternalGameId = source.ExternalGameId},
 				cancellationToken: HttpContext.RequestAborted).AsTask()),
 		};
 

@@ -1,25 +1,24 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Channels;
+using MediatR;
 using Microsoft.Extensions.Logging;
 
 using Microsoft.Extensions.Options;
 
 using Tgs.GameRecord.Handle.Core.ApplicationServices;
 
-using Tgs.ServiceUtility;
-
 namespace Tgs.GameRecord.Handle.Core;
 
 internal class GameRecordChannel(
 	ILogger<GameRecordChannel> logger,
 	IOptions<GameRecordHandleSettingsOptions> options,
-	ICommandService<GameRecordHandleCommand> service,
+	IMediator mediator,
 	string key) : IDisposable, IAsyncDisposable
 {
 	private static readonly ActivitySource _ActivitySource = new(name: typeof(GameRecordChannel).FullName!);
 
-	private readonly Channel<GameRecordHandleCommand> _channel = Channel.CreateUnbounded<GameRecordHandleCommand>(
+	private readonly Channel<GameRecordCommandRequest> _channel = Channel.CreateUnbounded<GameRecordCommandRequest>(
 		new UnboundedChannelOptions
 		{
 			SingleReader = true
@@ -74,7 +73,7 @@ internal class GameRecordChannel(
 		}
 	}
 
-	public async ValueTask PushCommandAsync(GameRecordHandleCommand command, CancellationToken cancellationToken = default)
+	public async ValueTask PushCommandAsync(GameRecordCommandRequest command, CancellationToken cancellationToken = default)
 	{
 		using var cts = CancellationTokenSource.CreateLinkedTokenSource(
 			cancellationToken,
@@ -160,8 +159,8 @@ internal class GameRecordChannel(
 							Message = "This processing."
 						}));
 
-					await service.ExecuteAsync(
-						command: command,
+					await mediator.Send(
+						request: command,
 						cancellationToken: cancellationToken)
 						.ConfigureAwait(false);
 				}

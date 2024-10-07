@@ -31,7 +31,7 @@ public class GameRecordHandleMessageHandler(
 			}));
 
 		return dispatcher.PushCommandAsync(
-		   command: new GameRecordHandleCommand(
+		   command: new GameRecordCommandRequest(
 			   GameProviderCode: data.GameProviderCode,
 			   PlayerCode: data.PlayerCode,
 			   ExternalRoundId: data.ExternalRoundId,
@@ -51,9 +51,10 @@ public class GameRecordHandleMessageHandler(
 			   Bet: data.Bet,
 			   ValidBet: data.ValidBet,
 			   Settle: data.Settle,
-			   Commission: data.Commission,
-			   Turnover: data.Turnover,
 			   WinLoss: data.WinLoss,
+			   Turnover: data.Turnover,
+			   Commission: data.Commission,
+			   Contribute: data.Contribute,
 			   Jackpot: data.Jackpot,
 			   AdditionalData: data.AdditionalData),
 		   cancellationToken: cancellationToken);

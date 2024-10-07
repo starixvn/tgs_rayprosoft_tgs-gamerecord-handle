@@ -1,6 +1,5 @@
-﻿namespace Tgs.GameRecord.Handle.Core.ApplicationServices;
-
-public record GameBetsRapidTestWorkerPublishCommand(
+﻿namespace Tgs.GameRecord.Handle.Core.Models;
+public record GameBetsRapidTestWorkerPublish(
 	Guid GameProviderId,
 	string GameProviderCode,
 	Guid GameProviderConfigurationId,
@@ -23,19 +22,20 @@ public record GameBetsRapidTestWorkerPublishCommand(
 	DateTimeOffset ExternalClosedOn,
 	DateTimeOffset ExternalPayoffOn,
 	DateTimeOffset ExternalResettleOn,
-	GameBets.Common.Enums.BetState BetState,
-	GameBets.Common.Enums.BetType BetType,
-	GameBets.Common.Enums.FreeGameState FreeGameState,
-	GameBets.Common.Enums.GambleState GambleState,
-	GameBets.Common.Enums.CashoutState CashoutState,
-	GameBets.Common.Enums.ResettleState ResettleState,
-	GameBets.Common.Enums.JackpotState JackpotState,
+	GameBets.RapidTest.Worker.Common.Protos.BetState BetState,
+	GameBets.RapidTest.Worker.Common.Protos.BetType BetType,
+	GameBets.RapidTest.Worker.Common.Protos.FreeGameState FreeGameState,
+	GameBets.RapidTest.Worker.Common.Protos.GambleState GambleState,
+	GameBets.RapidTest.Worker.Common.Protos.CashoutState CashoutState,
+	GameBets.RapidTest.Worker.Common.Protos.ResettleState ResettleState,
+	GameBets.RapidTest.Worker.Common.Protos.JackpotState JackpotState,
 	decimal CurrencyRatio,
 	decimal Bet,
 	decimal ValidBet,
 	decimal Settle,
-	decimal Commission,
-	decimal Turnover,
 	decimal WinLoss,
+	decimal Turnover,
+	decimal Commission,
+	decimal Contribute,
 	decimal Jackpot,
 	string AdditionalData);

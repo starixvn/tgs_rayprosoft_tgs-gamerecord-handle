@@ -14,7 +14,7 @@ internal class GameCurrencyRepository(
 {
 	private readonly PolicySettingsOptions _policySettingsOptions = options.Value;
 
-	public async ValueTask<GameCurrencyInfo> GetAsync(string gameProviderCode, string currencyCode, decimal bet, decimal validBet, decimal settle, decimal commission, decimal turnover, decimal winLoss, decimal jackpot, CancellationToken cancellationToken = default)
+	public async ValueTask<GameCurrencyInfo> GetAsync(string gameProviderCode, string currencyCode, decimal bet, decimal validBet, decimal settle, decimal winLoss, decimal turnover, decimal commission, decimal contribute, decimal jackpot, CancellationToken cancellationToken = default)
 	{
 		var retryCount = _policySettingsOptions.RetryCount;
 		var retrySeconds = _policySettingsOptions.RetrySeconds;
@@ -43,9 +43,10 @@ internal class GameCurrencyRepository(
 			bet: bet,
 			validBet: validBet,
 			settle: settle,
-			commission: commission,
-			turnover: turnover,
 			winLoss: winLoss,
+			turnover: turnover,
+			commission: commission,
+			contribute: contribute,
 			jackpot: jackpot,
 			cancellationToken).AsTask())
 			.ConfigureAwait(false);
@@ -55,9 +56,10 @@ internal class GameCurrencyRepository(
 			Bet: result.Bet,
 			ValidBet: result.ValidBet,
 			Settle: result.Settle,
-			Commission: result.Commission,
-			Turnover: result.Turnover,
 			WinLoss: result.WinLoss,
+			Turnover: result.Turnover,
+			Commission: result.Commission,
+			Contribute: result.Contribute,
 			Jackpot: result.Jackpot);
 	}
 }

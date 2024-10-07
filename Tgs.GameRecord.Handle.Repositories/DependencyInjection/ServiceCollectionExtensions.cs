@@ -12,13 +12,14 @@ public static class ServiceCollectionExtensions
 		Action<IServiceProvider, DbContextOptionsBuilder> dbContextOptions)
 		=> services
 		.AddDbContext<TgsContext>(dbContextOptions)
-		.AddScoped<IGameCurrencyRepository, GameCurrencyRepository>()
-		.AddScoped<IBrandGameProviderRepository, BrandGameProviderRepository>()
+		.AddTransient<IGameCurrencyRepository, GameCurrencyRepository>()
+		.AddTransient<IBrandGameProviderRepository, BrandGameProviderRepository>()
 		.Decorate<IBrandGameProviderRepository, BrandGameProviderCacheRepository>()
-		.AddScoped<IGameProviderRepository, GameProviderRepository>()
+		.AddTransient<IGameProviderRepository, GameProviderRepository>()
 		.Decorate<IGameProviderRepository, GameProviderCacheRepository>()
-		.AddScoped<IGameRepository, GameRepository>()
+		.AddTransient<IGameRepository, GameRepository>()
 		.Decorate<IGameRepository, GameCacheRepository>()
-		.AddScoped<IPlayerRepository, PlayerRepository>()
-		.Decorate<IPlayerRepository, PlayerCacheRepository>();
+		.AddTransient<IPlayerRepository, PlayerRepository>()
+		.Decorate<IPlayerRepository, PlayerCacheRepository>()
+		.AddTransient<IGameBetsRapidTestWorkerPublishRepository, GameBetsRapidTestWorkerPublishRepository>();
 }
