@@ -53,7 +53,7 @@ internal class GameRecordCommandHandler(
 		var externalPayoffOn = DateTimeOffset.UnixEpoch;
 		var externalResettleOn = DateTimeOffset.UnixEpoch;
 		var bet = request.Bet;
-		var validBet = request.ValidBet;
+		var validBet = 0.0m;
 		var settle = 0.0m;
 		var winLoss = 0.0m;
 		var turnover = 0.0m;
