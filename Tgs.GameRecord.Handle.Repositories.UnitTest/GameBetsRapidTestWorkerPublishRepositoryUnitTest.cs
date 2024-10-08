@@ -72,7 +72,6 @@ public class GameBetsRapidTestWorkerPublishRepositoryUnitTest
 
 		await sut.PublishAsync(source);
 
-
 		_ = fakeClient
 			.Received(1)
 			.HandleAsync(
